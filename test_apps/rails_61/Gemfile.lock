@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/spajic/lobanov.git
+  revision: 1fc1a9c038f3309a135fdfb8eee53386aafc6a52
+  specs:
+    lobanov (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -134,6 +140,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  lobanov!
   puma (~> 5.0)
   rails (~> 6.1.4, >= 6.1.4.2)
 
