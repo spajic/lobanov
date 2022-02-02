@@ -10,3 +10,4 @@ gem 'puma', '~> 5.0'
 
 gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 gem 'lobanov', github: 'spajic/lobanov'
+gem 'rspec-rails'
