@@ -16,10 +16,10 @@ RSpec.describe FruitsController, type: :controller do
     end
 
     # with :lobanov rspec-tag syntax
-    it 'returns expected json', :aggregate_failures, :lobanov do
-      subject
-      expect(response).to have_http_status(:ok)
-      expect(json_body).to eq({fruits: 'will_be_here'})
-    end
+    # it 'returns expected json', :aggregate_failures, :lobanov do
+    #   subject
+    #   expect(response).to have_http_status(:ok)
+    #   expect(json_body).to eq({fruits: 'will_be_here'})
+    # end
   end
 end

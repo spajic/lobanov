@@ -42,7 +42,7 @@ module Lobanov
     def load_schema
       # начинаем c api-backend-specification/index.yaml и проходим по ссылкам
       index = YAML.load_file(INDEX_PATH)
-      path_index = index['paths']["/#{path_name}"]
+      path_index = index.dig('paths', "/#{path_name}")
       return nil unless path_index
 
       path_schema = read_relative(path_index['$ref'])
