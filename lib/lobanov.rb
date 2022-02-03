@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'lobanov/spec_helper'
+
 module Lobanov
   class LobanovError < StandardError; end
 
