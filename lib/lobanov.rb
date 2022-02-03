@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-Dir.glob(File.expand_path("lobanov/*.rb", __FILE__)).each do |file|
-  require file
-end
+src = File.expand_path("../lobanov/*.rb", __FILE__)
+Dir.glob(src).each { |file| require file }
 
 module Lobanov
   class LobanovError < StandardError; end
