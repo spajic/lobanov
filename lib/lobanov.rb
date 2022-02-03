@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-require 'lobanov/spy'
-require 'lobanov/spec_helper'
+Dir.glob(File.expand_path("lobanov/*.rb", __FILE__)).each do |file|
+  require file
+end
 
 module Lobanov
   class LobanovError < StandardError; end
