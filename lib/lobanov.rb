@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'lobanov/spy'
 require 'lobanov/spec_helper'
 
 module Lobanov
