@@ -11,6 +11,6 @@ gem 'pry'
 gem 'pry-byebug'
 
 gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-gem 'rspec-rails'
+gem 'rspec-rails', '5.1.0'
 # gem 'lobanov', github: 'spajic/lobanov'
 gem 'lobanov', path: '/Users/spajic/code/lobanov'

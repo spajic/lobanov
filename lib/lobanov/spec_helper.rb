@@ -36,13 +36,13 @@ if defined?(ActionController::TestCase::Behavior)
 end
 
 if defined?(RSpec)
-  RSpec.configure do |config|
-    config.around(:each, :lobanov) do |ex|
-      Lobanov.capture(&ex)
-    end
+  # RSpec.configure do |config|
+  #   config.around(:each, :lobanov) do |ex|
+  #     Lobanov.capture(&ex)
+  #   end
 
-    config.around(:each, :lobanov!) do |ex|
-      Lobanov.capture!(&ex)
-    end
-  end
+  #   config.around(:each, :lobanov!) do |ex|
+  #     Lobanov.capture!(&ex)
+  #   end
+  # end
 end

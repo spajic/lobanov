@@ -4,6 +4,7 @@ Feature: Cucumber
     """
     Hello, Aruba!
     """
+
     Then the file "file.txt" should contain:
     """
     Hello, Aruba!
