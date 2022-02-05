@@ -1,0 +1,8 @@
+---
+type: object
+required:
+- fruits
+properties:
+  fruits:
+    type: string
+    example: will_be_here

@@ -177,7 +177,7 @@ DEPENDENCIES
   pry-byebug
   puma (~> 5.0)
   rails (~> 6.1.4, >= 6.1.4.2)
-  rspec-rails
+  rspec-rails (= 5.1.0)
 
 RUBY VERSION
    ruby 2.7.2p137

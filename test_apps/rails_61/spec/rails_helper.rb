@@ -7,7 +7,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 
 # Add additional requires below this line. Rails is not loaded until this point!
-
+require 'lobanov/spec_helper'
 
 def json_body
   JSON.parse(response.body, symbolize_names: true)

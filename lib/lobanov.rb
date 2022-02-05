@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 src = File.expand_path("../lobanov/*.rb", __FILE__)
-Dir.glob(src).each { |file| require file }
+files = Dir.glob(src).reject { |name| name.end_with?('lobanov/spec_helper.rb') }
+files.each { |file| require file }
 
 module Lobanov
   class LobanovError < StandardError; end

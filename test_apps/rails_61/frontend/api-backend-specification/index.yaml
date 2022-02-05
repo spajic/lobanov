@@ -1,3 +1,4 @@
 ---
 paths: {}
-components: {}
+components:
+  schemas: {}
