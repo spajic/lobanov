@@ -2,9 +2,11 @@ Feature: generate schema for test with :lobanov tag
   When you write rspec test with :lobanov tag it generates schema
 
   Scenario: basic usage
+    When I cd to "../../test_apps/rails_61"
+
     Given a file named "spec/controllers/fruits_controller_spec.rb" with:
       """ruby
-      # require 'rails_helper'
+      require 'rails_helper'
 
       RSpec.describe FruitsController, type: :controller do
         describe 'GET #index' do
@@ -17,8 +19,8 @@ Feature: generate schema for test with :lobanov tag
       end
       """
 
-  When I run `bin/rspec spec/controllers/fruits_controller_spec.rb`
-  Then the example should pass
+    When I run `rspec spec/controllers/fruits_controller_spec.rb`
+    Then the example should pass
 
   # Then a file named "spec/murker/v1/martians/GET.yml" should exist
 
