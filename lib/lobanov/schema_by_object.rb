@@ -35,7 +35,7 @@ module Lobanov
             add_examples_to_schema(schema['properties'][skey]['items'], example)
           end
         else
-          schema['properties'][skey]['example'] = obj[key]
+          schema['properties'][skey]['example'] = obj[key] || ''
         end
       end
 
