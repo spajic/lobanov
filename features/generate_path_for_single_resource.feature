@@ -1,5 +1,5 @@
-Feature: generate schema for test with :lobanov tag
-  When you write rspec test with :lobanov tag it generates schema
+Feature: generate path for single resource
+  When you write lobanov spec for /resources/:id path
 
   Scenario: basic usage
     When I cd to "../../test_apps/rails_61"
@@ -9,11 +9,12 @@ Feature: generate schema for test with :lobanov tag
       require 'rails_helper'
 
       RSpec.describe FruitsController, type: :controller do
-        describe 'GET #index' do
-          it 'returns a success response', :lobanov do
-            get :index
+        describe 'GET #show' do
+          it 'returns expected resource', :lobanov do
+            get(:show, params: {id: 1})
+
             expect(response).to have_http_status(:ok)
-            expect(json_body).to eq({fruits: 'will_be_here'})
+            expect(json_body).to eq({color: nil})
           end
         end
       end
@@ -36,39 +37,31 @@ Feature: generate schema for test with :lobanov tag
     Then the example should pass
 
     Then a file named "frontend/api-backend-specification/index.yaml" should contain:
-      """yaml
-      ---
-      paths:
-        "/fruits":
-          "$ref": "./paths/fruits.yaml"
-      components:
-        schemas:
-          Fruits:
-            "$ref": "./components/fruits/Fruits.yaml"
-      """
+    """yaml
+    ---
+    paths:
+      "/fruits/[id]":
+        "$ref": "./paths/fruits/[id].yaml"
+    """
 
-    Then a file named "frontend/api-backend-specification/components/fruits/Fruits.yaml" should contain:
-      """yaml
-      ---
-      type: object
-      required:
-      - fruits
-      properties:
-        fruits:
-          type: string
-          example: will_be_here
-      """
-
-      Then a file named "frontend/api-backend-specification/paths/fruits.yaml" should contain:
+    Then a file named "frontend/api-backend-specification/paths/fruits/[id].yaml" should contain:
       """yaml
       ---
       get:
+        parameters:
+        - in: path
+          name: id
+          description: id
+          schema:
+            type: integer
+          required: true
+          example: '1'
         responses:
           '200':
-            description: GET /fruits -> 200
+            description: GET /fruits/:id -> 200
             content:
               application/json:
                 schema:
-                  "$ref": "../components/fruits/Fruits.yaml"
-      """
+                  "$ref": "../../components//Fruit.yaml"
 
+      """

@@ -9,7 +9,7 @@ get:
     required: true
     example: '1'
   responses:
-    "'200'":
+    '200':
       description: GET /fruits/:id -> 200
       content:
         application/json:

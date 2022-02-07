@@ -50,7 +50,7 @@ module Lobanov
       component_index = index['components']['schemas'][component_name_for_index]
       component_schema = read_relative(component_index['$ref'])
 
-      path_schema[verb.downcase]['responses']["'#{status}'"]['content']['application/json']['schema'] = component_schema
+      path_schema[verb.downcase]['responses'][status.to_s]['content']['application/json']['schema'] = component_schema
 
       {
         'paths' => {
@@ -61,7 +61,7 @@ module Lobanov
 
     def replace_component_schema_with_ref
       res = path_schema.dup
-      content = res[verb.downcase]['responses']["'#{status}'"]['content']
+      content = res[verb.downcase]['responses'][status.to_s]['content']
       content['application/json']['schema'] = ref_to_component
       res
     end

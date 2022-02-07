@@ -98,7 +98,7 @@ module Lobanov
 
     def response_schema
       {
-        "'#{status}'" => {
+        status.to_s => {
           'description' => "#{verb} #{endpoint_path} -> #{status}",
           'content' => {
             'application/json' => {

@@ -1,8 +1,8 @@
 ---
 paths:
-  "/fruits/[id]":
-    "$ref": "./paths/fruits/[id].yaml"
+  "/fruits":
+    "$ref": "./paths/fruits.yaml"
 components:
   schemas:
-    Fruit:
-      "$ref": "./components//Fruit.yaml"
+    Fruits:
+      "$ref": "./components/fruits/Fruits.yaml"
