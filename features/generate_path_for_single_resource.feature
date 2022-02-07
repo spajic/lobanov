@@ -11,10 +11,10 @@ Feature: generate path for single resource
       RSpec.describe FruitsController, type: :controller do
         describe 'GET #show' do
           it 'returns expected resource', :lobanov do
-            get(:show, params: {id: 1})
+            get(:show, params: {id: 2})
 
             expect(response).to have_http_status(:ok)
-            expect(json_body).to eq({color: nil})
+            expect(json_body).to eq({color: 'yellow'})
           end
         end
       end
@@ -55,7 +55,7 @@ Feature: generate path for single resource
           schema:
             type: integer
           required: true
-          example: '1'
+          example: '2'
         responses:
           '200':
             description: GET /fruits/:id -> 200

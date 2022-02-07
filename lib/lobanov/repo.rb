@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+
 module Lobanov
   # Ответственность Repo - сохранять и загружать схему, подготовленную Generator
   # Самый простой вариант - сохранять просто всю схему в файл по соответствующему пути
@@ -7,6 +9,8 @@ module Lobanov
   # При сохранении раскладываем схему в components и paths и добавляем в index
   # При загрузке собираем из тех же кусочков обратно
   class Repo
+    extend Forwardable
+
     SCHEMAS_PATH = 'spec/lobanov/schemas'
     COMPONENTS_BASE = 'frontend/api-backend-specification/components'
     PATHS_BASE = 'frontend/api-backend-specification/paths'
@@ -15,15 +19,12 @@ module Lobanov
 
     attr_reader :interaction
 
-    delegate(
-      :component_name,
-      :path_name,
-      :path_schema,
-      :status,
-      :verb,
-      :component_schema,
-      to: :generator
-    )
+    def_delegator :generator, :component_name
+    def_delegator :generator, :path_name
+    def_delegator :generator, :path_schema
+    def_delegator :generator, :status
+    def_delegator :generator, :verb
+    def_delegator :generator, :component_schema
 
     def initialize(interaction:)
       @interaction = interaction

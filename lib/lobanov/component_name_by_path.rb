@@ -37,11 +37,11 @@ module Lobanov
     end
 
     def single_resource_name
-      parts[-2].singularize.camelize
+      Support.camelize(Support.singularize(parts[-2]))
     end
 
     def componentize_last_part
-      last_part.camelize
+      Support.camelize(last_part)
     end
 
     def last_part
@@ -60,7 +60,7 @@ module Lobanov
     end
 
     def parts
-      @parts ||= endpoint_path.split('/').reject(&:blank?)
+      @parts ||= endpoint_path.split('/').reject(&:empty?)
     end
   end
 end

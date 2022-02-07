@@ -11,6 +11,10 @@ class FruitsController < ActionController::Base
       render json: {
         color: nil
       }
+    when 2
+      render json: {
+        color: 'yellow'
+      }
     end
   end
 end

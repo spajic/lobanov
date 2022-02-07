@@ -3,7 +3,7 @@
 module Lobanov
   # Generates OpenAPI v3 schema for path_params of Interaction
   class PathParamsGenerator
-    attr_reader :params
+    attr_reader :params # Hash
 
     def self.call(params)
       new(params).call
@@ -14,7 +14,7 @@ module Lobanov
     end
 
     def call
-      return if params.blank?
+      return if params.empty?
 
       params.reject! { |name, _value| %w[controller action].include? name }
       return if params.empty?

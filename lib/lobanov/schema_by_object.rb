@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'pry'
 
 module Lobanov
   class SchemaByObject
@@ -30,12 +31,19 @@ module Lobanov
         when Hash
           add_examples_to_schema(schema['properties'][skey], obj[key])
         when Array
-          example = obj[key].detect(&:present?)
-          if schema['properties'][skey]['items'].present?
+          example = obj[key].detect {|hash| !hash.empty?}
+          unless schema['properties'][skey]['items'].empty?
             add_examples_to_schema(schema['properties'][skey]['items'], example)
           end
         else
-          schema['properties'][skey]['example'] = obj[key] || ''
+          example = obj[key]
+          # Не разрешаем добавить в тест поле, но не дать реального примера
+          # по nil мы не можем на вывести тип
+          # пустая строка тоже плохо, лучше в качестве примера дать заполненную
+          if example.nil? || example == ''
+            raise MissingExampleError.new("for #{key.inspect} in #{obj}")
+          end
+          schema['properties'][skey]['example'] = example
         end
       end
 

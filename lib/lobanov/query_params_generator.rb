@@ -3,7 +3,7 @@
 module Lobanov
   # Generates OpenAPI v3 schema for query_params of Interaction
   class QueryParamsGenerator
-    attr_reader :params
+    attr_reader :params # Hash
 
     def self.call(params)
       new(params).call
@@ -14,7 +14,7 @@ module Lobanov
     end
 
     def call
-      return if params.blank?
+      return if params.empty?
 
       params.map { |name, value| schema_for_path_param(name, value) }
     end

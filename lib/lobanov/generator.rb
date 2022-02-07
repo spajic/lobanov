@@ -4,19 +4,18 @@ module Lobanov
   # Generates OpenAPI v3 schema for Interaction
   # Output is Ruby object representing schema, it may be serialized to yml|json
   class Generator
+    extend Forwardable
+
     attr_reader :interaction
 
-    delegate(
-      :verb,
-      :endpoint_path,
-      :path_info,
-      :path_params,
-      :query_params,
-      :payload,
-      :body,
-      :status,
-      to: :interaction
-    )
+    def_delegator :@interaction, :verb
+    def_delegator :@interaction, :endpoint_path
+    def_delegator :@interaction, :path_info
+    def_delegator :@interaction, :path_params
+    def_delegator :@interaction, :query_params
+    def_delegator :@interaction, :payload
+    def_delegator :@interaction, :body
+    def_delegator :@interaction, :status
 
     def initialize(interaction:)
       @interaction = interaction

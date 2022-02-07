@@ -11,6 +11,8 @@ module Lobanov
 
   class NonroutableRequestError < LobanovError; end
 
+  class MissingExampleError < LobanovError; end
+
   def self.capture(&block)
     Spy.on(&block)
   end
