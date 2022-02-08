@@ -39,7 +39,7 @@ Feature: generate schema for test with :lobanov tag
       """yaml
       ---
       paths:
-        "/fruits":
+        "/wapi/fruits":
           "$ref": "./paths/fruits.yaml"
       components:
         schemas:

@@ -40,8 +40,12 @@ Feature: generate path for single resource
     """yaml
     ---
     paths:
-      "/fruits/{id}":
+      "/wapi/fruits/{id}":
         "$ref": "./paths/fruits/[id].yaml"
+    components:
+      schemas:
+        Fruit:
+          "$ref": "./components/fruits/Fruit.yaml"
     """
 
     Then a file named "frontend/api-backend-specification/paths/fruits/[id].yaml" should contain:

@@ -59,7 +59,7 @@ RSpec.describe Lobanov::Generator do
     let(:expected_result) do
       {
         'paths' => {
-          '/grid_bots/{id}' => path_schema
+          '/wapi/grid_bots/{id}' => path_schema
         }
       }
     end

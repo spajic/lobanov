@@ -72,9 +72,9 @@ module Lobanov
       res = endpoint_path.gsub(/:(\w*)/) { |_s| "{#{Regexp.last_match(1)}}" }
 
       # TODO: refactor, duplicate code smell
-      Lobanov.namespaces_to_ignore.each do |namespace|
-        res.gsub!("#{namespace}/", '')
-      end
+      # Lobanov.namespaces_to_ignore.each do |namespace|
+      #   res.gsub!("#{namespace}/", '')
+      # end
 
       res
     end
