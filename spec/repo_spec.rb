@@ -161,9 +161,6 @@ RSpec.describe Lobanov::Repo do
     }
   end
 
-  let(:component_name) { 'wapi/GridBot' }
-  let(:path_name) { 'wapi/grid_bots/[id]' }
-
   describe '#ref_to_component' do
     let(:subject) do
       repo.ref_to_component

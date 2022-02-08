@@ -40,7 +40,7 @@ Feature: generate path for single resource
     """yaml
     ---
     paths:
-      "/fruits/[id]":
+      "/fruits/{id}":
         "$ref": "./paths/fruits/[id].yaml"
     """
 

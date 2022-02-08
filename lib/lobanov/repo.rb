@@ -21,6 +21,7 @@ module Lobanov
 
     def_delegator :generator, :component_name
     def_delegator :generator, :path_name
+    def_delegator :generator, :path_with_curly_braces
     def_delegator :generator, :path_schema
     def_delegator :generator, :status
     def_delegator :generator, :verb
@@ -70,7 +71,7 @@ module Lobanov
     def update_index
       index = YAML.load_file(INDEX_PATH)
 
-      index['paths']["/#{path_name}"] = {'$ref' => "./paths/#{path_name}.yaml"}
+      index['paths'][path_with_curly_braces] = {'$ref' => "./paths/#{path_name}.yaml"}
 
       index['components']['schemas'][component_name_for_index] = {
         '$ref' => "./components/#{component_name}.yaml"
