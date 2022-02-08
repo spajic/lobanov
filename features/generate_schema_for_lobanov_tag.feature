@@ -65,7 +65,7 @@ Feature: generate schema for test with :lobanov tag
       get:
         responses:
           '200':
-            description: GET /fruits -> 200
+            description: GET /wapi/fruits -> 200
             content:
               application/json:
                 schema:

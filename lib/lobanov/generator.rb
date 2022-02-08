@@ -52,7 +52,7 @@ module Lobanov
       ComponentNameByPath.call(endpoint_path)
     end
 
-    # /wapi/grid_bots/:id -> wapi/grid_bots[id]
+    # /wapi/grid_bots/:id -> wapi/grid_bots/[id]
     # users/:user_id/pets/:pet_id -> users/[user_id]/pets/[pet_id]
     def path_name
       res = endpoint_path.dup.gsub(%r{^/}, '') # убираем /, если строка начинается с него
@@ -61,11 +61,22 @@ module Lobanov
         res.gsub!(id, "[#{id.gsub(':', '')}]")
       end
 
+      Lobanov.namespaces_to_ignore.each do |namespace|
+        res.gsub!("#{namespace}/", '')
+      end
+
       res
     end
 
     def path_with_curly_braces
-      endpoint_path.gsub(/:(\w*)/) { |_s| "{#{Regexp.last_match(1)}}" }
+      res = endpoint_path.gsub(/:(\w*)/) { |_s| "{#{Regexp.last_match(1)}}" }
+
+      # TODO: refactor, duplicate code smell
+      Lobanov.namespaces_to_ignore.each do |namespace|
+        res.gsub!("#{namespace}/", '')
+      end
+
+      res
     end
 
     private

@@ -5,6 +5,8 @@ files = Dir.glob(src).reject { |name| name.end_with?('lobanov/spec_helper.rb') }
 files.each { |file| require file }
 
 module Lobanov
+  extend Configuration
+
   class LobanovError < StandardError; end
 
   class SchemaMismatchError < LobanovError; end

@@ -5,57 +5,133 @@ require 'spec_helper'
 RSpec.describe Lobanov::ComponentNameByPath do
   subject { described_class.call(endpoint_path) }
 
-  context 'with single resource path' do
-    let(:endpoint_path) { 'wapi/grid_bots/:id' }
-    let(:expected_result) { 'wapi/GridBot' }
+  context 'with empty namespaces_to_ignore' do
+    before(:all) do
+      Lobanov.configure do |config|
+        config.namespaces_to_ignore = []
+      end
+    end
 
-    it 'returns expected result' do
-      expect(subject).to eq(expected_result)
+    context 'with single resource path' do
+      let(:endpoint_path) { 'wapi/grid_bots/:id' }
+      let(:expected_result) { 'wapi/grid_bots/GridBot' }
+
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
+    end
+
+    context 'with slash in beginning' do
+      let(:endpoint_path) { '/wapi/grid_bots/:id' }
+      let(:expected_result) { 'wapi/grid_bots/GridBot' }
+
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
+    end
+
+    context 'with collection path' do
+      let(:endpoint_path) { 'wapi/grid_bots' }
+      let(:expected_result) { 'wapi/grid_bots/GridBots' }
+
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
+    end
+
+    context 'with collection path/' do
+      let(:endpoint_path) { 'wapi/grid_bots/' }
+      let(:expected_result) { 'wapi/grid_bots/GridBots' }
+
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
+    end
+
+    context 'with nested resource' do
+      let(:endpoint_path) { 'wapi/owners/:owner_id/pets/:pet_id/toys/:toy_id' }
+      let(:expected_result) { 'wapi/owners/pets/toys/Toy' }
+
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
+    end
+
+    context 'with nested collection' do
+      let(:endpoint_path) { 'wapi/owners/:owner_id/pets/:pet_id/toys' }
+      let(:expected_result) { 'wapi/owners/pets/toys/Toys' }
+
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
     end
   end
 
-  context 'with slash in beginning' do
-    let(:endpoint_path) { '/wapi/grid_bots/:id' }
-    let(:expected_result) { 'wapi/GridBot' }
-
-    it 'returns expected result' do
-      expect(subject).to eq(expected_result)
+  context 'with Lobanov.namespaces_to_ignore = ["wapi"]' do
+    before(:all) do
+      Lobanov.configure do |config|
+        config.namespaces_to_ignore = ['wapi']
+      end
     end
-  end
 
-  context 'with collection path' do
-    let(:endpoint_path) { 'wapi/grid_bots' }
-    let(:expected_result) { 'wapi/GridBots' }
-
-    it 'returns expected result' do
-      expect(subject).to eq(expected_result)
+    after(:all) do
+      Lobanov.configure do |config|
+        config.namespaces_to_ignore = []
+      end
     end
-  end
 
-  context 'with collection path/' do
-    let(:endpoint_path) { 'wapi/grid_bots/' }
-    let(:expected_result) { 'wapi/GridBots' }
+    context 'with single resource path' do
+      let(:endpoint_path) { 'wapi/grid_bots/:id' }
+      let(:expected_result) { 'grid_bots/GridBot' }
 
-    it 'returns expected result' do
-      expect(subject).to eq(expected_result)
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
     end
-  end
 
-  context 'with nested resource' do
-    let(:endpoint_path) { 'wapi/owners/:owner_id/pets/:pet_id/toys/:toy_id' }
-    let(:expected_result) { 'wapi/Toy' }
+    context 'with slash in beginning' do
+      let(:endpoint_path) { '/wapi/grid_bots/:id' }
+      let(:expected_result) { 'grid_bots/GridBot' }
 
-    it 'returns expected result' do
-      expect(subject).to eq(expected_result)
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
     end
-  end
 
-  context 'with nested collection' do
-    let(:endpoint_path) { 'wapi/owners/:owner_id/pets/:pet_id/toys' }
-    let(:expected_result) { 'wapi/Toys' }
+    context 'with collection path' do
+      let(:endpoint_path) { 'wapi/grid_bots' }
+      let(:expected_result) { 'grid_bots/GridBots' }
 
-    it 'returns expected result' do
-      expect(subject).to eq(expected_result)
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
+    end
+
+    context 'with collection path/' do
+      let(:endpoint_path) { 'wapi/grid_bots/' }
+      let(:expected_result) { 'grid_bots/GridBots' }
+
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
+    end
+
+    context 'with nested resource' do
+      let(:endpoint_path) { 'wapi/owners/:owner_id/pets/:pet_id/toys/:toy_id' }
+      let(:expected_result) { 'owners/pets/toys/Toy' }
+
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
+    end
+
+    context 'with nested collection' do
+      let(:endpoint_path) { 'wapi/owners/:owner_id/pets/:pet_id/toys' }
+      let(:expected_result) { 'owners/pets/toys/Toys' }
+
+      it 'returns expected result' do
+        expect(subject).to eq(expected_result)
+      end
     end
   end
 end

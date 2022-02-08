@@ -22,7 +22,15 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Configuration
+
+В config/initializers/lobanov.rb
+
+```ruby
+Lobanov.configure do |config|
+  config.namespaces_to_ignore = ['wapi']
+end
+```
 
 ## Development
 

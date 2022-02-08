@@ -58,10 +58,10 @@ Feature: generate path for single resource
           example: '2'
         responses:
           '200':
-            description: GET /fruits/:id -> 200
+            description: GET /wapi/fruits/:id -> 200
             content:
               application/json:
                 schema:
-                  "$ref": "../../components//Fruit.yaml"
+                  "$ref": "../../components/fruits/Fruit.yaml"
 
       """

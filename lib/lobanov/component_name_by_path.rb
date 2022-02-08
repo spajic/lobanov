@@ -4,6 +4,11 @@ module Lobanov
   # wapi/grid_bots -> wapi/GridBots
   # wapi/grid_bots/:id -> wapi/GridBot
   # wapi/owners/:owner_id/pets/:pet_id -> wapi/Pet
+  #
+  # if 'wapi' is in Lobanov.namespaces_to_ignore
+  # wapi/grid_bots -> GridBots
+  # wapi/grid_bots/:id -> GridBot
+  # wapi/owners/:owner_id/pets/:pet_id -> Pet
   class ComponentNameByPath
     def self.call(endpoint_path)
       new(endpoint_path).call
@@ -23,7 +28,7 @@ module Lobanov
           componentize_last_part
         end
 
-      "#{namespace}/#{component}"
+      ([namespace, component] - [""]).join('/')
     end
 
     private
@@ -49,18 +54,11 @@ module Lobanov
     end
 
     def namespace
-      res = []
-      parts.each_slice(3) do |part|
-        if !id?(part[0]) && !id?(part[1]) && (id?(part[2]) || part[2].nil?)
-          res << part[0]
-        end
-      end
-
-      res.join('/')
+      parts.reject { |part| id?(part) }.join('/')
     end
 
     def parts
-      @parts ||= endpoint_path.split('/').reject(&:empty?)
+      @parts ||= endpoint_path.split('/').reject(&:empty?) - Lobanov.namespaces_to_ignore
     end
   end
 end

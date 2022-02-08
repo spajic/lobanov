@@ -47,11 +47,19 @@ RSpec.describe Lobanov::Generator do
   end
 
   describe '#call with grid_bots interaction' do
+    before(:all) do
+      Lobanov.configure { |config| config.namespaces_to_ignore = ['wapi'] }
+    end
+
+    after(:all) do
+      Lobanov.configure { |config| config.namespaces_to_ignore = [] }
+    end
+
     let(:interaction) { grid_bots_interaction }
     let(:expected_result) do
       {
         'paths' => {
-          '/wapi/grid_bots/{id}' => path_schema
+          '/grid_bots/{id}' => path_schema
         }
       }
     end
@@ -147,11 +155,11 @@ RSpec.describe Lobanov::Generator do
       expect(subject.call).to eq(expected_result)
 
       expect(subject.endpoint_path).to eq('/wapi/grid_bots/:id')
-      expect(subject.component_name).to eq('wapi/GridBot')
+      expect(subject.component_name).to eq('grid_bots/GridBot')
       expect(subject.verb).to eq('GET')
       expect(subject.status).to eq(200)
       expect(subject.component_schema).to eq(component_schema)
-      expect(subject.path_name).to eq('wapi/grid_bots/[id]')
+      expect(subject.path_name).to eq('grid_bots/[id]')
       expect(subject.path_schema).to eq(path_schema)
     end
   end
