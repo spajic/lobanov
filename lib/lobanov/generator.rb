@@ -46,8 +46,8 @@ module Lobanov
       paths[key]
     end
 
-    # путь вида wapi/grid_bots/:id  -> wapi/GridBot
-    # путь вида wapi/grid_bots -> wapi/GridBots
+    # путь вида wapi/grid_bots/:id  -> wapi/grid_bots/GridBot
+    # путь вида wapi/grid_bots -> wapi/grid_bots/GridBots
     def component_name
       ComponentNameByPath.call(endpoint_path)
     end
@@ -69,14 +69,7 @@ module Lobanov
     end
 
     def path_with_curly_braces
-      res = endpoint_path.gsub(/:(\w*)/) { |_s| "{#{Regexp.last_match(1)}}" }
-
-      # TODO: refactor, duplicate code smell
-      # Lobanov.namespaces_to_ignore.each do |namespace|
-      #   res.gsub!("#{namespace}/", '')
-      # end
-
-      res
+      endpoint_path.gsub(/:(\w*)/) { |_s| "{#{Regexp.last_match(1)}}" }
     end
 
     private
