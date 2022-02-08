@@ -37,14 +37,25 @@ module Lobanov
 
     def store_schema
       write("#{COMPONENTS_BASE}/#{component_name}", component_schema)
-      write("#{PATHS_BASE}/#{path_name}", replace_component_schema_with_ref)
+      write("#{PATHS_BASE}/#{store_path_name}", replace_component_schema_with_ref)
       update_index
+    end
+
+    def store_path_name
+      res = path_name.dup
+      Lobanov.namespaces_to_ignore.each do |namespace|
+        res.gsub!("#{namespace}/", '')
+      end
+
+      puts "💪💪💪#{res}"
+
+      res
     end
 
     def load_schema
       # начинаем c api-backend-specification/index.yaml и проходим по ссылкам
       index = YAML.load_file(INDEX_PATH)
-      path_index = index.dig('paths', "/#{path_name}")
+      path_index = index.dig('paths', "/#{store_path_name}")
       return nil unless path_index
 
       path_schema = read_relative(path_index['$ref'])
@@ -71,7 +82,7 @@ module Lobanov
     def update_index
       index = YAML.load_file(INDEX_PATH)
 
-      index['paths'][path_with_curly_braces] = {'$ref' => "./paths/#{path_name}.yaml"}
+      index['paths'][path_with_curly_braces] = {'$ref' => "./paths/#{store_path_name}.yaml"}
 
       index['components']['schemas'][component_name_for_index] = {
         '$ref' => "./components/#{component_name}.yaml"
@@ -85,7 +96,7 @@ module Lobanov
     end
 
     def ref_to_component
-      nesting_depth = path_name.count('/') + 1
+      nesting_depth = store_path_name.count('/') + 1
       component_path = ('../' * nesting_depth) + "components/#{component_name}.yaml"
       {'$ref' => component_path}
     end

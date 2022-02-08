@@ -49,7 +49,16 @@ module Lobanov
     # путь вида wapi/grid_bots/:id  -> wapi/grid_bots/GridBot
     # путь вида wapi/grid_bots -> wapi/grid_bots/GridBots
     def component_name
-      ComponentNameByPath.call(endpoint_path)
+      ComponentNameByPath.call(endpoint_path)[:full]
+    end
+
+    def component_only_name
+      ComponentNameByPath.call(endpoint_path)[:name]
+    end
+
+    # TODO: refactor
+    def component_namespace
+      ComponentNameByPath.call(endpoint_path)[:namespace]
     end
 
     # /wapi/grid_bots/:id -> wapi/grid_bots/[id]
@@ -59,10 +68,6 @@ module Lobanov
       ids = res.scan(/(:\w*)/).flatten # [':user_id', ':pet_id']
       ids.each do |id|
         res.gsub!(id, "[#{id.gsub(':', '')}]")
-      end
-
-      Lobanov.namespaces_to_ignore.each do |namespace|
-        res.gsub!("#{namespace}/", '')
       end
 
       res

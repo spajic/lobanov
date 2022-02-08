@@ -159,7 +159,7 @@ RSpec.describe Lobanov::Generator do
       expect(subject.verb).to eq('GET')
       expect(subject.status).to eq(200)
       expect(subject.component_schema).to eq(component_schema)
-      expect(subject.path_name).to eq('grid_bots/[id]')
+      expect(subject.path_name).to eq('wapi/grid_bots/[id]')
       expect(subject.path_schema).to eq(path_schema)
     end
   end

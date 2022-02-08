@@ -3,7 +3,9 @@
 require 'spec_helper'
 
 RSpec.describe Lobanov::ComponentNameByPath do
-  subject { described_class.call(endpoint_path) }
+  subject do
+    res = described_class.call(endpoint_path)[:full]
+  end
 
   context 'with empty namespaces_to_ignore' do
     before(:all) do

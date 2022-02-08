@@ -28,7 +28,12 @@ module Lobanov
           componentize_last_part
         end
 
-      ([namespace, component] - [""]).join('/')
+      # TODO: refactor
+      {
+        name: component,
+        namespace: namespace,
+        full: ([namespace, component] - [""]).join('/')
+      }
     end
 
     private
