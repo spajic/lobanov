@@ -7,46 +7,94 @@ RSpec.describe Lobanov::Generator do
     described_class.new(interaction: interaction)
   end
 
-  let(:grid_bots_interaction) do
-    Lobanov::Interaction.new(
-      verb: 'GET',
-      endpoint_path: '/wapi/grid_bots/:id',
-      path_info: '/wapi/grid_bots/1.json',
-      path_params: {'id' => '1'},
-      query_params: {},
-      payload: {},
-      status: 200,
-      body: {
-        'bot' => {
-          'id' => 1,
-          'name' => 'test bot',
-          'created_at' => 1_633_612_919,
-          'account_id' => 1,
-          'pair' => 'USDT_BTC',
-          'strategy_type' => 'manual',
-          'leverage_custom_value' => 2.5,
-          'investment' => '0.0',
-          'investment_quote_currency' => '0.0',
-          'upper_price' => '11000.0',
-          'lower_price' => '9000.0',
-          'quantity_per_grid' => '1.0',
-          'grids_quantity' => 101,
-          'total_quantity' => '0.0',
-          'current_profit' => '0.0',
-          'current_profit_percent' => 0,
-          'current_price' => 100.0,
-          'status' => 'enabled',
-          'grid' => [],
-          'tv_key' => 'BINANCE',
-          'tv_pair' => 'USDT_BTC',
-          'trailing_view_supported' => true,
-          'is_contract' => false
-        }
-      }
-    )
+  describe 'generate all possibly useful stuff by interaction' do
+    context 'for GET /fruits/:id/reviews/:review_id' do
+      let(:interaction) do
+        Lobanov::Interaction.new(
+          verb: 'GET',
+          endpoint_path: '/fruits/:id/reviews/:review_id',
+          controller_action: 'show',
+          path_info: '/fruits/1/reviews/2.json',
+          path_params: {'id' => '1', 'review_id' => '2'},
+          query_params: {},
+          payload: {},
+          status: 200,
+          body: []
+        )
+      end
+
+      it 'generates expected props' do
+        expect(subject.path_with_square_braces).to eq('/fruits/[id]/reviews/[review_id]')
+        expect(subject.path_with_curly_braces).to eq('/fruits/{id}/reviews/{review_id}')
+        expect(subject.path_parts).to eq(['fruits', '[id]', 'reviews', '[review_id]'])
+        expect(subject.response_component_name).to eq('FruitsReviewsShowResponse')
+      end
+    end
+
+    context 'for POST /fruits/:id/reviews/:review_id/upvote' do
+      let(:interaction) do
+        Lobanov::Interaction.new(
+          verb: 'POST',
+          endpoint_path: '/fruits/:id/reviews/:review_id/upvote',
+          controller_action: 'upvote',
+          path_info: '/fruits/1/reviews/2/upvote.json',
+          path_params: {'id' => '1', 'review_id' => '2'},
+          query_params: {},
+          payload: {},
+          status: 200,
+          body: []
+        )
+      end
+
+      it 'generates expected props' do
+        expect(subject.path_with_square_braces).to eq('/fruits/[id]/reviews/[review_id]/upvote')
+        expect(subject.path_with_curly_braces).to eq('/fruits/{id}/reviews/{review_id}/upvote')
+        expect(subject.path_parts).to eq(['fruits', '[id]', 'reviews', '[review_id]', 'upvote'])
+        expect(subject.response_component_name).to eq('FruitsReviewsUpvoteResponse')
+      end
+    end
   end
 
   describe '#call with grid_bots interaction' do
+    let(:grid_bots_interaction) do
+      Lobanov::Interaction.new(
+        verb: 'GET',
+        endpoint_path: '/wapi/grid_bots/:id',
+        path_info: '/wapi/grid_bots/1.json',
+        path_params: {'id' => '1'},
+        query_params: {},
+        payload: {},
+        status: 200,
+        body: {
+          'bot' => {
+            'id' => 1,
+            'name' => 'test bot',
+            'created_at' => 1_633_612_919,
+            'account_id' => 1,
+            'pair' => 'USDT_BTC',
+            'strategy_type' => 'manual',
+            'leverage_custom_value' => 2.5,
+            'investment' => '0.0',
+            'investment_quote_currency' => '0.0',
+            'upper_price' => '11000.0',
+            'lower_price' => '9000.0',
+            'quantity_per_grid' => '1.0',
+            'grids_quantity' => 101,
+            'total_quantity' => '0.0',
+            'current_profit' => '0.0',
+            'current_profit_percent' => 0,
+            'current_price' => 100.0,
+            'status' => 'enabled',
+            'grid' => [],
+            'tv_key' => 'BINANCE',
+            'tv_pair' => 'USDT_BTC',
+            'trailing_view_supported' => true,
+            'is_contract' => false
+          }
+        }
+      )
+    end
+
     before(:all) do
       Lobanov.configure { |config| config.namespaces_to_ignore = ['wapi'] }
     end

@@ -10,6 +10,7 @@ module Lobanov
 
     def_delegator :@interaction, :verb
     def_delegator :@interaction, :endpoint_path
+    def_delegator :@interaction, :controller_action
     def_delegator :@interaction, :path_info
     def_delegator :@interaction, :path_params
     def_delegator :@interaction, :query_params
@@ -29,6 +30,27 @@ module Lobanov
 
     def component_schema
       SchemaByObject.call(body)
+    end
+
+    def response_component_name
+      parts = path_parts_without_ids.map(&:capitalize) + [controller_action.capitalize]
+      if parts[-1] == parts[-2] # /fruits/:id/reviews/:review_id/upvote
+        parts.pop
+      end
+
+      parts.join + 'Response'
+    end
+
+    def path_with_square_braces
+      "/#{path_name}" # TODO: refactor
+    end
+
+    def path_parts
+      path_with_square_braces.split('/') - [""]
+    end
+
+    def path_parts_without_ids
+      path_parts.reject { |part| part.start_with?('[') }
     end
 
     def paths
