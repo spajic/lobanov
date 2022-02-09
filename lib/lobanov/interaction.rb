@@ -8,6 +8,7 @@ module Lobanov
     attr_reader(
       :verb,
       :endpoint_path,
+      :controller_action,
       :path_info,
       :path_params,
       :query_params,
@@ -19,6 +20,7 @@ module Lobanov
     def initialize(**params)
       @verb = params[:verb]
       @endpoint_path = params[:endpoint_path]
+      @controller_action = params[:controller_action]
       @path_info = params[:path_info]
       @path_params = params[:path_params]
       @query_params = params[:query_params]
@@ -42,6 +44,7 @@ module Lobanov
       params = {
         verb: request.method,
         endpoint_path: route_name(request),
+        controller_action: controller_action(request),
         path_info: request.path_info,
         path_params: request.env["#{PREFIX}.path_parameters"].stringify_keys.except('format'),
         query_params: request.env["#{PREFIX}.query_parameters"],
@@ -53,6 +56,10 @@ module Lobanov
       }
 
       new(params)
+    end
+
+    def self.controller_action(request)
+      Rails.application.routes.recognize_path(request.url, method: request.method)[:action]
     end
 
     def self.route_name(request)
