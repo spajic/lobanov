@@ -42,7 +42,7 @@ module Lobanov
     end
 
     def store_path_name
-      path_with_square_braces
+      path_with_square_braces + '/' + 'path'
     end
 
     def load_schema

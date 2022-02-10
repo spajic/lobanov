@@ -40,14 +40,14 @@ Feature: generate schema for test with :lobanov tag
       ---
       paths:
         "/fruits":
-          "$ref": "./paths/fruits.yaml"
+          "$ref": "./paths/fruits/path.yaml"
       components:
         schemas:
           FruitsIndexResponse:
             "$ref": "./components/FruitsIndexResponse.yaml"
       """
 
-    Then a file named "frontend/api-backend-specification/components/fruits/Fruits.yaml" should contain:
+    Then a file named "frontend/api-backend-specification/components/FruitsIndexResponse.yaml" should contain:
       """yaml
       ---
       type: object
@@ -59,7 +59,7 @@ Feature: generate schema for test with :lobanov tag
           example: will_be_here
       """
 
-      Then a file named "frontend/api-backend-specification/paths/fruits.yaml" should contain:
+      Then a file named "frontend/api-backend-specification/paths/fruits/path.yaml" should contain:
       """yaml
       ---
       get:
@@ -69,6 +69,6 @@ Feature: generate schema for test with :lobanov tag
             content:
               application/json:
                 schema:
-                  "$ref": "../components/FruitsIndexResponse.yaml"
+                  "$ref": "../../components/FruitsIndexResponse.yaml"
       """
 

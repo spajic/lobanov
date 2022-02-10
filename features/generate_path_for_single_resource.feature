@@ -41,14 +41,14 @@ Feature: generate path for single resource
     ---
     paths:
       "/fruits/{id}":
-        "$ref": "./paths/fruits/[id].yaml"
+        "$ref": "./paths/fruits/[id]/path.yaml"
     components:
       schemas:
         FruitsShowResponse:
           "$ref": "./components/FruitsShowResponse.yaml"
     """
 
-    Then a file named "frontend/api-backend-specification/paths/fruits/[id].yaml" should contain:
+    Then a file named "frontend/api-backend-specification/paths/fruits/[id]/path.yaml" should contain:
       """yaml
       ---
       get:
@@ -66,6 +66,6 @@ Feature: generate path for single resource
             content:
               application/json:
                 schema:
-                  "$ref": "../../components/FruitsShowResponse.yaml"
+                  "$ref": "../../../components/FruitsShowResponse.yaml"
 
       """
