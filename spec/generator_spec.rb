@@ -59,8 +59,8 @@ RSpec.describe Lobanov::Generator do
     let(:grid_bots_interaction) do
       Lobanov::Interaction.new(
         verb: 'GET',
-        endpoint_path: '/wapi/grid_bots/:id',
-        path_info: '/wapi/grid_bots/1.json',
+        endpoint_path: '/grid_bots/:id',
+        path_info: '/grid_bots/1.json',
         path_params: {'id' => '1'},
         query_params: {},
         payload: {},
@@ -107,7 +107,7 @@ RSpec.describe Lobanov::Generator do
     let(:expected_result) do
       {
         'paths' => {
-          '/wapi/grid_bots/{id}' => path_schema
+          '/grid_bots/{id}' => path_schema
         }
       }
     end
@@ -126,7 +126,7 @@ RSpec.describe Lobanov::Generator do
           ],
           'responses' => {
             '200' => {
-              'description' => 'GET /wapi/grid_bots/:id -> 200',
+              'description' => 'GET /grid_bots/:id -> 200',
               'content' => {
                 'application/json' => {
                   'schema' => component_schema
@@ -202,12 +202,11 @@ RSpec.describe Lobanov::Generator do
     it 'returns expected result' do
       expect(subject.call).to eq(expected_result)
 
-      expect(subject.endpoint_path).to eq('/wapi/grid_bots/:id')
-      expect(subject.component_name).to eq('grid_bots/GridBot')
+      expect(subject.endpoint_path).to eq('/grid_bots/:id')
       expect(subject.verb).to eq('GET')
       expect(subject.status).to eq(200)
       expect(subject.component_schema).to eq(component_schema)
-      expect(subject.path_name).to eq('wapi/grid_bots/[id]')
+      expect(subject.path_with_square_braces).to eq('/grid_bots/[id]')
       expect(subject.path_schema).to eq(path_schema)
     end
   end

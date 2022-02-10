@@ -33,7 +33,7 @@ module Lobanov
     end
 
     def response_component_name
-      parts = path_parts_without_ids.map(&:capitalize) + [controller_action.capitalize]
+      parts = path_parts_without_ids.map{|str| Support.camelize(str)} + [Support.camelize(controller_action)]
       if parts[-1] == parts[-2] # /fruits/:id/reviews/:review_id/upvote
         parts.pop
       end
@@ -41,8 +41,20 @@ module Lobanov
       parts.join + 'Response'
     end
 
+    # users/:user_id/pets/:pet_id -> users/[user_id]/pets/[pet_id]
     def path_with_square_braces
-      "/#{path_name}" # TODO: refactor
+      # res = endpoint_path.dup.gsub(%r{^/}, '') # убираем /, если строка начинается с него
+      res = endpoint_path.dup
+      ids = res.scan(/(:\w*)/).flatten # [':user_id', ':pet_id']
+      ids.each do |id|
+        res.gsub!(id, "[#{id.gsub(':', '')}]")
+      end
+
+      res.gsub('//', '/')
+    end
+
+    def path_with_curly_braces
+      path_with_square_braces.gsub('[', '{').gsub(']', '}')
     end
 
     def path_parts
@@ -66,37 +78,6 @@ module Lobanov
 
       key = paths.keys.first
       paths[key]
-    end
-
-    # путь вида wapi/grid_bots/:id  -> wapi/grid_bots/GridBot
-    # путь вида wapi/grid_bots -> wapi/grid_bots/GridBots
-    def component_name
-      ComponentNameByPath.call(endpoint_path)[:full]
-    end
-
-    def component_only_name
-      ComponentNameByPath.call(endpoint_path)[:name]
-    end
-
-    # TODO: refactor
-    def component_namespace
-      ComponentNameByPath.call(endpoint_path)[:namespace]
-    end
-
-    # /wapi/grid_bots/:id -> wapi/grid_bots/[id]
-    # users/:user_id/pets/:pet_id -> users/[user_id]/pets/[pet_id]
-    def path_name
-      res = endpoint_path.dup.gsub(%r{^/}, '') # убираем /, если строка начинается с него
-      ids = res.scan(/(:\w*)/).flatten # [':user_id', ':pet_id']
-      ids.each do |id|
-        res.gsub!(id, "[#{id.gsub(':', '')}]")
-      end
-
-      res
-    end
-
-    def path_with_curly_braces
-      endpoint_path.gsub(/:(\w*)/) { |_s| "{#{Regexp.last_match(1)}}" }
     end
 
     private

@@ -15,7 +15,7 @@ module Lobanov
     end
 
     def set_default_configuration
-      self.namespaces_to_ignore = []
+      self.namespaces_to_ignore = ['wapi']
     end
   end
 end

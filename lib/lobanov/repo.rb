@@ -19,8 +19,8 @@ module Lobanov
 
     attr_reader :interaction
 
-    def_delegator :generator, :component_name
-    def_delegator :generator, :path_name
+    def_delegator :generator, :response_component_name
+    def_delegator :generator, :path_with_square_braces
     def_delegator :generator, :path_with_curly_braces
     def_delegator :generator, :path_schema
     def_delegator :generator, :status
@@ -36,31 +36,24 @@ module Lobanov
     end
 
     def store_schema
-      write("#{COMPONENTS_BASE}/#{component_name}", component_schema)
-      write("#{PATHS_BASE}/#{store_path_name}", replace_component_schema_with_ref)
+      write(COMPONENTS_BASE + '/' + response_component_name, component_schema)
+      write(PATHS_BASE + store_path_name, replace_component_schema_with_ref)
       update_index
     end
 
     def store_path_name
-      res = path_name.dup
-      Lobanov.namespaces_to_ignore.each do |namespace|
-        res.gsub!("#{namespace}/", '')
-      end
-
-      puts "💪💪💪#{res}"
-
-      res
+      path_with_square_braces
     end
 
     def load_schema
       # начинаем c api-backend-specification/index.yaml и проходим по ссылкам
       index = YAML.load_file(INDEX_PATH)
-      path_index = index.dig('paths', "/#{store_path_name}")
+      path_index = index.dig('paths', store_path_name)
       return nil unless path_index
 
       path_schema = read_relative(path_index['$ref'])
 
-      component_index = index['components']['schemas'][component_name_for_index]
+      component_index = index['components']['schemas'][response_component_name]
       component_schema = read_relative(component_index['$ref'])
 
       path_schema[verb.downcase]['responses'][status.to_s]['content']['application/json']['schema'] = component_schema
@@ -82,22 +75,18 @@ module Lobanov
     def update_index
       index = YAML.load_file(INDEX_PATH)
 
-      index['paths'][path_with_curly_braces] = {'$ref' => "./paths/#{store_path_name}.yaml"}
+      index['paths'][path_with_curly_braces] = {'$ref' => "./paths#{store_path_name}.yaml"}
 
-      index['components']['schemas'][component_name_for_index] = {
-        '$ref' => "./components/#{component_name}.yaml"
+      index['components']['schemas'][response_component_name] = {
+        '$ref' => "./components/#{response_component_name}.yaml"
       }
 
       File.write(INDEX_PATH, index.to_yaml)
     end
 
-    def component_name_for_index
-      component_name.split('/').last
-    end
-
     def ref_to_component
-      nesting_depth = store_path_name.count('/') + 1
-      component_path = ('../' * nesting_depth) + "components/#{component_name}.yaml"
+      nesting_depth = store_path_name.count('/')
+      component_path = ('../' * nesting_depth) + "components/#{response_component_name}.yaml"
       {'$ref' => component_path}
     end
 

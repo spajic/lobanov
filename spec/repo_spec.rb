@@ -7,8 +7,9 @@ RSpec.describe Lobanov::Repo do
   let(:grid_bots_interaction) do
     Lobanov::Interaction.new(
       verb: 'GET',
-      endpoint_path: '/wapi/grid_bots/:id',
-      path_info: '/wapi/grid_bots/1.json',
+      endpoint_path: '/grid_bots/:id',
+      path_info: '/grid_bots/1.json',
+      controller_action: 'show',
       path_params: {'id' => '1'},
       query_params: {},
       payload: {},
@@ -58,7 +59,7 @@ RSpec.describe Lobanov::Repo do
         ],
         'responses' => {
           '200' => {
-            'description' => 'GET /wapi/grid_bots/:id -> 200',
+            'description' => 'GET /grid_bots/:id -> 200',
             'content' => {
               'application/json' => {
                 'schema' => component_schema
@@ -85,11 +86,11 @@ RSpec.describe Lobanov::Repo do
         ],
         'responses' => {
           '200' => {
-            'description' => 'GET /wapi/grid_bots/:id -> 200',
+            'description' => 'GET /grid_bots/:id -> 200',
             'content' => {
               'application/json' => {
                 'schema' => {
-                  '$ref' => '../../../components/wapi/grid_bots/GridBot.yaml'
+                  '$ref' => '../../../components/GridBotsShowResponse.yaml'
                 }
               }
             }
@@ -165,7 +166,7 @@ RSpec.describe Lobanov::Repo do
     let(:subject) do
       repo.ref_to_component
     end
-    let(:expected_ref) { {'$ref' => '../../../components/wapi/grid_bots/GridBot.yaml'} }
+    let(:expected_ref) { {'$ref' => '../../../components/GridBotsShowResponse.yaml'} }
 
     it 'returns expected result' do
       expect(subject).to eq(expected_ref)

@@ -40,12 +40,12 @@ Feature: generate path for single resource
     """yaml
     ---
     paths:
-      "/wapi/fruits/{id}":
+      "/fruits/{id}":
         "$ref": "./paths/fruits/[id].yaml"
     components:
       schemas:
-        Fruit:
-          "$ref": "./components/fruits/Fruit.yaml"
+        FruitsShowResponse:
+          "$ref": "./components/FruitsShowResponse.yaml"
     """
 
     Then a file named "frontend/api-backend-specification/paths/fruits/[id].yaml" should contain:
@@ -62,10 +62,10 @@ Feature: generate path for single resource
           example: '2'
         responses:
           '200':
-            description: GET /wapi/fruits/:id -> 200
+            description: GET /fruits/:id -> 200
             content:
               application/json:
                 schema:
-                  "$ref": "../../components/fruits/Fruit.yaml"
+                  "$ref": "../../components/FruitsShowResponse.yaml"
 
       """

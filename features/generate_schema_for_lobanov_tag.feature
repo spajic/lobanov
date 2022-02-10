@@ -39,12 +39,12 @@ Feature: generate schema for test with :lobanov tag
       """yaml
       ---
       paths:
-        "/wapi/fruits":
+        "/fruits":
           "$ref": "./paths/fruits.yaml"
       components:
         schemas:
-          Fruits:
-            "$ref": "./components/fruits/Fruits.yaml"
+          FruitsIndexResponse:
+            "$ref": "./components/FruitsIndexResponse.yaml"
       """
 
     Then a file named "frontend/api-backend-specification/components/fruits/Fruits.yaml" should contain:
@@ -65,10 +65,10 @@ Feature: generate schema for test with :lobanov tag
       get:
         responses:
           '200':
-            description: GET /wapi/fruits -> 200
+            description: GET /fruits -> 200
             content:
               application/json:
                 schema:
-                  "$ref": "../components/fruits/Fruits.yaml"
+                  "$ref": "../components/FruitsIndexResponse.yaml"
       """
 
