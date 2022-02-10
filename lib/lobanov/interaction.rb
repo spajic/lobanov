@@ -43,9 +43,9 @@ module Lobanov
 
       params = {
         verb: request.method,
-        endpoint_path: route_name(request),
+        endpoint_path: remove_ignored_namespaces(route_name(request)),
         controller_action: controller_action(request),
-        path_info: request.path_info,
+        path_info: remove_ignored_namespaces(request.path_info),
         path_params: request.env["#{PREFIX}.path_parameters"].stringify_keys.except('format'),
         query_params: request.env["#{PREFIX}.query_parameters"],
         payload: request.env["#{PREFIX}.request_parameters"].merge(
@@ -56,6 +56,15 @@ module Lobanov
       }
 
       new(params)
+    end
+
+    def self.remove_ignored_namespaces(path)
+      res = path
+      Lobanov.namespaces_to_ignore.each do |namespace|
+        res.gsub!(namespace, '')
+      end
+
+      res.gsub('//', '/')
     end
 
     def self.controller_action(request)
