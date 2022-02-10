@@ -22,6 +22,28 @@ Or install it yourself as:
 
 ## Usage
 
+### Что должен уметь Lobanov: checklist
+
+#### Now
+
+- [ ] для GET сохранить path и схему Response в componets/responses
+  - [ ] GET /fruits,
+  - [ ] GET /fruits/:id,
+  - [ ] GET /resources/:id/reviews
+  - [ ] GET /resources/:id/reviews/:review_id
+- [ ] ронять тест, если схема ответа изменилась
+- [ ] для POST, PUT, DELETE важно сохранять схему параметров запроса в components/params
+- [ ] требовать чтобы для examples все поля были заполнены
+- [ ] требовать стандартной схемы для успешного ответа POST, PUT, DELETE
+
+#### Later
+- [ ] уметь работать с enums, когда поле может принимать известное множество значений
+
+#### Notes
+- [ ] все поля, которые в lobanov-spec приходят в Response считаем обязательными и требуем чтобы было не пустое значение для example
+- [ ] API подразумевается json, параметры либо в path, либо в body в json
+
+
 ### Схема хранения
 
 Вообще схемы хранения могут быть разные, но начнём с одной.
@@ -29,8 +51,6 @@ Or install it yourself as:
 Пусть есть ресурс и вложенный ресурс, например пусть Фрукты и Отзывы на фрукты
 
 И пусть ещё всё это в неймспейсе `wapi/`
-
-API подразумевается json.
 
 - GET /fruits (index)
 - GET /fruits/:id (show)
