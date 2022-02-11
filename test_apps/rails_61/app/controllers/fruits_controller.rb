@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FruitsController < ActionController::Base
-  # TODO: сохранить в константу 3 фрукта и брать контент из неё
   FRUITS = [
     {name: 'orange', color: 'orange', weight: 100, seasonal: false},
     {name: 'lemon', color: 'yellow', weight: 50, seasonal: false},
@@ -34,6 +33,12 @@ class FruitsController < ActionController::Base
 
   def update
     data = params.require([:id, :name, :color, :weight, :seasonal])
+
+    render json: {}, status: :ok
+  end
+
+  def destroy
+    data = params.require(:id)
 
     render json: {}, status: :ok
   end

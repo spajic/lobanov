@@ -56,6 +56,14 @@ Feature: generate complete specs for resource
             expect(response).to have_http_status(:ok)
           end
         end
+
+        describe 'DELETE #destroy' do
+          it 'returns expected response with 200 and empty body', :lobanov do
+            delete(:destroy, params: {id: 1})
+
+            expect(response).to have_http_status(:ok)
+          end
+        end
       end
       """
 
@@ -81,6 +89,8 @@ Feature: generate complete specs for resource
           "$ref": "./components/FruitsCreateResponse.yaml"
         FruitsUpdateResponse:
           "$ref": "./components/FruitsUpdateResponse.yaml"
+        FruitsDestroyResponse:
+          "$ref": "./components/FruitsDestroyResponse.yaml"
     """
 
     # ============= PATHS =============
@@ -189,7 +199,22 @@ Feature: generate complete specs for resource
                 application/json:
                   schema:
                     "$ref": "../../../components/FruitsShowResponse.yaml"
-
+        delete:
+          responses:
+            '200':
+              description: DELETE /fruits/:id -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "../../../components/FruitsDestroyResponse.yaml"
+          parameters:
+          - in: path
+            name: id
+            description: id
+            schema:
+              type: integer
+            required: true
+            example: '1'
         """
 
       # ============= COMPONENTS =============

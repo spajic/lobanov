@@ -36,4 +36,12 @@ RSpec.describe FruitsController, type: :controller do
       expect(response).to have_http_status(:ok)
     end
   end
+
+  describe 'DELETE #destroy' do
+    it 'returns expected response with 200 and empty body', :lobanov do
+      delete(:destroy, params: {id: 1})
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end
