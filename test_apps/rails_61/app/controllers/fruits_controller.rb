@@ -27,9 +27,14 @@ class FruitsController < ActionController::Base
   end
 
   def create
-    respond_to :json
     data = params.require([:name, :color, :weight, :seasonal])
 
     render json: {}, status: :created
+  end
+
+  def update
+    data = params.require([:id, :name, :color, :weight, :seasonal])
+
+    render json: {}, status: :ok
   end
 end
