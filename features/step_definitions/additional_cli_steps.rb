@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'pry'
 
 Then(/^the example(s)? should( all)? pass$/) do |_, _|
   puts all_output
@@ -18,4 +17,11 @@ Then(/^the output should contain (failures|these lines):$/) do |_, lines|
     expect(out).to match(/#{Regexp.escape(line)}/)
     out.gsub!(/.*?#{Regexp.escape(line)}/m, '')
   end
+end
+
+Then('a yaml named {string} should contain:') do |file, expected_content|
+  file_content = YAML.load_file(expand_path(file))
+  content = YAML.load(expected_content)
+
+  expect(file_content).to eq(content)
 end
