@@ -30,8 +30,8 @@ RSpec.describe FruitsController, type: :controller do
 
   describe 'PUT #update' do
     let(:apple) { {id: 1, name: 'apple', color: 'green', weight: 150, seasonal: false} }
-    it 'returns expected response with 200 and empty body' do
-      put(:update, params: apple)
+    it 'returns expected response with 200 and empty body', :lobanov do
+      put(:update, params: apple, as: :json)
 
       expect(response).to have_http_status(:ok)
     end

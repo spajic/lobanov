@@ -50,8 +50,8 @@ Feature: generate complete specs for resource
 
         describe 'PUT #update' do
           let(:apple) { {id: 1, name: 'apple', color: 'green', weight: 150, seasonal: false} }
-          it 'returns expected response with 200 and empty body' do
-            put(:update, params: apple)
+          it 'returns expected response with 200 and empty body', :lobanov do
+            put(:update, params: apple, as: :json)
 
             expect(response).to have_http_status(:ok)
           end
@@ -63,7 +63,7 @@ Feature: generate complete specs for resource
 
     Then the example should pass
 
-    Then a file named "frontend/api-backend-specification/index.yaml" should contain:
+    Then a yaml named "frontend/api-backend-specification/index.yaml" should contain:
     """yaml
     ---
     paths:
@@ -77,6 +77,10 @@ Feature: generate complete specs for resource
           "$ref": "./components/FruitsIndexResponse.yaml"
         FruitsShowResponse:
           "$ref": "./components/FruitsShowResponse.yaml"
+        FruitsCreateResponse:
+          "$ref": "./components/FruitsCreateResponse.yaml"
+        FruitsUpdateResponse:
+          "$ref": "./components/FruitsUpdateResponse.yaml"
     """
 
     # ============= PATHS =============
@@ -129,6 +133,46 @@ Feature: generate complete specs for resource
       Then a yaml named "frontend/api-backend-specification/paths/fruits/[id]/path.yaml" should contain:
         """yaml
         ---
+        put:
+          parameters:
+          - in: path
+            name: id
+            description: id
+            schema:
+              type: integer
+            required: true
+            example: '1'
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  required:
+                  - name
+                  - color
+                  - weight
+                  - seasonal
+                  properties:
+                    name:
+                      type: string
+                      example: apple
+                    color:
+                      type: string
+                      example: green
+                    weight:
+                      type: integer
+                      example: 150
+                    seasonal:
+                      type: boolean
+                      example: false
+          responses:
+            '200':
+              description: PUT /fruits/:id -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "../../../components/FruitsUpdateResponse.yaml"
         get:
           parameters:
           - in: path
