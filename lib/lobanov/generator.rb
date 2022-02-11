@@ -84,14 +84,15 @@ module Lobanov
 
     def verb_schema
       params_schema = parameters_schema
-      if params_schema
-        {
-          'parameters' => params_schema,
-          'responses' => response_schema
-        }
-      else
-        {'responses' => response_schema}
+      if (verb == 'POST' || verb == 'PUT' || verb == 'PATCH') and payload
+        body_schema = BodyParamsGenerator.call(payload)
       end
+
+      res = {'responses' => response_schema}
+      res.merge!({'parameters' => params_schema}) if parameters_schema
+      res.merge!({'requestBody' => body_schema}) if body_schema
+
+      res
     end
 
     def parameters_schema

@@ -37,7 +37,7 @@ module Lobanov
 
     def store_schema
       write(COMPONENTS_BASE + '/' + response_component_name, component_schema)
-      write(PATHS_BASE + store_path_name, replace_component_schema_with_ref)
+      write_append(PATHS_BASE + store_path_name, replace_component_schema_with_ref)
       update_index
     end
 
@@ -94,8 +94,15 @@ module Lobanov
 
     def write(path, object)
       full_path = "#{path}.yaml"
-      ensure_directory_exists(full_path)
+      ensure_file_exists(full_path)
       File.write full_path, YAML.dump(object)
+    end
+
+    def write_append(path, object)
+      full_path = "#{path}.yaml"
+      ensure_file_exists(full_path)
+      content = YAML.load_file(full_path)
+      File.write full_path, YAML.dump((content || {}).merge(object))
     end
 
     def read_relative(relative_path)
@@ -107,9 +114,10 @@ module Lobanov
       YAML.load_file("#{path}.yaml")
     end
 
-    def ensure_directory_exists(path)
+    def ensure_file_exists(path)
       dirname = File.dirname(path)
       FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
+      File.write(path, '---') unless File.exist?(path)
     end
   end
 end

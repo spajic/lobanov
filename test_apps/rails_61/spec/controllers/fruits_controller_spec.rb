@@ -18,4 +18,13 @@ RSpec.describe FruitsController, type: :controller do
       expect(json_body).to eq({name: 'lemon', color: 'yellow', weight: 50, seasonal: false})
     end
   end
+
+  describe 'POST #create' do
+    let(:apple) { {name: 'apple', color: 'green', weight: 150, seasonal: false} }
+    it 'returns expected response with 201', :lobanov do
+      post(:create, params: apple, as: :json)
+
+      expect(response).to have_http_status(:created)
+    end
+  end
 end

@@ -38,6 +38,15 @@ Feature: generate complete specs for resource
             expect(json_body).to eq({name: 'lemon', color: 'yellow', weight: 50, seasonal: false})
           end
         end
+
+        describe 'POST #create' do
+          let(:apple) { {name: 'apple', color: 'green', weight: 150, seasonal: false} }
+          it 'returns expected response with 201', :lobanov do
+            post(:create, params: apple, as: :json)
+
+            expect(response).to have_http_status(:created)
+          end
+        end
       end
       """
 
@@ -63,9 +72,41 @@ Feature: generate complete specs for resource
 
     # ============= PATHS =============
 
-    Then a file named "frontend/api-backend-specification/paths/fruits/path.yaml" should contain:
+    Then a yaml named "frontend/api-backend-specification/paths/fruits/path.yaml" should contain:
       """yaml
       ---
+      post:
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - name
+                - color
+                - weight
+                - seasonal
+                properties:
+                  name:
+                    type: string
+                    example: apple
+                  color:
+                    type: string
+                    example: green
+                  weight:
+                    type: integer
+                    example: 150
+                  seasonal:
+                    type: boolean
+                    example: false
+        responses:
+          '201':
+            description: POST /fruits -> 201
+            content:
+              application/json:
+                schema:
+                  "$ref": "../../components/FruitsCreateResponse.yaml"
       get:
         responses:
           '200':
@@ -76,7 +117,7 @@ Feature: generate complete specs for resource
                   "$ref": "../../components/FruitsIndexResponse.yaml"
       """
 
-      Then a file named "frontend/api-backend-specification/paths/fruits/[id]/path.yaml" should contain:
+      Then a yaml named "frontend/api-backend-specification/paths/fruits/[id]/path.yaml" should contain:
         """yaml
         ---
         get:

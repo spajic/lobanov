@@ -34,5 +34,6 @@ module Rails61
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.action_controller.default_protect_from_forgery = false
   end
 end

@@ -27,23 +27,33 @@ Or install it yourself as:
 #### Now
 
 - [ ] для GET сохранить path и схему Response в componets/responses
-  - [ ] GET /fruits,
-  - [ ] GET /fruits/:id,
+  - [x] GET /fruits,
+  - [x] GET /fruits/:id,
   - [ ] GET /resources/:id/reviews
   - [ ] GET /resources/:id/reviews/:review_id
 - [ ] ронять тест, если схема ответа изменилась
-- [ ] для POST, PUT, DELETE важно сохранять схему параметров запроса в components/params
-- [ ] требовать чтобы для examples все поля были заполнены
-- [ ] требовать стандартной схемы для успешного ответа POST, PUT, DELETE
+- [ ] для POST, PUT, DELETE важно сохранять схему параметров запроса (в components/params?)
+  - [x] POST
+  - [ ] PUT
+  - [ ] DELETE
+- [ ] генерировать схемы передаваемых параметров
+  - [x] path params
+  - [x] body params
+  - [ ] query params
+- [ ] требовать чтобы для examples все поля были заполнены (протестировать)
 
 #### Later
 - [ ] уметь работать с enums, когда поле может принимать известное множество значений
+- [ ] (?) требовать стандартной схемы для успешного ответа POST, PUT, DELETE
 
 #### Notes
 - [ ] все поля, которые в lobanov-spec приходят в Response считаем обязательными и требуем чтобы было не пустое значение для example
 - [ ] API подразумевается json, параметры либо в path, либо в body в json
 - [ ] В OpenApi предусмотрена наряду с components.schemas секция components.responses: for reusable responses, like 401 Unauthorized or 400 Bad Request, 404 Not Found.
 - [ ] see https://swagger.io/docs/specification/components/
+- [ ] https://swagger.io/docs/specification/describing-request-body/
+  - в OpenAPI v2 было parameters in body, в v3 стало `requestBody`
+- [ ] хорошо бы реюзать схему ресурса для show, index и create
 
 
 ### Схема хранения
