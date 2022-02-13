@@ -34,12 +34,12 @@ Or install it yourself as:
 - [ ] ронять тест, если схема ответа изменилась
 - [ ] для POST, PUT, DELETE важно сохранять схему параметров запроса (в components/params?)
   - [x] POST
-  - [ ] PUT
-  - [ ] DELETE
+  - [x] PUT
+  - [x] DELETE
 - [ ] генерировать схемы передаваемых параметров
   - [x] path params
   - [x] body params
-  - [ ] query params
+  - [ ] query params - есть, но покрыть спеком
 - [ ] требовать чтобы для examples все поля были заполнены (протестировать)
 
 #### Later
@@ -54,6 +54,7 @@ Or install it yourself as:
 - [ ] https://swagger.io/docs/specification/describing-request-body/
   - в OpenAPI v2 было parameters in body, в v3 стало `requestBody`
 - [ ] хорошо бы реюзать схему ресурса для show, index и create
+- [ ] для ошибок можно завести стандартные общепринятые типы ответа, и контроллировать лобановым что схема действительно соблюдается
 
 
 ### Схема хранения

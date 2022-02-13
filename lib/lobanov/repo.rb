@@ -24,7 +24,6 @@ module Lobanov
     def_delegator :generator, :path_with_curly_braces
     def_delegator :generator, :path_schema
     def_delegator :generator, :status
-    def_delegator :generator, :verb
     def_delegator :generator, :component_schema
 
     def initialize(interaction:)
@@ -33,6 +32,10 @@ module Lobanov
 
     def generator
       @generator ||= Generator.new(interaction: interaction)
+    end
+
+    def verb
+      generator.verb.downcase
     end
 
     def store_schema
@@ -56,7 +59,7 @@ module Lobanov
       component_index = index['components']['schemas'][response_component_name]
       component_schema = read_relative(component_index['$ref'])
 
-      path_schema[verb.downcase]['responses'][status.to_s]['content']['application/json']['schema'] = component_schema
+      path_schema[verb]['responses'][status.to_s]['content']['application/json']['schema'] = component_schema
 
       {
         'paths' => {
@@ -67,7 +70,7 @@ module Lobanov
 
     def replace_component_schema_with_ref
       res = path_schema.dup
-      content = res[verb.downcase]['responses'][status.to_s]['content']
+      content = res[verb]['responses'][status.to_s]['content']
       content['application/json']['schema'] = ref_to_component
       res
     end
@@ -102,7 +105,18 @@ module Lobanov
       full_path = "#{path}.yaml"
       ensure_file_exists(full_path)
       content = YAML.load_file(full_path)
-      File.write full_path, YAML.dump((content || {}).merge(object))
+
+      merged =
+        if content.nil?
+          object
+        elsif content[verb] # если уже было что-то для этого пути и этого HTTP-метода
+          content[verb]['responses'].merge!(object[verb]['responses'])
+          content
+        else
+          content.merge(object)
+        end
+
+      File.write full_path, YAML.dump(merged)
     end
 
     def read_relative(relative_path)

@@ -29,10 +29,18 @@ module Lobanov
     end
 
     def component_schema
-      SchemaByObject.call(body)
+      if status.to_i >= 400
+        {type: 'object', properties: {}}
+      else
+        SchemaByObject.call(body)
+      end
     end
 
     def response_component_name
+      if status.to_i >= 400
+        return "#{status}Response"
+      end
+
       parts = path_parts_without_ids.map{|str| Support.camelize(str)} + [Support.camelize(controller_action)]
       if parts[-1] == parts[-2] # /fruits/:id/reviews/:review_id/upvote
         parts.pop
@@ -108,6 +116,7 @@ module Lobanov
       QueryParamsGenerator.call(query_params)
     end
 
+    # TODO: нужно сделать дописывание разных кодов ответов в responses
     def response_schema
       {
         status.to_s => {

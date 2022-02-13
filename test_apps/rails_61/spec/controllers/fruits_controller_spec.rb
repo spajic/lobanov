@@ -44,4 +44,12 @@ RSpec.describe FruitsController, type: :controller do
       expect(response).to have_http_status(:ok)
     end
   end
+
+  describe '404 on resource show' do
+    it 'returns 404 for non-existing fruit', :lobanov do
+      get(:show, params: {id: 999})
+
+      expect(response).to have_http_status(404)
+    end
+  end
 end

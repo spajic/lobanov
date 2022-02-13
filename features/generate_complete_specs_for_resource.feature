@@ -64,6 +64,14 @@ Feature: generate complete specs for resource
             expect(response).to have_http_status(:ok)
           end
         end
+
+        describe '404 on resource show' do
+          it 'returns 404 for non-existing fruit', :lobanov do
+            get(:show, params: {id: 999})
+
+            expect(response).to have_http_status(404)
+          end
+        end
       end
       """
 
@@ -91,6 +99,8 @@ Feature: generate complete specs for resource
           "$ref": "./components/FruitsUpdateResponse.yaml"
         FruitsDestroyResponse:
           "$ref": "./components/FruitsDestroyResponse.yaml"
+        404Response:
+          "$ref": "./components/404Response.yaml"
     """
 
     # ============= PATHS =============
@@ -199,6 +209,12 @@ Feature: generate complete specs for resource
                 application/json:
                   schema:
                     "$ref": "../../../components/FruitsShowResponse.yaml"
+            '404':
+              description: GET /fruits/:id -> 404
+              content:
+                application/json:
+                  schema:
+                    "$ref": "../../../components/404Response.yaml"
         delete:
           responses:
             '200':
