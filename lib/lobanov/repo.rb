@@ -68,7 +68,7 @@ module Lobanov
     def extract_request_body_to_file(path_schema)
       extracted_body =
         path_schema.dig(verb, 'requestBody', 'content', 'application/json', 'schema')
-      return path_schema unless extracted_body
+      return path_schema if extracted_body.nil?
 
       write(COMPONENTS_BASE + '/' + generator.request_body_name, extracted_body)
 

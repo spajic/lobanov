@@ -68,4 +68,12 @@ RSpec.describe FruitsController, type: :controller do
       expect(response).to have_http_status(400)
     end
   end
+
+  describe '201 on POST fruits/:id/upvote' do
+    it 'returns 201', :lobanov do
+      post(:upvote, params: {id: 5})
+
+      expect(response).to have_http_status(201)
+    end
+  end
 end

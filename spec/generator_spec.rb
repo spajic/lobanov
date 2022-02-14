@@ -27,7 +27,7 @@ RSpec.describe Lobanov::Generator do
         expect(subject.path_with_square_braces).to eq('/fruits/[id]/reviews/[review_id]')
         expect(subject.path_with_curly_braces).to eq('/fruits/{id}/reviews/{review_id}')
         expect(subject.path_parts).to eq(['fruits', '[id]', 'reviews', '[review_id]'])
-        expect(subject.response_component_name).to eq('FruitsReviewsShowResponse')
+        expect(subject.response_component_name).to eq('FruitsReviewsShow200Response')
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Lobanov::Generator do
         expect(subject.path_with_square_braces).to eq('/fruits/[id]/reviews/[review_id]/upvote')
         expect(subject.path_with_curly_braces).to eq('/fruits/{id}/reviews/{review_id}/upvote')
         expect(subject.path_parts).to eq(['fruits', '[id]', 'reviews', '[review_id]', 'upvote'])
-        expect(subject.response_component_name).to eq('FruitsReviewsUpvoteResponse')
+        expect(subject.response_component_name).to eq('FruitsReviewsUpvote200Response')
       end
     end
   end

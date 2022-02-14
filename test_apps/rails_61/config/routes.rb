@@ -2,6 +2,8 @@
 
 Rails.application.routes.draw do
   scope :wapi do # scope should not present in paths
-    resources :fruits
+    resources :fruits do
+      member { post 'upvote' }
+    end
   end
 end

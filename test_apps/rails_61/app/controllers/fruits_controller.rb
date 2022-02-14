@@ -60,4 +60,9 @@ class FruitsController < ActionController::Base
 
     render json: {}, status: :ok
   end
+
+  # POST /fruits/:id/upvote
+  def upvote
+    render json: {}, status: :created
+  end
 end

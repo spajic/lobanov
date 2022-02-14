@@ -33,11 +33,7 @@ module Lobanov
     end
 
     def response_component_name
-      if status.to_i >= 400
-        return "#{camelized_path}#{status}Error"
-      end
-
-      camelized_path + 'Response'
+      "#{camelized_path}#{status}Response"
     end
 
     def request_body_name
@@ -97,7 +93,7 @@ module Lobanov
 
     def verb_schema
       params_schema = parameters_schema
-      if (verb == 'POST' || verb == 'PUT' || verb == 'PATCH') and payload
+      if (verb == 'POST' || verb == 'PUT' || verb == 'PATCH') and payload != {}
         body_schema = BodyParamsGenerator.call(payload)
       end
 

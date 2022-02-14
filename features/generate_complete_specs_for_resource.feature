@@ -88,6 +88,14 @@ Feature: generate complete specs for resource
             expect(response).to have_http_status(400)
           end
         end
+
+        describe '201 on POST fruits/:id/upvote' do
+          it 'returns 201', :lobanov do
+            post(:upvote, params: {id: 5})
+
+            expect(response).to have_http_status(201)
+          end
+        end
       end
       """
 
@@ -103,24 +111,28 @@ Feature: generate complete specs for resource
         "$ref": "./paths/fruits/path.yaml"
       "/fruits/{id}":
         "$ref": "./paths/fruits/[id]/path.yaml"
+      "/fruits/{id}/upvote":
+        "$ref": "./paths/fruits/[id]/upvote/path.yaml"
     components:
       schemas:
-        FruitsIndexResponse:
-          "$ref": "./components/FruitsIndexResponse.yaml"
-        FruitsShowResponse:
-          "$ref": "./components/FruitsShowResponse.yaml"
-        FruitsCreateResponse:
-          "$ref": "./components/FruitsCreateResponse.yaml"
-        FruitsUpdateResponse:
-          "$ref": "./components/FruitsUpdateResponse.yaml"
-        FruitsDestroyResponse:
-          "$ref": "./components/FruitsDestroyResponse.yaml"
-        FruitsShow404Error:
-          "$ref": "./components/FruitsShow404Error.yaml"
-        FruitsShow401Error:
-          "$ref": "./components/FruitsShow401Error.yaml"
-        FruitsCreate400Error:
-          "$ref": "./components/FruitsCreate400Error.yaml"
+        FruitsIndex200Response:
+          "$ref": "./components/FruitsIndex200Response.yaml"
+        FruitsShow200Response:
+          "$ref": "./components/FruitsShow200Response.yaml"
+        FruitsCreate201Response:
+          "$ref": "./components/FruitsCreate201Response.yaml"
+        FruitsUpdate200Response:
+          "$ref": "./components/FruitsUpdate200Response.yaml"
+        FruitsDestroy200Response:
+          "$ref": "./components/FruitsDestroy200Response.yaml"
+        FruitsShow404Response:
+          "$ref": "./components/FruitsShow404Response.yaml"
+        FruitsShow401Response:
+          "$ref": "./components/FruitsShow401Response.yaml"
+        FruitsCreate400Response:
+          "$ref": "./components/FruitsCreate400Response.yaml"
+        FruitsUpvote201Response:
+          "$ref": "./components/FruitsUpvote201Response.yaml"
     """
 
     # ============= PATHS =============
@@ -141,13 +153,13 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "../../components/FruitsCreateResponse.yaml"
+                  "$ref": "../../components/FruitsCreate201Response.yaml"
           '400':
             description: POST /fruits -> 400
             content:
               application/json:
                 schema:
-                  "$ref": "../../components/FruitsCreate400Error.yaml"
+                  "$ref": "../../components/FruitsCreate400Response.yaml"
       get:
         responses:
           '200':
@@ -155,7 +167,7 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "../../components/FruitsIndexResponse.yaml"
+                  "$ref": "../../components/FruitsIndex200Response.yaml"
       """
 
       Then a yaml named "frontend/api-backend-specification/paths/fruits/[id]/path.yaml" should contain:
@@ -182,7 +194,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "../../../components/FruitsUpdateResponse.yaml"
+                    "$ref": "../../../components/FruitsUpdate200Response.yaml"
         get:
           parameters:
           - in: path
@@ -198,19 +210,19 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "../../../components/FruitsShowResponse.yaml"
+                    "$ref": "../../../components/FruitsShow200Response.yaml"
             '404':
               description: GET /fruits/:id -> 404
               content:
                 application/json:
                   schema:
-                    "$ref": "../../../components/FruitsShow404Error.yaml"
+                    "$ref": "../../../components/FruitsShow404Response.yaml"
             '401':
               description: GET /fruits/:id -> 401
               content:
                 application/json:
                   schema:
-                    "$ref": "../../../components/FruitsShow401Error.yaml"
+                    "$ref": "../../../components/FruitsShow401Response.yaml"
         delete:
           responses:
             '200':
@@ -218,7 +230,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "../../../components/FruitsDestroyResponse.yaml"
+                    "$ref": "../../../components/FruitsDestroy200Response.yaml"
           parameters:
           - in: path
             name: id
@@ -231,7 +243,7 @@ Feature: generate complete specs for resource
 
       # ============= COMPONENTS =============
 
-      Then a file named "frontend/api-backend-specification/components/FruitsIndexResponse.yaml" should contain:
+      Then a file named "frontend/api-backend-specification/components/FruitsIndex200Response.yaml" should contain:
         """yaml
         ---
         type: object
@@ -262,7 +274,7 @@ Feature: generate complete specs for resource
                   example: false
         """
 
-      Then a file named "frontend/api-backend-specification/components/FruitsShowResponse.yaml" should contain:
+      Then a file named "frontend/api-backend-specification/components/FruitsShow200Response.yaml" should contain:
         """yaml
         ---
         type: object
@@ -286,7 +298,7 @@ Feature: generate complete specs for resource
             example: false
         """
 
-        Then a yaml named "frontend/api-backend-specification/components/FruitsCreate400Error.yaml" should contain:
+        Then a yaml named "frontend/api-backend-specification/components/FruitsCreate400Response.yaml" should contain:
           """yaml
           ---
           type: object
@@ -307,14 +319,14 @@ Feature: generate complete specs for resource
               example: Bad request
           """
 
-          Then a yaml named "frontend/api-backend-specification/components/FruitsShow401Error.yaml" should contain:
+          Then a yaml named "frontend/api-backend-specification/components/FruitsShow401Response.yaml" should contain:
             """yaml
             ---
             type: object
             properties: {}
             """
 
-          Then a yaml named "frontend/api-backend-specification/components/FruitsShow404Error.yaml" should contain:
+          Then a yaml named "frontend/api-backend-specification/components/FruitsShow404Response.yaml" should contain:
             """yaml
             ---
             type: object
@@ -368,3 +380,5 @@ Feature: generate complete specs for resource
                   type: boolean
                   example: false
               """
+
+              Then a file named "frontend/api-backend-specification/components/FruitsUpvoteRequestBody.yaml" should not exist

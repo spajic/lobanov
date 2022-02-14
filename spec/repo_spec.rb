@@ -166,7 +166,7 @@ RSpec.describe Lobanov::Repo do
     let(:subject) do
       repo.ref_to_component
     end
-    let(:expected_ref) { '../../../components/GridBotsShowResponse.yaml' }
+    let(:expected_ref) { '../../../components/GridBotsShow200Response.yaml' }
 
     it 'returns expected result' do
       expect(subject).to eq(expected_ref)
