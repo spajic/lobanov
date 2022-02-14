@@ -166,20 +166,10 @@ RSpec.describe Lobanov::Repo do
     let(:subject) do
       repo.ref_to_component
     end
-    let(:expected_ref) { {'$ref' => '../../../components/GridBotsShowResponse.yaml'} }
+    let(:expected_ref) { '../../../components/GridBotsShowResponse.yaml' }
 
     it 'returns expected result' do
       expect(subject).to eq(expected_ref)
-    end
-  end
-
-  describe '#replace_component_schema_with_ref' do
-    let(:subject) do
-      repo.replace_component_schema_with_ref
-    end
-
-    it 'returns expected result' do
-      expect(subject).to eq(path_schema_with_component_ref)
     end
   end
 end

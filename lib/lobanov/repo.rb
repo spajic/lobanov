@@ -22,9 +22,6 @@ module Lobanov
     def_delegator :generator, :response_component_name
     def_delegator :generator, :path_with_square_braces
     def_delegator :generator, :path_with_curly_braces
-    def_delegator :generator, :path_schema
-    def_delegator :generator, :status
-    def_delegator :generator, :component_schema
 
     def initialize(interaction:)
       @interaction = interaction
@@ -35,17 +32,62 @@ module Lobanov
     end
 
     def verb
-      generator.verb.downcase
+      @verb ||= generator.verb.downcase
+    end
+
+    def status
+      @status ||= generator.status.to_s
     end
 
     def store_schema
-      write(COMPONENTS_BASE + '/' + response_component_name, component_schema)
-      write_append(PATHS_BASE + store_path_name, replace_component_schema_with_ref)
+      path_schema = generator.path_schema
+      path_schema = extract_component_schema_to_file(path_schema)
+      path_schema = extract_request_body_to_file(path_schema) if status.to_i < 400
+
+      write_append(PATHS_BASE + store_path_name, path_schema)
       update_index
+    end
+
+    def extract_component_schema_to_file(path_schema)
+      extracted_schema =
+        path_schema.dig(verb, 'responses', status, 'content', 'application/json', 'schema')
+      return path_schema unless extracted_schema
+
+      write(COMPONENTS_BASE + '/' + response_component_name, extracted_schema)
+
+      path_schema[verb]['responses'][status]['content']['application/json']['schema'] =
+        {'$ref' => ref_to_component}
+
+      path_schema
+    end
+
+    def ref_to_component
+      component_path = ('../' * nesting_depth) + "components/#{response_component_name}.yaml"
+    end
+
+    def extract_request_body_to_file(path_schema)
+      extracted_body =
+        path_schema.dig(verb, 'requestBody', 'content', 'application/json', 'schema')
+      return path_schema unless extracted_body
+
+      write(COMPONENTS_BASE + '/' + generator.request_body_name, extracted_body)
+
+      path_schema[verb]['requestBody']['content']['application/json']['schema'] =
+        {'$ref' => ref_to_request_body}
+
+      path_schema
+    end
+
+    def ref_to_request_body
+      request_body_path = ('../' * nesting_depth) + "components/#{generator.request_body_name}"
     end
 
     def store_path_name
       path_with_square_braces + '/' + 'path'
+    end
+
+    def nesting_depth
+      @nesting_depth ||= store_path_name.count('/')
     end
 
     def load_schema
@@ -68,13 +110,6 @@ module Lobanov
       }
     end
 
-    def replace_component_schema_with_ref
-      res = path_schema.dup
-      content = res[verb]['responses'][status.to_s]['content']
-      content['application/json']['schema'] = ref_to_component
-      res
-    end
-
     def update_index
       index = YAML.load_file(INDEX_PATH)
 
@@ -85,12 +120,6 @@ module Lobanov
       }
 
       File.write(INDEX_PATH, index.to_yaml)
-    end
-
-    def ref_to_component
-      nesting_depth = store_path_name.count('/')
-      component_path = ('../' * nesting_depth) + "components/#{response_component_name}.yaml"
-      {'$ref' => component_path}
     end
 
     private
@@ -105,6 +134,12 @@ module Lobanov
       full_path = "#{path}.yaml"
       ensure_file_exists(full_path)
       content = YAML.load_file(full_path)
+
+      # Если ответ с ошибкой, не обновляем parameters и requestBody, там что-то не то
+      if status.to_i >= 400
+        content.delete('parameters')
+        content.delete('requestBody')
+      end
 
       merged =
         if content.nil?

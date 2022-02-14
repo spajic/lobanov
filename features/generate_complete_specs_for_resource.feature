@@ -134,25 +134,7 @@ Feature: generate complete specs for resource
           content:
             application/json:
               schema:
-                type: object
-                required:
-                - name
-                - color
-                - weight
-                - seasonal
-                properties:
-                  name:
-                    type: string
-                    example: apple
-                  color:
-                    type: string
-                    example: green
-                  weight:
-                    type: integer
-                    example: 150
-                  seasonal:
-                    type: boolean
-                    example: false
+                "$ref": "../../components/FruitsCreateRequestBody"
         responses:
           '201':
             description: POST /fruits -> 201
@@ -193,25 +175,7 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  type: object
-                  required:
-                  - name
-                  - color
-                  - weight
-                  - seasonal
-                  properties:
-                    name:
-                      type: string
-                      example: apple
-                    color:
-                      type: string
-                      example: green
-                    weight:
-                      type: integer
-                      example: 150
-                    seasonal:
-                      type: boolean
-                      example: false
+                  "$ref": "../../../components/FruitsUpdateRequestBody"
           responses:
             '200':
               description: PUT /fruits/:id -> 200
@@ -356,3 +320,51 @@ Feature: generate complete specs for resource
             type: object
             properties: {}
             """
+
+          Then a yaml named "frontend/api-backend-specification/components/FruitsUpdateRequestBody.yaml" should contain:
+            """yaml
+            ---
+            type: object
+            required:
+            - name
+            - color
+            - weight
+            - seasonal
+            properties:
+              name:
+                type: string
+                example: apple
+              color:
+                type: string
+                example: green
+              weight:
+                type: integer
+                example: 150
+              seasonal:
+                type: boolean
+                example: false
+            """
+
+            Then a yaml named "frontend/api-backend-specification/components/FruitsCreateRequestBody.yaml" should contain:
+              """yaml
+              ---
+              type: object
+              required:
+              - name
+              - color
+              - weight
+              - seasonal
+              properties:
+                name:
+                  type: string
+                  example: apple
+                color:
+                  type: string
+                  example: green
+                weight:
+                  type: integer
+                  example: 150
+                seasonal:
+                  type: boolean
+                  example: false
+              """

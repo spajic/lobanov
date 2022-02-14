@@ -37,12 +37,21 @@ module Lobanov
         return "#{status}Response"
       end
 
-      parts = path_parts_without_ids.map{|str| Support.camelize(str)} + [Support.camelize(controller_action)]
-      if parts[-1] == parts[-2] # /fruits/:id/reviews/:review_id/upvote
-        parts.pop
-      end
+      camelized_path + 'Response'
+    end
 
-      parts.join + 'Response'
+    def request_body_name
+      camelized_path + 'RequestBody'
+    end
+
+    def camelized_path
+      @camelized_path ||= begin
+        parts = path_parts_without_ids.map{|str| Support.camelize(str)} + [Support.camelize(controller_action)]
+        if parts[-1] == parts[-2] # /fruits/:id/reviews/:review_id/upvote
+          parts.pop
+        end
+        parts.join
+      end
     end
 
     # users/:user_id/pets/:pet_id -> users/[user_id]/pets/[pet_id]
