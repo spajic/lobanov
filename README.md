@@ -26,6 +26,9 @@ Or install it yourself as:
 
 #### Now
 
+- [ ] Надо договориться, как работать с ошибками
+  - [ ] тело ответа пустое, или {}
+  - [ ] стоит ли свести все ошибки к единому типу (code, message, content)?
 - [ ] для GET сохранить path и схему Response в componets/responses
   - [x] GET /fruits,
   - [x] GET /fruits/:id,
@@ -48,7 +51,7 @@ Or install it yourself as:
 
 #### Notes
 - [ ] все поля, которые в lobanov-spec приходят в Response считаем обязательными и требуем чтобы было не пустое значение для example
-- [ ] API подразумевается json, параметры либо в path, либо в body в json
+- [ ] API подразумевается json, параметры либо в path, либо в query, либо в body в json
 - [ ] В OpenApi предусмотрена наряду с components.schemas секция components.responses: for reusable responses, like 401 Unauthorized or 400 Bad Request, 404 Not Found.
 - [ ] see https://swagger.io/docs/specification/components/
 - [ ] https://swagger.io/docs/specification/describing-request-body/

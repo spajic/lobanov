@@ -29,11 +29,7 @@ module Lobanov
     end
 
     def component_schema
-      if status.to_i >= 400
-        {type: 'object', properties: {}}
-      else
-        SchemaByObject.call(body)
-      end
+      SchemaByObject.call(body)
     end
 
     def response_component_name

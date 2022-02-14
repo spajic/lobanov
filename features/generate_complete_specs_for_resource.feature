@@ -72,6 +72,22 @@ Feature: generate complete specs for resource
             expect(response).to have_http_status(404)
           end
         end
+
+        describe '401 on resource show' do
+          it 'returns 401 for non-authorized fruit', :lobanov do
+            get(:show, params: {id: 666})
+
+            expect(response).to have_http_status(401)
+          end
+        end
+
+        describe '400 on POST new fruit' do
+          it 'returns 400 for incorrect params', :lobanov do
+            post(:create, params: {color: 'green'}, as: :json)
+
+            expect(response).to have_http_status(400)
+          end
+        end
       end
       """
 
@@ -99,6 +115,10 @@ Feature: generate complete specs for resource
           "$ref": "./components/FruitsUpdateResponse.yaml"
         FruitsDestroyResponse:
           "$ref": "./components/FruitsDestroyResponse.yaml"
+        400Response:
+          "$ref": "./components/400Response.yaml"
+        401Response:
+          "$ref": "./components/401Response.yaml"
         404Response:
           "$ref": "./components/404Response.yaml"
     """
@@ -140,6 +160,12 @@ Feature: generate complete specs for resource
               application/json:
                 schema:
                   "$ref": "../../components/FruitsCreateResponse.yaml"
+          '400':
+            description: POST /fruits -> 400
+            content:
+              application/json:
+                schema:
+                  "$ref": "../../components/400Response.yaml"
       get:
         responses:
           '200':
@@ -215,6 +241,12 @@ Feature: generate complete specs for resource
                 application/json:
                   schema:
                     "$ref": "../../../components/404Response.yaml"
+            '401':
+              description: GET /fruits/:id -> 401
+              content:
+                application/json:
+                  schema:
+                    "$ref": "../../../components/401Response.yaml"
         delete:
           responses:
             '200':
@@ -289,3 +321,38 @@ Feature: generate complete specs for resource
             type: boolean
             example: false
         """
+
+        Then a yaml named "frontend/api-backend-specification/components/400Response.yaml" should contain:
+          """yaml
+          ---
+          type: object
+          required:
+          - message
+          - title
+          properties:
+            message:
+              type: string
+              example: |-
+                param is missing or the value is empty: name
+                Did you mean?  action
+                               format
+                               controller
+                               color
+            title:
+              type: string
+              example: Bad request
+          """
+
+          Then a yaml named "frontend/api-backend-specification/components/401Response.yaml" should contain:
+            """yaml
+            ---
+            type: object
+            properties: {}
+            """
+
+          Then a yaml named "frontend/api-backend-specification/components/404Response.yaml" should contain:
+            """yaml
+            ---
+            type: object
+            properties: {}
+            """

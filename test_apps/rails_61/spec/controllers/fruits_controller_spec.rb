@@ -52,4 +52,20 @@ RSpec.describe FruitsController, type: :controller do
       expect(response).to have_http_status(404)
     end
   end
+
+  describe '401 on resource show' do
+    it 'returns 401 for non-authorized fruit', :lobanov do
+      get(:show, params: {id: 666})
+
+      expect(response).to have_http_status(401)
+    end
+  end
+
+  describe '400 on POST new fruit' do
+    it 'returns 400 for incorrect params', :lobanov do
+      post(:create, params: {color: 'green'}, as: :json)
+
+      expect(response).to have_http_status(400)
+    end
+  end
 end

@@ -1,6 +1,19 @@
 # frozen_string_literal: true
 
 class FruitsController < ActionController::Base
+  rescue_from ActionController::ParameterMissing, with: :invalid_parameters
+
+  def invalid_parameters(exception)
+    bad_request exception.message, title: 'Bad request'
+  end
+
+  def bad_request(message, title: nil)
+    respond_to do |format|
+      format.json {render json: {message: message, title: title}, status: :bad_request}
+      format.all {head :bad_request}
+    end
+  end
+
   FRUITS = [
     {name: 'orange', color: 'orange', weight: 100, seasonal: false},
     {name: 'lemon', color: 'yellow', weight: 50, seasonal: false},
@@ -16,6 +29,11 @@ class FruitsController < ActionController::Base
 
   def show
     num = params[:id].to_i - 1
+    if num == 665
+      return render json: {}, status: 401
+    end
+
+
     fruit = FRUITS[num]
 
     if fruit
