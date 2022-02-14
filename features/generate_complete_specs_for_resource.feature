@@ -115,12 +115,12 @@ Feature: generate complete specs for resource
           "$ref": "./components/FruitsUpdateResponse.yaml"
         FruitsDestroyResponse:
           "$ref": "./components/FruitsDestroyResponse.yaml"
-        400Response:
-          "$ref": "./components/400Response.yaml"
-        401Response:
-          "$ref": "./components/401Response.yaml"
-        404Response:
-          "$ref": "./components/404Response.yaml"
+        FruitsShow404Error:
+          "$ref": "./components/FruitsShow404Error.yaml"
+        FruitsShow401Error:
+          "$ref": "./components/FruitsShow401Error.yaml"
+        FruitsCreate400Error:
+          "$ref": "./components/FruitsCreate400Error.yaml"
     """
 
     # ============= PATHS =============
@@ -147,7 +147,7 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "../../components/400Response.yaml"
+                  "$ref": "../../components/FruitsCreate400Error.yaml"
       get:
         responses:
           '200':
@@ -204,13 +204,13 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "../../../components/404Response.yaml"
+                    "$ref": "../../../components/FruitsShow404Error.yaml"
             '401':
               description: GET /fruits/:id -> 401
               content:
                 application/json:
                   schema:
-                    "$ref": "../../../components/401Response.yaml"
+                    "$ref": "../../../components/FruitsShow401Error.yaml"
         delete:
           responses:
             '200':
@@ -286,7 +286,7 @@ Feature: generate complete specs for resource
             example: false
         """
 
-        Then a yaml named "frontend/api-backend-specification/components/400Response.yaml" should contain:
+        Then a yaml named "frontend/api-backend-specification/components/FruitsCreate400Error.yaml" should contain:
           """yaml
           ---
           type: object
@@ -307,14 +307,14 @@ Feature: generate complete specs for resource
               example: Bad request
           """
 
-          Then a yaml named "frontend/api-backend-specification/components/401Response.yaml" should contain:
+          Then a yaml named "frontend/api-backend-specification/components/FruitsShow401Error.yaml" should contain:
             """yaml
             ---
             type: object
             properties: {}
             """
 
-          Then a yaml named "frontend/api-backend-specification/components/404Response.yaml" should contain:
+          Then a yaml named "frontend/api-backend-specification/components/FruitsShow404Error.yaml" should contain:
             """yaml
             ---
             type: object

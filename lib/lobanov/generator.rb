@@ -34,7 +34,7 @@ module Lobanov
 
     def response_component_name
       if status.to_i >= 400
-        return "#{status}Response"
+        return "#{camelized_path}#{status}Error"
       end
 
       camelized_path + 'Response'
