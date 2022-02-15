@@ -45,7 +45,7 @@ module Lobanov
       path_schema = extract_request_body_to_file(path_schema) if status.to_i < 400
 
       write_append(PATHS_BASE + store_path_name, path_schema)
-      update_index
+      update_index(path_schema)
     end
 
     def extract_component_schema_to_file(path_schema)
@@ -79,7 +79,7 @@ module Lobanov
     end
 
     def ref_to_request_body
-      request_body_path = ('../' * nesting_depth) + "components/#{generator.request_body_name}"
+      request_body_path = ('../' * nesting_depth) + "components/#{generator.request_body_name}.yaml"
     end
 
     def store_path_name
@@ -110,7 +110,7 @@ module Lobanov
       }
     end
 
-    def update_index
+    def update_index(path_schema)
       index = YAML.load_file(INDEX_PATH)
 
       index['paths'][path_with_curly_braces] = {'$ref' => "./paths#{store_path_name}.yaml"}
@@ -118,6 +118,12 @@ module Lobanov
       index['components']['schemas'][response_component_name] = {
         '$ref' => "./components/#{response_component_name}.yaml"
       }
+
+      if path_schema[verb]['requestBody']
+        index['components']['schemas'][generator.request_body_name] = {
+          '$ref' => "./components/#{generator.request_body_name}.yaml"
+        }
+      end
 
       File.write(INDEX_PATH, index.to_yaml)
     end

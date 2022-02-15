@@ -7,6 +7,11 @@ Feature: generate complete specs for resource
     Given a file named "frontend/api-backend-specification/index.yaml" with:
       """yaml
       ---
+      openapi: 3.0.1
+      info:
+        title: Test fruits API for Lobanov development
+        description: API which is used to develop Lobanov gem.
+        version: 0.0.1
       paths: {}
       components:
         schemas: {}
@@ -106,6 +111,11 @@ Feature: generate complete specs for resource
     Then a yaml named "frontend/api-backend-specification/index.yaml" should contain:
     """yaml
     ---
+    openapi: 3.0.1
+    info:
+      title: Test fruits API for Lobanov development
+      description: API which is used to develop Lobanov gem.
+      version: 0.0.1
     paths:
       "/fruits":
         "$ref": "./paths/fruits/path.yaml"
@@ -133,6 +143,10 @@ Feature: generate complete specs for resource
           "$ref": "./components/FruitsCreate400Response.yaml"
         FruitsUpvote201Response:
           "$ref": "./components/FruitsUpvote201Response.yaml"
+        FruitsUpdateRequestBody:
+          "$ref": "./components/FruitsUpdateRequestBody.yaml"
+        FruitsCreateRequestBody:
+          "$ref": "./components/FruitsCreateRequestBody.yaml"
     """
 
     # ============= PATHS =============
@@ -146,7 +160,7 @@ Feature: generate complete specs for resource
           content:
             application/json:
               schema:
-                "$ref": "../../components/FruitsCreateRequestBody"
+                "$ref": "../../components/FruitsCreateRequestBody.yaml"
         responses:
           '201':
             description: POST /fruits -> 201
@@ -187,7 +201,7 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "../../../components/FruitsUpdateRequestBody"
+                  "$ref": "../../../components/FruitsUpdateRequestBody.yaml"
           responses:
             '200':
               description: PUT /fruits/:id -> 200
