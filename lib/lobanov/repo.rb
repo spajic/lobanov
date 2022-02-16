@@ -143,8 +143,8 @@ module Lobanov
 
       # Если ответ с ошибкой, не обновляем parameters и requestBody, там что-то не то
       if status.to_i >= 400
-        content.delete('parameters')
-        content.delete('requestBody')
+        object[verb].delete('parameters')
+        object[verb].delete('requestBody')
       end
 
       merged =
@@ -152,6 +152,9 @@ module Lobanov
           object
         elsif content[verb] # если уже было что-то для этого пути и этого HTTP-метода
           content[verb]['responses'].merge!(object[verb]['responses'])
+          if object[verb]['parameters']
+            content[verb]['parameters'] = object[verb]['parameters']
+          end
           content
         else
           content.merge(object)

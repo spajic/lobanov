@@ -21,6 +21,22 @@ Feature: generate complete specs for resource
 
     Given an empty directory "frontend/api-backend-specification/paths"
 
+    Given a file named "spec/requests/fruits_controller_spec.rb" with:
+      """ruby
+      require 'rails_helper'
+
+      RSpec.describe FruitsController, type: :request do
+        describe 'GET #show' do
+          it 'returns expected resource', :lobanov do
+            get('/wapi/fruits/2?q=true')
+
+            expect(response).to have_http_status(:ok)
+            expect(json_body).to eq({name: 'lemon', color: 'yellow', weight: 50, seasonal: false})
+          end
+        end
+      end
+      """
+
     Given a file named "spec/controllers/fruits_controller_spec.rb" with:
       """ruby
       require 'rails_helper'
@@ -32,15 +48,6 @@ Feature: generate complete specs for resource
 
             expect(response).to have_http_status(:ok)
             expect(json_body[:items].size).to eq(4)
-          end
-        end
-
-        describe 'GET #show' do
-          it 'returns expected resource', :lobanov do
-            get(:show, params: {id: 2})
-
-            expect(response).to have_http_status(:ok)
-            expect(json_body).to eq({name: 'lemon', color: 'yellow', weight: 50, seasonal: false})
           end
         end
 
@@ -104,9 +111,9 @@ Feature: generate complete specs for resource
       end
       """
 
-    When I run `rspec spec/controllers/fruits_controller_spec.rb`
+    When I run `rspec`
 
-    Then the example should pass
+    Then the examples should all pass
 
     Then a yaml named "frontend/api-backend-specification/index.yaml" should contain:
     """yaml
@@ -218,6 +225,12 @@ Feature: generate complete specs for resource
               type: integer
             required: true
             example: '2'
+          - in: query
+            name: q
+            description: q
+            schema:
+              type: string
+            required: true
           responses:
             '200':
               description: GET /fruits/:id -> 200
