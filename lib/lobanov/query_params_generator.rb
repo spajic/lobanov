@@ -27,7 +27,8 @@ module Lobanov
         'name' => name.to_s,
         'description' => name.to_s,
         'schema' => schema_by_query_param_value(value),
-        'required' => true
+        'required' => true,
+        'example' => value
       }
     end
 

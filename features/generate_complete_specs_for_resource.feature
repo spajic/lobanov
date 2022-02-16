@@ -231,6 +231,7 @@ Feature: generate complete specs for resource
             schema:
               type: string
             required: true
+            example: 'true'
           responses:
             '200':
               description: GET /fruits/:id -> 200
