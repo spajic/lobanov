@@ -8,6 +8,11 @@ class Fruits::ReviewsController < ApplicationController
     {text: 'review #4', positive: false},
   ]
 
+  # GET wapi/fruits/:fruit_id/reviews
+  def index
+    render json: REVIEWS
+  end
+
   # GET wapi/fruits/:fruit_id/reviews/:id.json
   def show
     num = params[:id].to_i - 1
