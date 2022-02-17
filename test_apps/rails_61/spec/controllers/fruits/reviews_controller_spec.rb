@@ -9,4 +9,13 @@ RSpec.describe Fruits::ReviewsController, type: :controller do
       expect(json_body).to eq({text: 'review #1', positive: true})
     end
   end
+
+  describe 'GET #index' do
+    it 'returns expected collection', :lobanov do
+      get(:index, params: {fruit_id: 1})
+
+      expect(response).to have_http_status(:ok)
+      expect(json_body.size).to eq(4)
+    end
+  end
 end

@@ -124,6 +124,15 @@ Feature: generate complete specs for resource
             expect(json_body).to eq({text: 'review #1', positive: true})
           end
         end
+
+        describe 'GET #index' do
+          it 'returns expected collection', :lobanov do
+            get(:index, params: {fruit_id: 1})
+
+            expect(response).to have_http_status(:ok)
+            expect(json_body.size).to eq(4)
+          end
+        end
       end
       """
 
@@ -140,6 +149,8 @@ Feature: generate complete specs for resource
       description: API which is used to develop Lobanov gem.
       version: 0.0.1
     paths:
+      "/fruits/{fruit_id}/reviews":
+        "$ref": "./paths/fruits/[fruit_id]/reviews/path.yaml"
       "/fruits/{fruit_id}/reviews/{id}":
         "$ref": "./paths/fruits/[fruit_id]/reviews/[id]/path.yaml"
       "/fruits":
@@ -150,6 +161,8 @@ Feature: generate complete specs for resource
         "$ref": "./paths/fruits/[id]/upvote/path.yaml"
     components:
       schemas:
+        FruitsReviewsIndex200Response:
+          "$ref": "./components/FruitsReviewsIndex200Response.yaml"
         FruitsReviewsShow200Response:
           "$ref": "./components/FruitsReviewsShow200Response.yaml"
         FruitsIndex200Response:
@@ -283,6 +296,27 @@ Feature: generate complete specs for resource
           - in: path
             name: id
             description: id
+            schema:
+              type: integer
+            required: true
+            example: '1'
+        """
+
+      Then a file named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/path.yaml" should contain:
+        """yaml
+        ---
+        get:
+          responses:
+            '200':
+              description: GET /fruits/:fruit_id/reviews -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "../../../../components/FruitsReviewsIndex200Response.yaml"
+          parameters:
+          - in: path
+            name: fruit_id
+            description: fruit_id
             schema:
               type: integer
             required: true
@@ -473,4 +507,23 @@ Feature: generate complete specs for resource
             positive:
               type: boolean
               example: true
+          """
+
+        Then a file named "frontend/api-backend-specification/components/FruitsReviewsIndex200Response.yaml" should contain:
+          """yaml
+          ---
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            type: object
+            required:
+            - text
+            properties:
+              text:
+                type: string
+                example: 'review #1'
+              positive:
+                type: boolean
+                example: true
           """
