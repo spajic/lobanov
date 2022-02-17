@@ -24,30 +24,41 @@ module Lobanov
     end
 
     def self.add_examples_to_schema(schema, obj)
-      obj.each_key do |key|
-        property = obj[key]
-        skey = key.is_a?(Symbol) ? key.to_s : key
-        case property
-        when Hash
-          add_examples_to_schema(schema['properties'][skey], obj[key])
-        when Array
-          example = obj[key].detect {|hash| !hash.empty?}
-          unless schema['properties'][skey]['items'].empty?
-            add_examples_to_schema(schema['properties'][skey]['items'], example)
-          end
-        else
-          example = obj[key]
-          # Не разрешаем добавить в тест поле, но не дать реального примера
-          # по nil мы не можем на вывести тип
-          # пустая строка тоже плохо, лучше в качестве примера дать заполненную
-          if example.nil? || example == ''
-            raise MissingExampleError.new("for #{key.inspect} in #{obj}")
-          end
-          schema['properties'][skey]['example'] = example
+      if obj.is_a?(Hash)
+        obj.each_key do |key|
+          add_example_for_key(schema, obj, key)
         end
+      elsif obj.is_a?(Array)
+        add_examples_to_schema(schema['items'], obj.first)
+      else
+        schema['example'] = obj
       end
 
       schema
+    end
+
+    def self.add_example_for_key(schema, obj, key)
+      property = obj[key]
+      skey = key.to_s
+
+      case property
+      when Hash
+        add_examples_to_schema(schema['properties'][skey], obj[key])
+      when Array
+        example = obj[key].detect {|hash| !hash.empty?}
+        unless schema['properties'][skey]['items'].empty?
+          add_examples_to_schema(schema['properties'][skey]['items'], example)
+        end
+      else
+        example = obj[key]
+        # Не разрешаем добавить в тест поле, но не дать реального примера
+        # по nil мы не можем на вывести тип
+        # пустая строка тоже плохо, лучше в качестве примера дать заполненную
+        if example.nil? || example == ''
+          raise MissingExampleError.new("for #{key.inspect} in #{obj}")
+        end
+        schema['properties'][skey]['example'] = example
+      end
     end
   end
 end

@@ -24,7 +24,7 @@ RSpec.describe Lobanov::SchemaByObject do
       }
     end
 
-    it 'return expected schema with examples' do
+    it 'returns expected schema with examples' do
       expect(subject).to eq(expected_schema)
     end
   end
@@ -113,6 +113,67 @@ RSpec.describe Lobanov::SchemaByObject do
     end
 
     it 'return expected schema with examples' do
+      expect(subject).to eq(expected_schema)
+    end
+  end
+
+  context 'with array' do
+    let(:obj) do
+      [
+        {text: 'one'},
+        {text: 'two'}
+      ]
+    end
+
+    let(:expected_schema) do
+      {
+        'type' => 'array',
+        'minItems' => 1,
+        'uniqueItems' => true,
+        'items' => {
+          'type' => 'object',
+          'required' => ['text'],
+          'properties' => {
+            'text' => {
+              'type' => 'string',
+              'example' => 'one'
+            }
+          }
+        }
+      }
+    end
+
+    it 'returns expected schema with examples' do
+      expect(subject).to eq(expected_schema)
+    end
+  end
+
+  context 'with array of arrays' do
+    let(:obj) do
+      [
+        [1, 2, 3],
+        [4, 5, 6]
+      ]
+    end
+
+    let(:expected_schema) do
+      {
+        'type' => 'array',
+        'minItems' => 1,
+        'uniqueItems' => true,
+        'items' => {
+          'type' => 'array',
+          'minItems' => 1,
+          'uniqueItems' => true,
+          'items' => {
+            'type' => 'integer',
+            'example' => 1
+          }
+        }
+      }
+    end
+
+    it 'returns expected schema with examples' do
       expect(subject).to eq(expected_schema)
     end
   end
