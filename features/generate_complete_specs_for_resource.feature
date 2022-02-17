@@ -111,6 +111,22 @@ Feature: generate complete specs for resource
       end
       """
 
+    Given a file named "spec/controllers/fruits/reviews_controller_spec.rb" with:
+      """ruby
+      require 'rails_helper'
+
+      RSpec.describe Fruits::ReviewsController, type: :controller do
+        describe 'GET #show' do
+          it 'returns expected review', :lobanov do
+            get(:show, params: {fruit_id: 1, id: 1})
+
+            expect(response).to have_http_status(:ok)
+            expect(json_body).to eq({text: 'review #1', positive: true})
+          end
+        end
+      end
+      """
+
     When I run `rspec`
 
     Then the examples should all pass
@@ -124,6 +140,8 @@ Feature: generate complete specs for resource
       description: API which is used to develop Lobanov gem.
       version: 0.0.1
     paths:
+      "/fruits/{fruit_id}/reviews/{id}":
+        "$ref": "./paths/fruits/[fruit_id]/reviews/[id]/path.yaml"
       "/fruits":
         "$ref": "./paths/fruits/path.yaml"
       "/fruits/{id}":
@@ -132,6 +150,8 @@ Feature: generate complete specs for resource
         "$ref": "./paths/fruits/[id]/upvote/path.yaml"
     components:
       schemas:
+        FruitsReviewsShow200Response:
+          "$ref": "./components/FruitsReviewsShow200Response.yaml"
         FruitsIndex200Response:
           "$ref": "./components/FruitsIndex200Response.yaml"
         FruitsShow200Response:
@@ -269,6 +289,34 @@ Feature: generate complete specs for resource
             example: '1'
         """
 
+      Then a file named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/[id]/path.yaml" should contain:
+        """yaml
+        ---
+        get:
+          responses:
+            '200':
+              description: GET /fruits/:fruit_id/reviews/:id -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "../../../../../components/FruitsReviewsShow200Response.yaml"
+          parameters:
+          - in: path
+            name: fruit_id
+            description: fruit_id
+            schema:
+              type: integer
+            required: true
+            example: '1'
+          - in: path
+            name: id
+            description: id
+            schema:
+              type: integer
+            required: true
+            example: '1'
+        """
+
       # ============= COMPONENTS =============
 
       Then a file named "frontend/api-backend-specification/components/FruitsIndex200Response.yaml" should contain:
@@ -326,87 +374,103 @@ Feature: generate complete specs for resource
             example: false
         """
 
-        Then a yaml named "frontend/api-backend-specification/components/FruitsCreate400Response.yaml" should contain:
+      Then a yaml named "frontend/api-backend-specification/components/FruitsCreate400Response.yaml" should contain:
+        """yaml
+        ---
+        type: object
+        required:
+        - message
+        - title
+        properties:
+          message:
+            type: string
+            example: |-
+              param is missing or the value is empty: name
+              Did you mean?  action
+                             format
+                             controller
+                             color
+          title:
+            type: string
+            example: Bad request
+        """
+
+      Then a yaml named "frontend/api-backend-specification/components/FruitsShow401Response.yaml" should contain:
+        """yaml
+        ---
+        type: object
+        properties: {}
+        """
+
+      Then a yaml named "frontend/api-backend-specification/components/FruitsShow404Response.yaml" should contain:
+        """yaml
+        ---
+        type: object
+        properties: {}
+        """
+
+      Then a yaml named "frontend/api-backend-specification/components/FruitsUpdateRequestBody.yaml" should contain:
+        """yaml
+        ---
+        type: object
+        required:
+        - name
+        - color
+        - weight
+        - seasonal
+        properties:
+          name:
+            type: string
+            example: apple
+          color:
+            type: string
+            example: green
+          weight:
+            type: integer
+            example: 150
+          seasonal:
+            type: boolean
+            example: false
+        """
+
+      Then a yaml named "frontend/api-backend-specification/components/FruitsCreateRequestBody.yaml" should contain:
+        """yaml
+        ---
+        type: object
+        required:
+        - name
+        - color
+        - weight
+        - seasonal
+        properties:
+          name:
+            type: string
+            example: apple
+          color:
+            type: string
+            example: green
+          weight:
+            type: integer
+            example: 150
+          seasonal:
+            type: boolean
+            example: false
+        """
+
+        Then a file named "frontend/api-backend-specification/components/FruitsUpvoteRequestBody.yaml" should not exist
+
+        Then a file named "frontend/api-backend-specification/components/FruitsReviewsShow200Response.yaml" should contain:
           """yaml
           ---
           type: object
           required:
-          - message
-          - title
+          - text
+          - positive
           properties:
-            message:
+            text:
               type: string
-              example: |-
-                param is missing or the value is empty: name
-                Did you mean?  action
-                               format
-                               controller
-                               color
-            title:
-              type: string
-              example: Bad request
+              example: 'review #1'
+            positive:
+              type: boolean
+              example: true
           """
-
-          Then a yaml named "frontend/api-backend-specification/components/FruitsShow401Response.yaml" should contain:
-            """yaml
-            ---
-            type: object
-            properties: {}
-            """
-
-          Then a yaml named "frontend/api-backend-specification/components/FruitsShow404Response.yaml" should contain:
-            """yaml
-            ---
-            type: object
-            properties: {}
-            """
-
-          Then a yaml named "frontend/api-backend-specification/components/FruitsUpdateRequestBody.yaml" should contain:
-            """yaml
-            ---
-            type: object
-            required:
-            - name
-            - color
-            - weight
-            - seasonal
-            properties:
-              name:
-                type: string
-                example: apple
-              color:
-                type: string
-                example: green
-              weight:
-                type: integer
-                example: 150
-              seasonal:
-                type: boolean
-                example: false
-            """
-
-            Then a yaml named "frontend/api-backend-specification/components/FruitsCreateRequestBody.yaml" should contain:
-              """yaml
-              ---
-              type: object
-              required:
-              - name
-              - color
-              - weight
-              - seasonal
-              properties:
-                name:
-                  type: string
-                  example: apple
-                color:
-                  type: string
-                  example: green
-                weight:
-                  type: integer
-                  example: 150
-                seasonal:
-                  type: boolean
-                  example: false
-              """
-
-              Then a file named "frontend/api-backend-specification/components/FruitsUpvoteRequestBody.yaml" should not exist
