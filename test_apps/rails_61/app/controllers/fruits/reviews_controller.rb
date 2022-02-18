@@ -31,4 +31,9 @@ class Fruits::ReviewsController < ApplicationController
 
     render json: {}, status: :created
   end
+
+  # GET wapi/fruits/:fruit_id/reviews/stats, non-CRUD method on collection
+  def stats
+    render json: {avg: 5.0}, status: 200
+  end
 end

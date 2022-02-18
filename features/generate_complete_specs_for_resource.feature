@@ -142,6 +142,15 @@ Feature: generate complete specs for resource
             expect(json_body).to eq({})
           end
         end
+
+        describe 'GET #stats' do
+          it 'returns 200 status', :lobanov do
+            get(:stats, params: {fruit_id: 1})
+
+            expect(response).to have_http_status(:ok)
+            expect(json_body).to eq({avg: 5.0})
+          end
+        end
       end
       """
 
@@ -162,6 +171,8 @@ Feature: generate complete specs for resource
         "$ref": "./paths/fruits/[fruit_id]/reviews/path.yaml"
       "/fruits/{fruit_id}/reviews/{id}":
         "$ref": "./paths/fruits/[fruit_id]/reviews/[id]/path.yaml"
+      "/fruits/{fruit_id}/reviews/stats":
+        "$ref": "./paths/fruits/[fruit_id]/reviews/stats/path.yaml"
       "/fruits":
         "$ref": "./paths/fruits/path.yaml"
       "/fruits/{id}":
@@ -178,6 +189,8 @@ Feature: generate complete specs for resource
           "$ref": "./components/FruitsReviewsCreate201Response.yaml"
         FruitsReviewsCreateRequestBody:
           "$ref": "./components/FruitsReviewsCreateRequestBody.yaml"
+        FruitsReviewsStats200Response:
+          "$ref": "./components/FruitsReviewsStats200Response.yaml"
         FruitsIndex200Response:
           "$ref": "./components/FruitsIndex200Response.yaml"
         FruitsShow200Response:
@@ -387,6 +400,27 @@ Feature: generate complete specs for resource
             example: '1'
         """
 
+      Then a yaml named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/stats/path.yaml" should contain:
+        """yaml
+        ---
+        get:
+          responses:
+            '200':
+              description: GET /fruits/:fruit_id/reviews/stats -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "../../../../../components/FruitsReviewsStats200Response.yaml"
+          parameters:
+          - in: path
+            name: fruit_id
+            description: fruit_id
+            schema:
+              type: integer
+            required: true
+            example: '1'
+        """
+
       # ============= COMPONENTS =============
 
       Then a file named "frontend/api-backend-specification/components/FruitsIndex200Response.yaml" should contain:
@@ -578,4 +612,16 @@ Feature: generate complete specs for resource
             positive:
               type: boolean
               example: true
+          """
+
+        Then a file named "frontend/api-backend-specification/components/FruitsReviewsStats200Response.yaml" should contain:
+          """yaml
+          ---
+          type: object
+          required:
+          - avg
+          properties:
+            avg:
+              type: number
+              example: 5.0
           """

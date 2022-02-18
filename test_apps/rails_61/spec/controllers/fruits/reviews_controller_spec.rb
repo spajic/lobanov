@@ -27,4 +27,13 @@ RSpec.describe Fruits::ReviewsController, type: :controller do
       expect(json_body).to eq({})
     end
   end
+
+  describe 'GET #stats' do
+    it 'returns 200 status', :lobanov do
+      get(:stats, params: {fruit_id: 1})
+
+      expect(response).to have_http_status(:ok)
+      expect(json_body).to eq({avg: 5.0})
+    end
+  end
 end

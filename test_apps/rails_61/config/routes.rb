@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     resources :fruits do
       member { post 'upvote' }
 
-      resources :reviews, module: 'fruits'
+      resources :reviews, module: 'fruits' do
+        collection { get 'stats' }
+      end
     end
   end
 end
