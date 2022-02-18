@@ -24,4 +24,11 @@ class Fruits::ReviewsController < ApplicationController
       render json: {}, status: :not_found
     end
   end
+
+  # POST wapi/fruits/:fruit_id/reviews
+  def create
+    data = params.require([:text, :positive])
+
+    render json: {}, status: :created
+  end
 end

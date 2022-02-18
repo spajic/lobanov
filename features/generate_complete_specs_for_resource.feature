@@ -61,7 +61,7 @@ Feature: generate complete specs for resource
         end
 
         describe 'PUT #update' do
-          let(:apple) { {id: 1, name: 'apple', color: 'green', weight: 150, seasonal: false} }
+          let(:apple) { {id: '1', name: 'apple', color: 'green', weight: 150, seasonal: false} }
           it 'returns expected response with 200 and empty body', :lobanov do
             put(:update, params: apple, as: :json)
 
@@ -71,7 +71,7 @@ Feature: generate complete specs for resource
 
         describe 'DELETE #destroy' do
           it 'returns expected response with 200 and empty body', :lobanov do
-            delete(:destroy, params: {id: 1})
+            delete(:destroy, params: {id: '1'})
 
             expect(response).to have_http_status(:ok)
           end
@@ -79,7 +79,7 @@ Feature: generate complete specs for resource
 
         describe '404 on resource show' do
           it 'returns 404 for non-existing fruit', :lobanov do
-            get(:show, params: {id: 999})
+            get(:show, params: {id: '999'})
 
             expect(response).to have_http_status(404)
           end
@@ -87,7 +87,7 @@ Feature: generate complete specs for resource
 
         describe '401 on resource show' do
           it 'returns 401 for non-authorized fruit', :lobanov do
-            get(:show, params: {id: 666})
+            get(:show, params: {id: '666'})
 
             expect(response).to have_http_status(401)
           end
@@ -103,7 +103,7 @@ Feature: generate complete specs for resource
 
         describe '201 on POST fruits/:id/upvote' do
           it 'returns 201', :lobanov do
-            post(:upvote, params: {id: 5})
+            post(:upvote, params: {id: '5'})
 
             expect(response).to have_http_status(201)
           end
@@ -118,7 +118,7 @@ Feature: generate complete specs for resource
       RSpec.describe Fruits::ReviewsController, type: :controller do
         describe 'GET #show' do
           it 'returns expected review', :lobanov do
-            get(:show, params: {fruit_id: 1, id: 1})
+            get(:show, params: {fruit_id: '1', id: '1'})
 
             expect(response).to have_http_status(:ok)
             expect(json_body).to eq({text: 'review #1', positive: true})
@@ -127,10 +127,19 @@ Feature: generate complete specs for resource
 
         describe 'GET #index' do
           it 'returns expected collection', :lobanov do
-            get(:index, params: {fruit_id: 1})
+            get(:index, params: {fruit_id: '1'})
 
             expect(response).to have_http_status(:ok)
             expect(json_body.size).to eq(4)
+          end
+        end
+
+        describe 'POST #create' do
+          it 'returns 201 status', :lobanov do
+            post(:create, params: {fruit_id: '1', text: 'hello', positive: true}, as: :json)
+
+            expect(response).to have_http_status(:created)
+            expect(json_body).to eq({})
           end
         end
       end
@@ -161,10 +170,14 @@ Feature: generate complete specs for resource
         "$ref": "./paths/fruits/[id]/upvote/path.yaml"
     components:
       schemas:
-        FruitsReviewsIndex200Response:
-          "$ref": "./components/FruitsReviewsIndex200Response.yaml"
         FruitsReviewsShow200Response:
           "$ref": "./components/FruitsReviewsShow200Response.yaml"
+        FruitsReviewsIndex200Response:
+          "$ref": "./components/FruitsReviewsIndex200Response.yaml"
+        FruitsReviewsCreate201Response:
+          "$ref": "./components/FruitsReviewsCreate201Response.yaml"
+        FruitsReviewsCreateRequestBody:
+          "$ref": "./components/FruitsReviewsCreateRequestBody.yaml"
         FruitsIndex200Response:
           "$ref": "./components/FruitsIndex200Response.yaml"
         FruitsShow200Response:
@@ -302,7 +315,7 @@ Feature: generate complete specs for resource
             example: '1'
         """
 
-      Then a file named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/path.yaml" should contain:
+      Then a yaml named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/path.yaml" should contain:
         """yaml
         ---
         get:
@@ -321,9 +334,32 @@ Feature: generate complete specs for resource
               type: integer
             required: true
             example: '1'
+        post:
+          responses:
+            '201':
+              description: POST /fruits/:fruit_id/reviews -> 201
+              content:
+                application/json:
+                  schema:
+                    "$ref": "../../../../components/FruitsReviewsCreate201Response.yaml"
+          parameters:
+          - in: path
+            name: fruit_id
+            description: fruit_id
+            schema:
+              type: integer
+            required: true
+            example: '1'
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  "$ref": "../../../../components/FruitsReviewsCreateRequestBody.yaml"
+
         """
 
-      Then a file named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/[id]/path.yaml" should contain:
+      Then a yaml named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/[id]/path.yaml" should contain:
         """yaml
         ---
         get:
@@ -526,4 +562,20 @@ Feature: generate complete specs for resource
               positive:
                 type: boolean
                 example: true
+          """
+
+        Then a file named "frontend/api-backend-specification/components/FruitsReviewsCreateRequestBody.yaml" should contain:
+          """yaml
+          ---
+          type: object
+          required:
+          - text
+          - positive
+          properties:
+            text:
+              type: string
+              example: hello
+            positive:
+              type: boolean
+              example: true
           """
