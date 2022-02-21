@@ -261,7 +261,7 @@ Feature: generate complete specs for resource
             schema:
               type: integer
             required: true
-            example: '1'
+            example: 1
           requestBody:
             required: true
             content:
@@ -283,7 +283,7 @@ Feature: generate complete specs for resource
             schema:
               type: integer
             required: true
-            example: '2'
+            example: 2
           - in: query
             name: q
             description: q
@@ -325,7 +325,7 @@ Feature: generate complete specs for resource
             schema:
               type: integer
             required: true
-            example: '1'
+            example: 1
         """
 
       Then a yaml named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/path.yaml" should contain:
@@ -346,7 +346,7 @@ Feature: generate complete specs for resource
             schema:
               type: integer
             required: true
-            example: '1'
+            example: 1
         post:
           responses:
             '201':
@@ -362,7 +362,7 @@ Feature: generate complete specs for resource
             schema:
               type: integer
             required: true
-            example: '1'
+            example: 1
           requestBody:
             required: true
             content:
@@ -390,14 +390,14 @@ Feature: generate complete specs for resource
             schema:
               type: integer
             required: true
-            example: '1'
+            example: 1
           - in: path
             name: id
             description: id
             schema:
               type: integer
             required: true
-            example: '1'
+            example: 1
         """
 
       Then a yaml named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/stats/path.yaml" should contain:
@@ -418,7 +418,7 @@ Feature: generate complete specs for resource
             schema:
               type: integer
             required: true
-            example: '1'
+            example: 1
         """
 
       # ============= COMPONENTS =============

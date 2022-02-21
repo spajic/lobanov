@@ -31,15 +31,24 @@ module Lobanov
         'description' => name,
         'schema' => schema_by_path_param_value(value),
         'required' => true,
-        'example' => value
+        'example' => example_by_path_param_value(value)
       }
     end
+
 
     def schema_by_path_param_value(value)
       if a_positive_integer?(value)
         {'type' => 'integer'}
       else
         {'type' => 'string'}
+      end
+    end
+
+    def example_by_path_param_value(value)
+      if a_positive_integer?(value)
+        value.to_i
+      else
+        value.to_s
       end
     end
 
