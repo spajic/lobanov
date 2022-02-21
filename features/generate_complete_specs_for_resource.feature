@@ -167,158 +167,23 @@ Feature: generate complete specs for resource
       description: API which is used to develop Lobanov gem.
       version: 0.0.1
     paths:
-      "/fruits/{fruit_id}/reviews":
-        "$ref": "./paths/fruits/[fruit_id]/reviews/path.yaml"
       "/fruits/{fruit_id}/reviews/{id}":
-        "$ref": "./paths/fruits/[fruit_id]/reviews/[id]/path.yaml"
-      "/fruits/{fruit_id}/reviews/stats":
-        "$ref": "./paths/fruits/[fruit_id]/reviews/stats/path.yaml"
-      "/fruits":
-        "$ref": "./paths/fruits/path.yaml"
-      "/fruits/{id}":
-        "$ref": "./paths/fruits/[id]/path.yaml"
-      "/fruits/{id}/upvote":
-        "$ref": "./paths/fruits/[id]/upvote/path.yaml"
-    components:
-      schemas:
-        FruitsReviewsShow200Response:
-          "$ref": "./components/FruitsReviewsShow200Response.yaml"
-        FruitsReviewsIndex200Response:
-          "$ref": "./components/FruitsReviewsIndex200Response.yaml"
-        FruitsReviewsCreate201Response:
-          "$ref": "./components/FruitsReviewsCreate201Response.yaml"
-        FruitsReviewsCreateRequestBody:
-          "$ref": "./components/FruitsReviewsCreateRequestBody.yaml"
-        FruitsReviewsStats200Response:
-          "$ref": "./components/FruitsReviewsStats200Response.yaml"
-        FruitsIndex200Response:
-          "$ref": "./components/FruitsIndex200Response.yaml"
-        FruitsShow200Response:
-          "$ref": "./components/FruitsShow200Response.yaml"
-        FruitsCreate201Response:
-          "$ref": "./components/FruitsCreate201Response.yaml"
-        FruitsUpdate200Response:
-          "$ref": "./components/FruitsUpdate200Response.yaml"
-        FruitsDestroy200Response:
-          "$ref": "./components/FruitsDestroy200Response.yaml"
-        FruitsShow404Response:
-          "$ref": "./components/FruitsShow404Response.yaml"
-        FruitsShow401Response:
-          "$ref": "./components/FruitsShow401Response.yaml"
-        FruitsCreate400Response:
-          "$ref": "./components/FruitsCreate400Response.yaml"
-        FruitsUpvote201Response:
-          "$ref": "./components/FruitsUpvote201Response.yaml"
-        FruitsUpdateRequestBody:
-          "$ref": "./components/FruitsUpdateRequestBody.yaml"
-        FruitsCreateRequestBody:
-          "$ref": "./components/FruitsCreateRequestBody.yaml"
-    """
-
-    # ============= PATHS =============
-
-    Then a yaml named "frontend/api-backend-specification/paths/fruits/path.yaml" should contain:
-      """yaml
-      ---
-      post:
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                "$ref": "../../components/FruitsCreateRequestBody.yaml"
-        responses:
-          '201':
-            description: POST /fruits -> 201
-            content:
-              application/json:
-                schema:
-                  "$ref": "../../components/FruitsCreate201Response.yaml"
-          '400':
-            description: POST /fruits -> 400
-            content:
-              application/json:
-                schema:
-                  "$ref": "../../components/FruitsCreate400Response.yaml"
-      get:
-        responses:
-          '200':
-            description: GET /fruits -> 200
-            content:
-              application/json:
-                schema:
-                  "$ref": "../../components/FruitsIndex200Response.yaml"
-      """
-
-      Then a yaml named "frontend/api-backend-specification/paths/fruits/[id]/path.yaml" should contain:
-        """yaml
-        ---
-        put:
-          parameters:
-          - in: path
-            name: id
-            description: id
-            schema:
-              type: integer
-            required: true
-            example: 1
-          requestBody:
-            required: true
-            content:
-              application/json:
-                schema:
-                  "$ref": "../../../components/FruitsUpdateRequestBody.yaml"
-          responses:
-            '200':
-              description: PUT /fruits/:id -> 200
-              content:
-                application/json:
-                  schema:
-                    "$ref": "../../../components/FruitsUpdate200Response.yaml"
         get:
+          responses:
+            '200':
+              description: GET /fruits/:fruit_id/reviews/:id -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/FruitsReviewsShow200Response.yaml"
           parameters:
           - in: path
-            name: id
-            description: id
+            name: fruit_id
+            description: fruit_id
             schema:
               type: integer
             required: true
-            example: 2
-          - in: query
-            name: q
-            description: q
-            schema:
-              type: string
-            required: true
-            example: 'true'
-          responses:
-            '200':
-              description: GET /fruits/:id -> 200
-              content:
-                application/json:
-                  schema:
-                    "$ref": "../../../components/FruitsShow200Response.yaml"
-            '404':
-              description: GET /fruits/:id -> 404
-              content:
-                application/json:
-                  schema:
-                    "$ref": "../../../components/FruitsShow404Response.yaml"
-            '401':
-              description: GET /fruits/:id -> 401
-              content:
-                application/json:
-                  schema:
-                    "$ref": "../../../components/FruitsShow401Response.yaml"
-        delete:
-          responses:
-            '200':
-              description: DELETE /fruits/:id -> 200
-              content:
-                application/json:
-                  schema:
-                    "$ref": "../../../components/FruitsDestroy200Response.yaml"
-          parameters:
+            example: 1
           - in: path
             name: id
             description: id
@@ -326,11 +191,7 @@ Feature: generate complete specs for resource
               type: integer
             required: true
             example: 1
-        """
-
-      Then a yaml named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/path.yaml" should contain:
-        """yaml
-        ---
+      "/fruits/{fruit_id}/reviews":
         get:
           responses:
             '200':
@@ -338,7 +199,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "../../../../components/FruitsReviewsIndex200Response.yaml"
+                    "$ref": "./components/FruitsReviewsIndex200Response.yaml"
           parameters:
           - in: path
             name: fruit_id
@@ -354,7 +215,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "../../../../components/FruitsReviewsCreate201Response.yaml"
+                    "$ref": "./components/FruitsReviewsCreate201Response.yaml"
           parameters:
           - in: path
             name: fruit_id
@@ -368,41 +229,8 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "../../../../components/FruitsReviewsCreateRequestBody.yaml"
-
-        """
-
-      Then a yaml named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/[id]/path.yaml" should contain:
-        """yaml
-        ---
-        get:
-          responses:
-            '200':
-              description: GET /fruits/:fruit_id/reviews/:id -> 200
-              content:
-                application/json:
-                  schema:
-                    "$ref": "../../../../../components/FruitsReviewsShow200Response.yaml"
-          parameters:
-          - in: path
-            name: fruit_id
-            description: fruit_id
-            schema:
-              type: integer
-            required: true
-            example: 1
-          - in: path
-            name: id
-            description: id
-            schema:
-              type: integer
-            required: true
-            example: 1
-        """
-
-      Then a yaml named "frontend/api-backend-specification/paths/fruits/[fruit_id]/reviews/stats/path.yaml" should contain:
-        """yaml
-        ---
+                  "$ref": "./components/FruitsReviewsCreateRequestBody.yaml"
+      "/fruits/{fruit_id}/reviews/stats":
         get:
           responses:
             '200':
@@ -410,7 +238,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "../../../../../components/FruitsReviewsStats200Response.yaml"
+                    "$ref": "./components/FruitsReviewsStats200Response.yaml"
           parameters:
           - in: path
             name: fruit_id
@@ -419,209 +247,363 @@ Feature: generate complete specs for resource
               type: integer
             required: true
             example: 1
-        """
-
-      # ============= COMPONENTS =============
-
-      Then a file named "frontend/api-backend-specification/components/FruitsIndex200Response.yaml" should contain:
-        """yaml
-        ---
-        type: object
-        required:
-        - items
-        properties:
-          items:
-            type: array
-            minItems: 1
-            uniqueItems: true
-            items:
-              type: object
-              required:
-              - name
-              - weight
-              properties:
-                name:
-                  type: string
-                  example: orange
-                color:
-                  type: string
-                  example: orange
-                weight:
-                  type: integer
-                  example: 100
-                seasonal:
-                  type: boolean
-                  example: false
-        """
-
-      Then a file named "frontend/api-backend-specification/components/FruitsShow200Response.yaml" should contain:
-        """yaml
-        ---
-        type: object
-        required:
-        - name
-        - color
-        - weight
-        - seasonal
-        properties:
-          name:
-            type: string
-            example: lemon
-          color:
-            type: string
-            example: yellow
-          weight:
-            type: integer
-            example: 50
-          seasonal:
-            type: boolean
-            example: false
-        """
-
-      Then a yaml named "frontend/api-backend-specification/components/FruitsCreate400Response.yaml" should contain:
-        """yaml
-        ---
-        type: object
-        required:
-        - message
-        - title
-        properties:
-          message:
-            type: string
-            example: |-
-              param is missing or the value is empty: name
-              Did you mean?  action
-                             format
-                             controller
-                             color
-          title:
-            type: string
-            example: Bad request
-        """
-
-      Then a yaml named "frontend/api-backend-specification/components/FruitsShow401Response.yaml" should contain:
-        """yaml
-        ---
-        type: object
-        properties: {}
-        """
-
-      Then a yaml named "frontend/api-backend-specification/components/FruitsShow404Response.yaml" should contain:
-        """yaml
-        ---
-        type: object
-        properties: {}
-        """
-
-      Then a yaml named "frontend/api-backend-specification/components/FruitsUpdateRequestBody.yaml" should contain:
-        """yaml
-        ---
-        type: object
-        required:
-        - name
-        - color
-        - weight
-        - seasonal
-        properties:
-          name:
-            type: string
-            example: apple
-          color:
-            type: string
-            example: green
-          weight:
-            type: integer
-            example: 150
-          seasonal:
-            type: boolean
-            example: false
-        """
-
-      Then a yaml named "frontend/api-backend-specification/components/FruitsCreateRequestBody.yaml" should contain:
-        """yaml
-        ---
-        type: object
-        required:
-        - name
-        - color
-        - weight
-        - seasonal
-        properties:
-          name:
-            type: string
-            example: apple
-          color:
-            type: string
-            example: green
-          weight:
-            type: integer
-            example: 150
-          seasonal:
-            type: boolean
-            example: false
-        """
-
-        Then a file named "frontend/api-backend-specification/components/FruitsUpvoteRequestBody.yaml" should not exist
-
-        Then a file named "frontend/api-backend-specification/components/FruitsReviewsShow200Response.yaml" should contain:
-          """yaml
-          ---
-          type: object
-          required:
-          - text
-          - positive
-          properties:
-            text:
+      "/fruits":
+        get:
+          responses:
+            '200':
+              description: GET /fruits -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/FruitsIndex200Response.yaml"
+        post:
+          responses:
+            '201':
+              description: POST /fruits -> 201
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/FruitsCreate201Response.yaml"
+            '400':
+              description: POST /fruits -> 400
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/FruitsCreate400Response.yaml"
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  "$ref": "./components/FruitsCreateRequestBody.yaml"
+      "/fruits/{id}":
+        put:
+          responses:
+            '200':
+              description: PUT /fruits/:id -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/FruitsUpdate200Response.yaml"
+          parameters:
+          - in: path
+            name: id
+            description: id
+            schema:
+              type: integer
+            required: true
+            example: 1
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  "$ref": "./components/FruitsUpdateRequestBody.yaml"
+        delete:
+          responses:
+            '200':
+              description: DELETE /fruits/:id -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/FruitsDestroy200Response.yaml"
+          parameters:
+          - in: path
+            name: id
+            description: id
+            schema:
+              type: integer
+            required: true
+            example: 1
+        get:
+          responses:
+            '404':
+              description: GET /fruits/:id -> 404
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/FruitsShow404Response.yaml"
+            '401':
+              description: GET /fruits/:id -> 401
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/FruitsShow401Response.yaml"
+            '200':
+              description: GET /fruits/:id -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/FruitsShow200Response.yaml"
+          parameters:
+          - in: path
+            name: id
+            description: id
+            schema:
+              type: integer
+            required: true
+            example: 2
+          - in: query
+            name: q
+            description: q
+            schema:
               type: string
-              example: 'review #1'
-            positive:
-              type: boolean
-              example: true
-          """
+            required: true
+            example: 'true'
+      "/fruits/{id}/upvote":
+        post:
+          responses:
+            '201':
+              description: POST /fruits/:id/upvote -> 201
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/FruitsUpvote201Response.yaml"
+          parameters:
+          - in: path
+            name: id
+            description: id
+            schema:
+              type: integer
+            required: true
+            example: 5
+    components:
+      schemas:
+        FruitsReviewsShow200Response:
+          "$ref": "./components/FruitsReviewsShow200Response.yaml"
+        FruitsReviewsIndex200Response:
+          "$ref": "./components/FruitsReviewsIndex200Response.yaml"
+        FruitsReviewsCreate201Response:
+          "$ref": "./components/FruitsReviewsCreate201Response.yaml"
+        FruitsReviewsCreateRequestBody:
+          "$ref": "./components/FruitsReviewsCreateRequestBody.yaml"
+        FruitsReviewsStats200Response:
+          "$ref": "./components/FruitsReviewsStats200Response.yaml"
+        FruitsIndex200Response:
+          "$ref": "./components/FruitsIndex200Response.yaml"
+        FruitsCreate201Response:
+          "$ref": "./components/FruitsCreate201Response.yaml"
+        FruitsCreateRequestBody:
+          "$ref": "./components/FruitsCreateRequestBody.yaml"
+        FruitsUpdate200Response:
+          "$ref": "./components/FruitsUpdate200Response.yaml"
+        FruitsUpdateRequestBody:
+          "$ref": "./components/FruitsUpdateRequestBody.yaml"
+        FruitsDestroy200Response:
+          "$ref": "./components/FruitsDestroy200Response.yaml"
+        FruitsShow404Response:
+          "$ref": "./components/FruitsShow404Response.yaml"
+        FruitsShow401Response:
+          "$ref": "./components/FruitsShow401Response.yaml"
+        FruitsCreate400Response:
+          "$ref": "./components/FruitsCreate400Response.yaml"
+        FruitsUpvote201Response:
+          "$ref": "./components/FruitsUpvote201Response.yaml"
+        FruitsShow200Response:
+          "$ref": "./components/FruitsShow200Response.yaml"
+    """
 
-        Then a file named "frontend/api-backend-specification/components/FruitsReviewsIndex200Response.yaml" should contain:
-          """yaml
-          ---
+    # ============= COMPONENTS =============
+
+    Then a file named "frontend/api-backend-specification/components/FruitsIndex200Response.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      required:
+      - items
+      properties:
+        items:
           type: array
           minItems: 1
           uniqueItems: true
           items:
             type: object
             required:
-            - text
+            - name
+            - weight
             properties:
-              text:
+              name:
                 type: string
-                example: 'review #1'
-              positive:
+                example: orange
+              color:
+                type: string
+                example: orange
+              weight:
+                type: integer
+                example: 100
+              seasonal:
                 type: boolean
-                example: true
-          """
+                example: false
+      """
 
-        Then a file named "frontend/api-backend-specification/components/FruitsReviewsCreateRequestBody.yaml" should contain:
-          """yaml
-          ---
-          type: object
-          required:
-          - text
-          - positive
-          properties:
-            text:
-              type: string
-              example: hello
-            positive:
-              type: boolean
-              example: true
-          """
+    Then a file named "frontend/api-backend-specification/components/FruitsShow200Response.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      required:
+      - name
+      - color
+      - weight
+      - seasonal
+      properties:
+        name:
+          type: string
+          example: lemon
+        color:
+          type: string
+          example: yellow
+        weight:
+          type: integer
+          example: 50
+        seasonal:
+          type: boolean
+          example: false
+      """
 
-        Then a file named "frontend/api-backend-specification/components/FruitsReviewsStats200Response.yaml" should contain:
-          """yaml
-          ---
-          type: object
-          required:
-          - avg
-          properties:
-            avg:
-              type: number
-              example: 5.0
-          """
+    Then a yaml named "frontend/api-backend-specification/components/FruitsCreate400Response.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      required:
+      - message
+      - title
+      properties:
+        message:
+          type: string
+          example: |-
+            param is missing or the value is empty: name
+            Did you mean?  action
+                           format
+                           controller
+                           color
+        title:
+          type: string
+          example: Bad request
+      """
+
+    Then a yaml named "frontend/api-backend-specification/components/FruitsShow401Response.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      properties: {}
+      """
+
+    Then a yaml named "frontend/api-backend-specification/components/FruitsShow404Response.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      properties: {}
+      """
+
+    Then a yaml named "frontend/api-backend-specification/components/FruitsUpdateRequestBody.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      required:
+      - name
+      - color
+      - weight
+      - seasonal
+      properties:
+        name:
+          type: string
+          example: apple
+        color:
+          type: string
+          example: green
+        weight:
+          type: integer
+          example: 150
+        seasonal:
+          type: boolean
+          example: false
+      """
+
+    Then a yaml named "frontend/api-backend-specification/components/FruitsCreateRequestBody.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      required:
+      - name
+      - color
+      - weight
+      - seasonal
+      properties:
+        name:
+          type: string
+          example: apple
+        color:
+          type: string
+          example: green
+        weight:
+          type: integer
+          example: 150
+        seasonal:
+          type: boolean
+          example: false
+      """
+
+    Then a file named "frontend/api-backend-specification/components/FruitsUpvoteRequestBody.yaml" should not exist
+
+    Then a file named "frontend/api-backend-specification/components/FruitsReviewsShow200Response.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      required:
+      - text
+      - positive
+      properties:
+        text:
+          type: string
+          example: 'review #1'
+        positive:
+          type: boolean
+          example: true
+      """
+
+    Then a file named "frontend/api-backend-specification/components/FruitsReviewsIndex200Response.yaml" should contain:
+      """yaml
+      ---
+      type: array
+      minItems: 1
+      uniqueItems: true
+      items:
+        type: object
+        required:
+        - text
+        properties:
+          text:
+            type: string
+            example: 'review #1'
+          positive:
+            type: boolean
+            example: true
+      """
+
+    Then a file named "frontend/api-backend-specification/components/FruitsReviewsCreateRequestBody.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      required:
+      - text
+      - positive
+      properties:
+        text:
+          type: string
+          example: hello
+        positive:
+          type: boolean
+          example: true
+      """
+
+    Then a file named "frontend/api-backend-specification/components/FruitsReviewsStats200Response.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      required:
+      - avg
+      properties:
+        avg:
+          type: number
+          example: 5.0
+      """

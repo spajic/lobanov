@@ -44,7 +44,7 @@ module Lobanov
       path_schema = extract_component_schema_to_file(path_schema)
       path_schema = extract_request_body_to_file(path_schema) if status.to_i < 400
 
-      write_append(PATHS_BASE + store_path_name, path_schema)
+      # write_append(PATHS_BASE + store_path_name, path_schema)
       update_index(path_schema)
     end
 
@@ -62,7 +62,7 @@ module Lobanov
     end
 
     def ref_to_component
-      component_path = ('../' * nesting_depth) + "components/#{response_component_name}.yaml"
+      component_path = "./components/#{response_component_name}.yaml"
     end
 
     def extract_request_body_to_file(path_schema)
@@ -79,7 +79,7 @@ module Lobanov
     end
 
     def ref_to_request_body
-      request_body_path = ('../' * nesting_depth) + "components/#{generator.request_body_name}.yaml"
+      request_body_path = "./components/#{generator.request_body_name}.yaml"
     end
 
     def store_path_name
@@ -113,7 +113,7 @@ module Lobanov
     def update_index(path_schema)
       index = YAML.load_file(INDEX_PATH)
 
-      index['paths'][path_with_curly_braces] = {'$ref' => "./paths#{store_path_name}.yaml"}
+      append_to_path!(index, path_with_curly_braces, path_schema)
 
       index['components']['schemas'][response_component_name] = {
         '$ref' => "./components/#{response_component_name}.yaml"
@@ -136,10 +136,8 @@ module Lobanov
       File.write full_path, YAML.dump(object)
     end
 
-    def write_append(path, object)
-      full_path = "#{path}.yaml"
-      ensure_file_exists(full_path)
-      content = YAML.load_file(full_path)
+    def append_to_path!(index, path, object)
+      content = index['paths'][path_with_curly_braces]
 
       # Если ответ с ошибкой, не обновляем parameters и requestBody, там что-то не то
       if status.to_i >= 400
@@ -160,7 +158,7 @@ module Lobanov
           content.merge(object)
         end
 
-      File.write full_path, YAML.dump(merged)
+      index['paths'][path_with_curly_braces] = merged
     end
 
     def read_relative(relative_path)
