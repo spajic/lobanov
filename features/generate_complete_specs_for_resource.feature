@@ -229,7 +229,7 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "./components/FruitsReviewsCreateRequestBody.yaml"
+                  "$ref": "./components/requestBodies/FruitsReviewsCreateRequestBody.yaml"
       "/fruits/{fruit_id}/reviews/stats":
         get:
           responses:
@@ -275,7 +275,7 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "./components/FruitsCreateRequestBody.yaml"
+                  "$ref": "./components/requestBodies/FruitsCreateRequestBody.yaml"
       "/fruits/{id}":
         put:
           responses:
@@ -298,7 +298,7 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "./components/FruitsUpdateRequestBody.yaml"
+                  "$ref": "./components/requestBodies/FruitsUpdateRequestBody.yaml"
         delete:
           responses:
             '200':
@@ -368,6 +368,13 @@ Feature: generate complete specs for resource
             required: true
             example: 5
     components:
+      requestBodies:
+        FruitsUpdateRequestBody:
+          "$ref": "./components/requestBodies/FruitsUpdateRequestBody.yaml"
+        FruitsCreateRequestBody:
+          "$ref": "./components/requestBodies/FruitsCreateRequestBody.yaml"
+        FruitsReviewsCreateRequestBody:
+          "$ref": "./components/requestBodies/FruitsReviewsCreateRequestBody.yaml"
       schemas:
         FruitsReviewsShow200Response:
           "$ref": "./components/FruitsReviewsShow200Response.yaml"
@@ -375,20 +382,14 @@ Feature: generate complete specs for resource
           "$ref": "./components/FruitsReviewsIndex200Response.yaml"
         FruitsReviewsCreate201Response:
           "$ref": "./components/FruitsReviewsCreate201Response.yaml"
-        FruitsReviewsCreateRequestBody:
-          "$ref": "./components/FruitsReviewsCreateRequestBody.yaml"
         FruitsReviewsStats200Response:
           "$ref": "./components/FruitsReviewsStats200Response.yaml"
         FruitsIndex200Response:
           "$ref": "./components/FruitsIndex200Response.yaml"
         FruitsCreate201Response:
           "$ref": "./components/FruitsCreate201Response.yaml"
-        FruitsCreateRequestBody:
-          "$ref": "./components/FruitsCreateRequestBody.yaml"
         FruitsUpdate200Response:
           "$ref": "./components/FruitsUpdate200Response.yaml"
-        FruitsUpdateRequestBody:
-          "$ref": "./components/FruitsUpdateRequestBody.yaml"
         FruitsDestroy200Response:
           "$ref": "./components/FruitsDestroy200Response.yaml"
         FruitsShow404Response:
@@ -495,7 +496,7 @@ Feature: generate complete specs for resource
       properties: {}
       """
 
-    Then a yaml named "frontend/api-backend-specification/components/FruitsUpdateRequestBody.yaml" should contain:
+    Then a yaml named "frontend/api-backend-specification/components/requestBodies/FruitsUpdateRequestBody.yaml" should contain:
       """yaml
       ---
       type: object
@@ -519,7 +520,7 @@ Feature: generate complete specs for resource
           example: false
       """
 
-    Then a yaml named "frontend/api-backend-specification/components/FruitsCreateRequestBody.yaml" should contain:
+    Then a yaml named "frontend/api-backend-specification/components/requestBodies/FruitsCreateRequestBody.yaml" should contain:
       """yaml
       ---
       type: object
@@ -543,7 +544,7 @@ Feature: generate complete specs for resource
           example: false
       """
 
-    Then a file named "frontend/api-backend-specification/components/FruitsUpvoteRequestBody.yaml" should not exist
+    Then a file named "frontend/api-backend-specification/components/requestBodies/FruitsUpvoteRequestBody.yaml" should not exist
 
     Then a file named "frontend/api-backend-specification/components/FruitsReviewsShow200Response.yaml" should contain:
       """yaml
@@ -580,7 +581,7 @@ Feature: generate complete specs for resource
             example: true
       """
 
-    Then a file named "frontend/api-backend-specification/components/FruitsReviewsCreateRequestBody.yaml" should contain:
+    Then a file named "frontend/api-backend-specification/components/requestBodies/FruitsReviewsCreateRequestBody.yaml" should contain:
       """yaml
       ---
       type: object

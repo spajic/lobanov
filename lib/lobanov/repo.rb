@@ -14,6 +14,7 @@ module Lobanov
     SCHEMAS_PATH = 'spec/lobanov/schemas'
     COMPONENTS_BASE = 'frontend/api-backend-specification/components'
     PATHS_BASE = 'frontend/api-backend-specification/paths'
+    BODIES_BASE = "#{COMPONENTS_BASE}/requestBodies"
     INDEX_BASE = 'frontend/api-backend-specification'
     INDEX_PATH = "#{INDEX_BASE}/index.yaml"
 
@@ -70,7 +71,7 @@ module Lobanov
         path_schema.dig(verb, 'requestBody', 'content', 'application/json', 'schema')
       return path_schema if extracted_body.nil?
 
-      write(COMPONENTS_BASE + '/' + generator.request_body_name, extracted_body)
+      write(BODIES_BASE + '/'  + generator.request_body_name, extracted_body)
 
       path_schema[verb]['requestBody']['content']['application/json']['schema'] =
         {'$ref' => ref_to_request_body}
@@ -79,7 +80,7 @@ module Lobanov
     end
 
     def ref_to_request_body
-      request_body_path = "./components/#{generator.request_body_name}.yaml"
+      request_body_path = "./components/requestBodies/#{generator.request_body_name}.yaml"
     end
 
     def store_path_name
@@ -120,8 +121,8 @@ module Lobanov
       }
 
       if path_schema[verb]['requestBody']
-        index['components']['schemas'][generator.request_body_name] = {
-          '$ref' => "./components/#{generator.request_body_name}.yaml"
+        index['components']['requestBodies'][generator.request_body_name] = {
+          '$ref' => "./components/requestBodies/#{generator.request_body_name}.yaml"
         }
       end
 
