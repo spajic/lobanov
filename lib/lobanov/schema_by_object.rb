@@ -51,13 +51,18 @@ module Lobanov
         end
       else
         example = obj[key]
-        # Не разрешаем добавить в тест поле, но не дать реального примера
+        # Предупреждаем, если в тесте есть поле, но нет реального примера
         # по nil мы не можем на вывести тип
         # пустая строка тоже плохо, лучше в качестве примера дать заполненную
         if example.nil? || example == ''
-          raise MissingExampleError.new("for #{key.inspect} in #{obj}")
+          # raise MissingExampleError.new("for #{key.inspect} in #{obj}")
+          puts "❗️❗️❗️ Cannot find example for #{key.inspect} in #{pp obj}"
         end
-        schema['properties'][skey]['example'] = example
+        if example.nil?
+          schema['properties'][skey]['nullable'] = true
+        else
+          schema['properties'][skey]['example'] = example
+        end
       end
     end
   end
