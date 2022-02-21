@@ -31,7 +31,9 @@ module Lobanov
       elsif obj.is_a?(Array)
         add_examples_to_schema(schema['items'], obj.first)
       else
-        schema['example'] = obj
+        if schema['example'].nil?
+          schema['example'] = obj
+        end
       end
 
       schema
