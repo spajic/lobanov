@@ -62,6 +62,10 @@ module Lobanov
           # raise MissingExampleError.new("for #{key.inspect} in #{obj}")
           puts "❗️❗️❗️ Cannot find example for #{key.inspect} in #{pp obj}"
         end
+        # эта проверка неправильная, схема всегда генерится без примера
+        # проблема просто в том, что схема перегенерируется, потому что не находится
+        # и аналогичная проверка выше тоже.
+        # TODO: починить загрузку и сверку схемы, покрыть тестами
         if example.nil?
           schema['properties'][skey]['nullable'] = true
         else
