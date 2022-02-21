@@ -50,6 +50,8 @@ module Lobanov
           add_examples_to_schema(schema['properties'][skey]['items'], example)
         end
       else
+        return unless schema['properties'][skey]['example'].nil?
+
         example = obj[key]
         # Предупреждаем, если в тесте есть поле, но нет реального примера
         # по nil мы не можем на вывести тип
