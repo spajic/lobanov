@@ -119,9 +119,9 @@ RSpec.describe Lobanov::Generator do
               'in' => 'path',
               'name' => 'id',
               'description' => 'id',
-              'schema' => {'type' => 'integer'},
+              'schema' => {'type' => 'string'},
               'required' => true,
-              'example' => 1
+              'example' => '1'
             }
           ],
           'responses' => {

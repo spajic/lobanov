@@ -11,7 +11,6 @@ module Lobanov
   class Repo
     extend Forwardable
 
-    SCHEMAS_PATH = 'spec/lobanov/schemas'
     COMPONENTS_BASE = 'frontend/api-backend-specification/components'
     PATHS_BASE = 'frontend/api-backend-specification/paths'
     BODIES_BASE = "#{COMPONENTS_BASE}/requestBodies"
@@ -54,7 +53,7 @@ module Lobanov
         path_schema.dig(verb, 'responses', status, 'content', 'application/json', 'schema')
       return path_schema unless extracted_schema
 
-      write(COMPONENTS_BASE + '/' + response_component_name, extracted_schema)
+      write(COMPONENTS_BASE + '/responses/' + response_component_name, extracted_schema)
 
       path_schema[verb]['responses'][status]['content']['application/json']['schema'] =
         {'$ref' => ref_to_component}
@@ -63,7 +62,7 @@ module Lobanov
     end
 
     def ref_to_component
-      component_path = "./components/#{response_component_name}.yaml"
+      component_path = "./components/responses/#{response_component_name}.yaml"
     end
 
     def extract_request_body_to_file(path_schema)
@@ -99,7 +98,7 @@ module Lobanov
 
       path_schema = read_relative(path_index['$ref'])
 
-      component_index = index['components']['schemas'][response_component_name]
+      component_index = index['components']['responses'][response_component_name]
       component_schema = read_relative(component_index['$ref'])
 
       path_schema[verb]['responses'][status.to_s]['content']['application/json']['schema'] = component_schema
@@ -116,8 +115,8 @@ module Lobanov
 
       append_to_path!(index, path_with_curly_braces, path_schema)
 
-      index['components']['schemas'][response_component_name] = {
-        '$ref' => "./components/#{response_component_name}.yaml"
+      index['components']['responses'][response_component_name] = {
+        '$ref' => "./components/responses/#{response_component_name}.yaml"
       }
 
       if path_schema[verb]['requestBody']

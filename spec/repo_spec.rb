@@ -52,7 +52,7 @@ RSpec.describe Lobanov::Repo do
             'in' => 'path',
             'name' => 'id',
             'description' => 'id',
-            'schema' => {'type' => 'integer'},
+            'schema' => {'type' => 'string'},
             'required' => true,
             'example' => '1'
           }
@@ -79,7 +79,7 @@ RSpec.describe Lobanov::Repo do
             'in' => 'path',
             'name' => 'id',
             'description' => 'id',
-            'schema' => {'type' => 'integer'},
+            'schema' => {'type' => 'string'},
             'required' => true,
             'example' => '1'
           }
@@ -166,7 +166,7 @@ RSpec.describe Lobanov::Repo do
     let(:subject) do
       repo.ref_to_component
     end
-    let(:expected_ref) { '../../../components/GridBotsShow200Response.yaml' }
+    let(:expected_ref) { './components/responses/GridBotsShow200Response.yaml' }
 
     it 'returns expected result' do
       expect(subject).to eq(expected_ref)
