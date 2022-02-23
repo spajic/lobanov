@@ -179,7 +179,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsReviewsShow200Response.yaml"
+                    "$ref": "#/components/responses/FruitsReviewsShow200Response"
           parameters:
           - in: path
             name: fruit_id
@@ -203,7 +203,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsReviewsIndex200Response.yaml"
+                    "$ref": "#/components/responses/FruitsReviewsIndex200Response"
           parameters:
           - in: path
             name: fruit_id
@@ -219,7 +219,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsReviewsCreate201Response.yaml"
+                    "$ref": "#/components/responses/FruitsReviewsCreate201Response"
           parameters:
           - in: path
             name: fruit_id
@@ -233,7 +233,7 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "./components/requestBodies/FruitsReviewsCreateRequestBody.yaml"
+                  "$ref": "#/components/requestBodies/FruitsReviewsCreateRequestBody"
       "/fruits/{fruit_id}/reviews/stats":
         get:
           responses:
@@ -242,7 +242,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsReviewsStats200Response.yaml"
+                    "$ref": "#/components/responses/FruitsReviewsStats200Response"
           parameters:
           - in: path
             name: fruit_id
@@ -259,7 +259,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsIndex200Response.yaml"
+                    "$ref": "#/components/responses/FruitsIndex200Response"
         post:
           responses:
             '201':
@@ -267,19 +267,19 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsCreate201Response.yaml"
+                    "$ref": "#/components/responses/FruitsCreate201Response"
             '400':
               description: POST /fruits -> 400
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsCreate400Response.yaml"
+                    "$ref": "#/components/responses/FruitsCreate400Response"
           requestBody:
             required: true
             content:
               application/json:
                 schema:
-                  "$ref": "./components/requestBodies/FruitsCreateRequestBody.yaml"
+                  "$ref": "#/components/requestBodies/FruitsCreateRequestBody"
       "/fruits/{id}":
         put:
           responses:
@@ -288,7 +288,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsUpdate200Response.yaml"
+                    "$ref": "#/components/responses/FruitsUpdate200Response"
           parameters:
           - in: path
             name: id
@@ -302,7 +302,7 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "./components/requestBodies/FruitsUpdateRequestBody.yaml"
+                  "$ref": "#/components/requestBodies/FruitsUpdateRequestBody"
         delete:
           responses:
             '200':
@@ -310,7 +310,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsDestroy200Response.yaml"
+                    "$ref": "#/components/responses/FruitsDestroy200Response"
           parameters:
           - in: path
             name: id
@@ -326,19 +326,19 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsShow404Response.yaml"
+                    "$ref": "#/components/responses/FruitsShow404Response"
             '401':
               description: GET /fruits/:id -> 401
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsShow401Response.yaml"
+                    "$ref": "#/components/responses/FruitsShow401Response"
             '200':
               description: GET /fruits/:id -> 200
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsShow200Response.yaml"
+                    "$ref": "#/components/responses/FruitsShow200Response"
           parameters:
           - in: path
             name: id
@@ -362,7 +362,7 @@ Feature: generate complete specs for resource
               content:
                 application/json:
                   schema:
-                    "$ref": "./components/responses/FruitsUpvote201Response.yaml"
+                    "$ref": "#/components/responses/FruitsUpvote201Response"
           parameters:
           - in: path
             name: id
@@ -409,7 +409,7 @@ Feature: generate complete specs for resource
           "$ref": "./components/responses/FruitsShow200Response.yaml"
     """
 
-    # ============= COMPONENTS =============
+    # ============= RESPONSES =============
 
     Then a file named "frontend/api-backend-specification/components/responses/FruitsIndex200Response.yaml" should contain:
       """yaml
@@ -501,6 +501,55 @@ Feature: generate complete specs for resource
       properties: {}
       """
 
+    Then a file named "frontend/api-backend-specification/components/responses/FruitsReviewsShow200Response.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      required:
+      - text
+      - positive
+      properties:
+        text:
+          type: string
+          example: 'review #1'
+        positive:
+          type: boolean
+          example: true
+      """
+
+    Then a file named "frontend/api-backend-specification/components/responses/FruitsReviewsIndex200Response.yaml" should contain:
+      """yaml
+      ---
+      type: array
+      minItems: 1
+      uniqueItems: true
+      items:
+        type: object
+        required:
+        - text
+        properties:
+          text:
+            type: string
+            example: 'review #1'
+          positive:
+            type: boolean
+            example: true
+      """
+
+    Then a file named "frontend/api-backend-specification/components/responses/FruitsReviewsStats200Response.yaml" should contain:
+      """yaml
+      ---
+      type: object
+      required:
+      - avg
+      properties:
+        avg:
+          type: number
+          example: 5.0
+      """
+
+    # ============= REQUEST BODIES =============
+
     Then a yaml named "frontend/api-backend-specification/components/requestBodies/FruitsUpdateRequestBody.yaml" should contain:
       """yaml
       ---
@@ -551,41 +600,6 @@ Feature: generate complete specs for resource
 
     Then a file named "frontend/api-backend-specification/components/requestBodies/FruitsUpvoteRequestBody.yaml" should not exist
 
-    Then a file named "frontend/api-backend-specification/components/responses/FruitsReviewsShow200Response.yaml" should contain:
-      """yaml
-      ---
-      type: object
-      required:
-      - text
-      - positive
-      properties:
-        text:
-          type: string
-          example: 'review #1'
-        positive:
-          type: boolean
-          example: true
-      """
-
-    Then a file named "frontend/api-backend-specification/components/responses/FruitsReviewsIndex200Response.yaml" should contain:
-      """yaml
-      ---
-      type: array
-      minItems: 1
-      uniqueItems: true
-      items:
-        type: object
-        required:
-        - text
-        properties:
-          text:
-            type: string
-            example: 'review #1'
-          positive:
-            type: boolean
-            example: true
-      """
-
     Then a file named "frontend/api-backend-specification/components/requestBodies/FruitsReviewsCreateRequestBody.yaml" should contain:
       """yaml
       ---
@@ -600,16 +614,4 @@ Feature: generate complete specs for resource
         positive:
           type: boolean
           example: true
-      """
-
-    Then a file named "frontend/api-backend-specification/components/responses/FruitsReviewsStats200Response.yaml" should contain:
-      """yaml
-      ---
-      type: object
-      required:
-      - avg
-      properties:
-        avg:
-          type: number
-          example: 5.0
       """
