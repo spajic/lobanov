@@ -162,9 +162,9 @@ RSpec.describe Lobanov::Repo do
     }
   end
 
-  describe '#ref_to_component' do
+  describe '#ref_to_component_file' do
     let(:subject) do
-      repo.ref_to_component
+      repo.ref_to_component_file
     end
     let(:expected_ref) { './components/responses/GridBotsShow200Response.yaml' }
 
