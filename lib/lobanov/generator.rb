@@ -97,7 +97,12 @@ module Lobanov
         body_schema = BodyParamsGenerator.call(payload)
       end
 
-      res = {'responses' => response_schema}
+      res = {
+        'description' => "#{verb} #{endpoint_path}",
+        'operationId' => camelized_path,
+        'responses' => response_schema,
+        'tags' => ['lobanov']
+      }
       res.merge!({'parameters' => params_schema}) if parameters_schema
       res.merge!({'requestBody' => body_schema}) if body_schema
 
@@ -117,7 +122,6 @@ module Lobanov
       QueryParamsGenerator.call(query_params)
     end
 
-    # TODO: нужно сделать дописывание разных кодов ответов в responses
     def response_schema
       {
         status.to_s => {
