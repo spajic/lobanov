@@ -1,0 +1,8 @@
+---
+type: object
+required:
+- avg
+properties:
+  avg:
+    type: number
+    example: 5.0

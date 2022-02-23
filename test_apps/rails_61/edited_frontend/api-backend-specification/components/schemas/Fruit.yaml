@@ -1,0 +1,18 @@
+type: object
+title: Fruit
+required:
+- name
+- weight
+properties:
+  name:
+    type: string
+    example: orange
+  color:
+    type: string
+    example: orange
+  weight:
+    type: integer
+    example: 100
+  seasonal:
+    type: boolean
+    example: false
