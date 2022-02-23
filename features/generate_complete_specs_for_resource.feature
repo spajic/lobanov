@@ -13,17 +13,11 @@ Feature: generate complete specs for resource
         description: API which is used to develop Lobanov gem.
         version: 0.0.1
       paths: {}
-      components:
-        schemas: {}
-        responses: {}
-        requestBodies: {}
       """
 
     Given an empty directory "frontend/api-backend-specification/components"
 
-    Given an empty directory "frontend/api-backend-specification/paths"
-
-    Given an empty directory "frontend/api-backend-specification/components/models"
+    Given an empty directory "frontend/api-backend-specification/components/schemas"
 
     Given a file named "spec/requests/fruits_controller_spec.rb" with:
       """ruby

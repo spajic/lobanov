@@ -56,13 +56,9 @@ module Lobanov
       write(COMPONENTS_BASE + '/responses/' + response_component_name, extracted_schema)
 
       path_schema[verb]['responses'][status]['content']['application/json']['schema'] =
-        {'$ref' => ref_to_component_definition}
+        {'$ref' => ref_to_component_file}
 
       path_schema
-    end
-
-    def ref_to_component_definition
-      "#/components/responses/#{response_component_name}"
     end
 
     def ref_to_component_file
@@ -77,17 +73,13 @@ module Lobanov
       write(BODIES_BASE + '/'  + generator.request_body_name, extracted_body)
 
       path_schema[verb]['requestBody']['content']['application/json']['schema'] =
-        {'$ref' => ref_to_request_body_definition}
+        {'$ref' => ref_to_request_body_file}
 
       path_schema
     end
 
     def ref_to_request_body_file
       "./components/requestBodies/#{generator.request_body_name}.yaml"
-    end
-
-    def ref_to_request_body_definition
-      "#/components/requestBodies/#{generator.request_body_name}"
     end
 
     def store_path_name
@@ -122,16 +114,6 @@ module Lobanov
       index = YAML.load_file(INDEX_PATH)
 
       append_to_path!(index, path_with_curly_braces, path_schema)
-
-      index['components']['responses'][response_component_name] = {
-        '$ref' => ref_to_component_file
-      }
-
-      if path_schema[verb]['requestBody']
-        index['components']['requestBodies'][generator.request_body_name] = {
-          '$ref' => ref_to_request_body_file
-        }
-      end
 
       File.write(INDEX_PATH, index.to_yaml)
     end
