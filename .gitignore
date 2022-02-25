@@ -60,3 +60,5 @@ build-iPhoneSimulator/
 
 .rspec_status
 test_apps/rails_61/frontend/
+
+todo.md
