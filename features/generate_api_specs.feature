@@ -1,5 +1,5 @@
-Feature: generate complete specs for resource
-  When you write lobanov specs for /resources CRUD + errors
+Feature: generate complete specs for API
+  When you write lobanov specs for REST JSON API
 
   Scenario: basic usage
     When I cd to "../../test_apps/rails_61"
@@ -167,13 +167,17 @@ Feature: generate complete specs for resource
     paths:
       "/fruits/{fruit_id}/reviews/{id}":
         get:
+          description: GET /fruits/:fruit_id/reviews/:id
+          operationId: FruitsReviewsShow
+          tags:
+          - lobanov
           responses:
             '200':
               description: GET /fruits/:fruit_id/reviews/:id -> 200
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsReviewsShow200Response"
+                    "$ref": "./components/responses/FruitsReviewsShow200Response.yaml"
           parameters:
           - in: path
             name: fruit_id
@@ -191,13 +195,17 @@ Feature: generate complete specs for resource
             example: '1'
       "/fruits/{fruit_id}/reviews":
         get:
+          description: GET /fruits/:fruit_id/reviews
+          operationId: FruitsReviewsIndex
+          tags:
+          - lobanov
           responses:
             '200':
               description: GET /fruits/:fruit_id/reviews -> 200
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsReviewsIndex200Response"
+                    "$ref": "./components/responses/FruitsReviewsIndex200Response.yaml"
           parameters:
           - in: path
             name: fruit_id
@@ -207,13 +215,17 @@ Feature: generate complete specs for resource
             required: true
             example: '1'
         post:
+          description: POST /fruits/:fruit_id/reviews
+          operationId: FruitsReviewsCreate
+          tags:
+          - lobanov
           responses:
             '201':
               description: POST /fruits/:fruit_id/reviews -> 201
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsReviewsCreate201Response"
+                    "$ref": "./components/responses/FruitsReviewsCreate201Response.yaml"
           parameters:
           - in: path
             name: fruit_id
@@ -227,16 +239,20 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "#/components/requestBodies/FruitsReviewsCreateRequestBody"
+                  "$ref": "./components/requestBodies/FruitsReviewsCreateRequestBody.yaml"
       "/fruits/{fruit_id}/reviews/stats":
         get:
+          description: GET /fruits/:fruit_id/reviews/stats
+          operationId: FruitsReviewsStats
+          tags:
+          - lobanov
           responses:
             '200':
               description: GET /fruits/:fruit_id/reviews/stats -> 200
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsReviewsStats200Response"
+                    "$ref": "./components/responses/FruitsReviewsStats200Response.yaml"
           parameters:
           - in: path
             name: fruit_id
@@ -247,42 +263,54 @@ Feature: generate complete specs for resource
             example: '1'
       "/fruits":
         get:
+          description: GET /fruits
+          operationId: FruitsIndex
+          tags:
+          - lobanov
           responses:
             '200':
               description: GET /fruits -> 200
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsIndex200Response"
+                    "$ref": "./components/responses/FruitsIndex200Response.yaml"
         post:
+          description: POST /fruits
+          operationId: FruitsCreate
+          tags:
+          - lobanov
           responses:
             '201':
               description: POST /fruits -> 201
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsCreate201Response"
+                    "$ref": "./components/responses/FruitsCreate201Response.yaml"
             '400':
               description: POST /fruits -> 400
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsCreate400Response"
+                    "$ref": "./components/responses/FruitsCreate400Response.yaml"
           requestBody:
             required: true
             content:
               application/json:
                 schema:
-                  "$ref": "#/components/requestBodies/FruitsCreateRequestBody"
+                  "$ref": "./components/requestBodies/FruitsCreateRequestBody.yaml"
       "/fruits/{id}":
         put:
+          description: PUT /fruits/:id
+          operationId: FruitsUpdate
+          tags:
+          - lobanov
           responses:
             '200':
               description: PUT /fruits/:id -> 200
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsUpdate200Response"
+                    "$ref": "./components/responses/FruitsUpdate200Response.yaml"
           parameters:
           - in: path
             name: id
@@ -296,15 +324,19 @@ Feature: generate complete specs for resource
             content:
               application/json:
                 schema:
-                  "$ref": "#/components/requestBodies/FruitsUpdateRequestBody"
+                  "$ref": "./components/requestBodies/FruitsUpdateRequestBody.yaml"
         delete:
+          description: DELETE /fruits/:id
+          operationId: FruitsDestroy
+          tags:
+          - lobanov
           responses:
             '200':
               description: DELETE /fruits/:id -> 200
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsDestroy200Response"
+                    "$ref": "./components/responses/FruitsDestroy200Response.yaml"
           parameters:
           - in: path
             name: id
@@ -314,25 +346,29 @@ Feature: generate complete specs for resource
             required: true
             example: '1'
         get:
+          description: GET /fruits/:id
+          operationId: FruitsShow
+          tags:
+          - lobanov
           responses:
             '404':
               description: GET /fruits/:id -> 404
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsShow404Response"
+                    "$ref": "./components/responses/FruitsShow404Response.yaml"
             '401':
               description: GET /fruits/:id -> 401
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsShow401Response"
+                    "$ref": "./components/responses/FruitsShow401Response.yaml"
             '200':
               description: GET /fruits/:id -> 200
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsShow200Response"
+                    "$ref": "./components/responses/FruitsShow200Response.yaml"
           parameters:
           - in: path
             name: id
@@ -350,13 +386,17 @@ Feature: generate complete specs for resource
             example: 'true'
       "/fruits/{id}/upvote":
         post:
+          description: POST /fruits/:id/upvote
+          operationId: FruitsUpvote
+          tags:
+          - lobanov
           responses:
             '201':
               description: POST /fruits/:id/upvote -> 201
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsUpvote201Response"
+                    "$ref": "./components/responses/FruitsUpvote201Response.yaml"
           parameters:
           - in: path
             name: id
@@ -365,42 +405,6 @@ Feature: generate complete specs for resource
               type: string
             required: true
             example: '5'
-    components:
-      schemas: {}
-      requestBodies:
-        FruitsUpdateRequestBody:
-          "$ref": "./components/requestBodies/FruitsUpdateRequestBody.yaml"
-        FruitsCreateRequestBody:
-          "$ref": "./components/requestBodies/FruitsCreateRequestBody.yaml"
-        FruitsReviewsCreateRequestBody:
-          "$ref": "./components/requestBodies/FruitsReviewsCreateRequestBody.yaml"
-      responses:
-        FruitsReviewsShow200Response:
-          "$ref": "./components/responses/FruitsReviewsShow200Response.yaml"
-        FruitsReviewsIndex200Response:
-          "$ref": "./components/responses/FruitsReviewsIndex200Response.yaml"
-        FruitsReviewsCreate201Response:
-          "$ref": "./components/responses/FruitsReviewsCreate201Response.yaml"
-        FruitsReviewsStats200Response:
-          "$ref": "./components/responses/FruitsReviewsStats200Response.yaml"
-        FruitsIndex200Response:
-          "$ref": "./components/responses/FruitsIndex200Response.yaml"
-        FruitsCreate201Response:
-          "$ref": "./components/responses/FruitsCreate201Response.yaml"
-        FruitsUpdate200Response:
-          "$ref": "./components/responses/FruitsUpdate200Response.yaml"
-        FruitsDestroy200Response:
-          "$ref": "./components/responses/FruitsDestroy200Response.yaml"
-        FruitsShow404Response:
-          "$ref": "./components/responses/FruitsShow404Response.yaml"
-        FruitsShow401Response:
-          "$ref": "./components/responses/FruitsShow401Response.yaml"
-        FruitsCreate400Response:
-          "$ref": "./components/responses/FruitsCreate400Response.yaml"
-        FruitsUpvote201Response:
-          "$ref": "./components/responses/FruitsUpvote201Response.yaml"
-        FruitsShow200Response:
-          "$ref": "./components/responses/FruitsShow200Response.yaml"
     """
 
     # ============= RESPONSES =============

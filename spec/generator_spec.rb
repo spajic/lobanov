@@ -114,6 +114,9 @@ RSpec.describe Lobanov::Generator do
     let(:path_schema) do
       {
         'get' => {
+          'operationId' => 'GridBots', # GridBotsShow вообще-то
+          'description' => 'GET /grid_bots/:id',
+          'tags' => ['lobanov'],
           'parameters' => [
             {
               'in' => 'path',
