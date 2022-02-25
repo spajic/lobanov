@@ -3,7 +3,8 @@
 module Lobanov
   module Configuration
     attr_accessor(
-      :namespaces_to_ignore
+      :namespaces_to_ignore,
+      :specification_folder
     )
 
     def configure
@@ -16,6 +17,7 @@ module Lobanov
 
     def set_default_configuration
       self.namespaces_to_ignore = ['wapi']
+      self.specification_folder = 'frontend/api-backend-specification'
     end
   end
 end

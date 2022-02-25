@@ -32,31 +32,31 @@ Feature: prevent unexpected schema changes
               content:
                 application/json:
                   schema:
-                    "$ref": "#/components/responses/FruitsShow200Response"
+                    "$ref": "./components/responses/FruitsShow200Response.yaml"
     """
 
     Given a file named "frontend/api-backend-specification/components/responses/FruitsShow200Response.yaml" with:
     """yaml
     ---
     type: object
-      required:
-      - name
-      - color
-      - weight
-      - seasonal
-      properties:
-        name:
-          type: string
-          example: lemon
-        color:
-          type: string
-          example: yellow
-        weight:
-          type: integer
-          example: 50
-        seasonal:
-          type: boolean
-          example: false
+    required:
+    - name
+    - color
+    - weight
+    - seasonal
+    properties:
+      name:
+        type: string
+        example: lemon
+      color:
+        type: string
+        example: yellow
+      weight:
+        type: integer
+        example: 50
+      seasonal:
+        type: boolean
+        example: false
     """
 
     Given a file named "spec/requests/fruits_controller_spec.rb" with:
@@ -75,7 +75,30 @@ Feature: prevent unexpected schema changes
     end
     """
 
-    When I run `rspec`
+    When I run `rspec spec/requests/fruits_controller_spec.rb`
 
     Then the examples should all fail
 
+    Then the output should contain failures:
+    """
+    Lobanov::SchemaMismatchError
+      LOBANOV DETECTED SCHEMA MISMATCH!
+
+      Interaction 'GET /fruits/:id' failed! Schema changed:
+      ---
+      type: object
+      required:
+      -- name
+      - color
+      - weight
+      - seasonal
+      properties:
+      -  name:
+      -    type: string
+        color:
+          type: string
+        weight:
+          type: integer
+        seasonal:
+      type: boolean
+    """

@@ -14,8 +14,6 @@ module Lobanov
     COMPONENTS_BASE = 'frontend/api-backend-specification/components'
     PATHS_BASE = 'frontend/api-backend-specification/paths'
     BODIES_BASE = "#{COMPONENTS_BASE}/requestBodies"
-    INDEX_BASE = 'frontend/api-backend-specification'
-    INDEX_PATH = "#{INDEX_BASE}/index.yaml"
 
     attr_reader :interaction
 
@@ -39,23 +37,8 @@ module Lobanov
       @status ||= generator.status.to_s
     end
 
-    def load_schema
-      # начинаем c api-backend-specification/index.yaml и проходим по ссылкам
-      index = YAML.load_file(INDEX_PATH)
-      path_schema = index.dig('paths', path_with_curly_braces, verb)
-      return nil unless path_schema
-
-      response_schema_file = path_schema.dig(
-        'responses', status, 'content', 'application/json', 'schema', '$ref'
-      )
-      response_schema = read_relative(response_schema_file) if response_schema_file
-
-      return nil # TODO: fix me
-      {
-        'paths' => {
-          path_with_curly_braces => path_schema
-        }
-      }
+    def index_path
+      "#{Lobanov.specification_folder}/index.yaml"
     end
 
     def store_schema
@@ -101,11 +84,11 @@ module Lobanov
     end
 
     def update_index(path_schema)
-      index = YAML.load_file(INDEX_PATH)
+      index = YAML.load_file(index_path)
 
       append_to_path!(index, path_with_curly_braces, path_schema)
 
-      File.write(INDEX_PATH, index.to_yaml)
+      File.write(index_path, index.to_yaml)
     end
 
     private
@@ -139,11 +122,6 @@ module Lobanov
         end
 
       index['paths'][path_with_curly_braces] = merged
-    end
-
-    def read_relative(relative_path)
-      full_path = "#{INDEX_BASE}/#{relative_path}"
-      YAML.load_file(full_path)
     end
 
     def read(path)

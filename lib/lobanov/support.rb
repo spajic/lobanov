@@ -13,5 +13,10 @@ module Lobanov
     def self.camelize(str)
       Inflector.camelize(str)
     end
+
+    def self.read_relative(relative_path)
+      full_path = "#{Lobanov.specification_folder}/#{relative_path}"
+      YAML.load_file(full_path)
+    end
   end
 end
