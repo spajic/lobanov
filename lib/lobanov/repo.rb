@@ -39,12 +39,30 @@ module Lobanov
       @status ||= generator.status.to_s
     end
 
+    def load_schema
+      # начинаем c api-backend-specification/index.yaml и проходим по ссылкам
+      index = YAML.load_file(INDEX_PATH)
+      path_schema = index.dig('paths', path_with_curly_braces, verb)
+      return nil unless path_schema
+
+      response_schema_file = path_schema.dig(
+        'responses', status, 'content', 'application/json', 'schema', '$ref'
+      )
+      response_schema = read_relative(response_schema_file) if response_schema_file
+
+      return nil # TODO: fix me
+      {
+        'paths' => {
+          path_with_curly_braces => path_schema
+        }
+      }
+    end
+
     def store_schema
       path_schema = generator.path_schema
       path_schema = extract_component_schema_to_file(path_schema)
       path_schema = extract_request_body_to_file(path_schema) if status.to_i < 400
 
-      # write_append(PATHS_BASE + store_path_name, path_schema)
       update_index(path_schema)
     end
 
@@ -80,34 +98,6 @@ module Lobanov
 
     def ref_to_request_body_file
       "./components/requestBodies/#{generator.request_body_name}.yaml"
-    end
-
-    def store_path_name
-      path_with_square_braces + '/' + 'path'
-    end
-
-    def nesting_depth
-      @nesting_depth ||= store_path_name.count('/')
-    end
-
-    def load_schema
-      # начинаем c api-backend-specification/index.yaml и проходим по ссылкам
-      index = YAML.load_file(INDEX_PATH)
-      path_index = index.dig('paths', store_path_name)
-      return nil unless path_index
-
-      path_schema = read_relative(path_index['$ref'])
-
-      component_index = index['components']['responses'][response_component_name]
-      component_schema = read_relative(component_index['$ref'])
-
-      path_schema[verb]['responses'][status.to_s]['content']['application/json']['schema'] = component_schema
-
-      {
-        'paths' => {
-          generator.path_with_curly_braces => path_schema
-        }
-      }
     end
 
     def update_index(path_schema)

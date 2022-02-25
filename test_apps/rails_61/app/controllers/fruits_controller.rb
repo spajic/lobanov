@@ -2,11 +2,11 @@
 
 class FruitsController < ApplicationController
   FRUITS = [
-    {name: 'orange', color: 'orange', weight: 100, seasonal: false},
-    {name: 'lemon', color: 'yellow', weight: 50, seasonal: false},
-    {name: 'watermelon', color: 'green', weight: 200, seasonal: true},
-    {name: 'durian', color: nil, weight: 500, seasonal: true}
-  ]
+    {name: 'orange', color: 'orange', weight: 100, seasonal: false}.freeze,
+    {name: 'lemon', color: 'yellow', weight: 50, seasonal: false}.freeze,
+    {name: 'watermelon', color: 'green', weight: 200, seasonal: true}.freeze,
+    {name: 'durian', color: nil, weight: 500, seasonal: true}.freeze
+  ].freeze
 
   def index
     render json: {
@@ -21,9 +21,13 @@ class FruitsController < ApplicationController
     end
 
 
-    fruit = FRUITS[num]
+    fruit = FRUITS[num].dup
 
     if fruit
+      if params[:q] == 'without_name'
+        fruit.delete(:name)
+      end
+
       render json: fruit
     else
       render json: {}, status: :not_found
