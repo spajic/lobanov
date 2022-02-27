@@ -9,7 +9,7 @@ Feature: prevent unexpected schema changes
     ---
     openapi: 3.0.1
     paths:
-      "/fruits/{id}":
+      "/wapi/fruits/{id}":
         get:
           parameters:
           - in: path

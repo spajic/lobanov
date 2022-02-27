@@ -63,7 +63,8 @@ module Lobanov
     end
 
     def path_with_curly_braces
-      path_with_square_braces.gsub('[', '{').gsub(']', '}')
+      prefix = Lobanov.namespaces_to_ignore.join('/')
+      "/#{prefix}/#{path_with_square_braces.gsub('[', '{').gsub(']', '}')}".gsub('//', '/')
     end
 
     def path_parts

@@ -25,7 +25,7 @@ RSpec.describe Lobanov::Generator do
 
       it 'generates expected props' do
         expect(subject.path_with_square_braces).to eq('/fruits/[id]/reviews/[review_id]')
-        expect(subject.path_with_curly_braces).to eq('/fruits/{id}/reviews/{review_id}')
+        expect(subject.path_with_curly_braces).to eq('/wapi/fruits/{id}/reviews/{review_id}')
         expect(subject.path_parts).to eq(['fruits', '[id]', 'reviews', '[review_id]'])
         expect(subject.response_component_name).to eq('FruitsReviewsShow200Response')
       end
@@ -48,7 +48,7 @@ RSpec.describe Lobanov::Generator do
 
       it 'generates expected props' do
         expect(subject.path_with_square_braces).to eq('/fruits/[id]/reviews/[review_id]/upvote')
-        expect(subject.path_with_curly_braces).to eq('/fruits/{id}/reviews/{review_id}/upvote')
+        expect(subject.path_with_curly_braces).to eq('/wapi/fruits/{id}/reviews/{review_id}/upvote')
         expect(subject.path_parts).to eq(['fruits', '[id]', 'reviews', '[review_id]', 'upvote'])
         expect(subject.response_component_name).to eq('FruitsReviewsUpvote200Response')
       end
@@ -107,7 +107,7 @@ RSpec.describe Lobanov::Generator do
     let(:expected_result) do
       {
         'paths' => {
-          '/grid_bots/{id}' => path_schema
+          '/wapi/grid_bots/{id}' => path_schema
         }
       }
     end

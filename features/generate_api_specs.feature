@@ -165,7 +165,7 @@ Feature: generate complete specs for API
       description: API which is used to develop Lobanov gem.
       version: 0.0.1
     paths:
-      "/fruits/{fruit_id}/reviews/{id}":
+      "/wapi/fruits/{fruit_id}/reviews/{id}":
         get:
           description: GET /fruits/:fruit_id/reviews/:id
           operationId: FruitsReviewsShow
@@ -193,7 +193,7 @@ Feature: generate complete specs for API
               type: string
             required: true
             example: '1'
-      "/fruits/{fruit_id}/reviews":
+      "/wapi/fruits/{fruit_id}/reviews":
         get:
           description: GET /fruits/:fruit_id/reviews
           operationId: FruitsReviewsIndex
@@ -240,7 +240,7 @@ Feature: generate complete specs for API
               application/json:
                 schema:
                   "$ref": "./components/requestBodies/FruitsReviewsCreateRequestBody.yaml"
-      "/fruits/{fruit_id}/reviews/stats":
+      "/wapi/fruits/{fruit_id}/reviews/stats":
         get:
           description: GET /fruits/:fruit_id/reviews/stats
           operationId: FruitsReviewsStats
@@ -261,7 +261,7 @@ Feature: generate complete specs for API
               type: string
             required: true
             example: '1'
-      "/fruits":
+      "/wapi/fruits":
         get:
           description: GET /fruits
           operationId: FruitsIndex
@@ -298,7 +298,7 @@ Feature: generate complete specs for API
               application/json:
                 schema:
                   "$ref": "./components/requestBodies/FruitsCreateRequestBody.yaml"
-      "/fruits/{id}":
+      "/wapi/fruits/{id}":
         put:
           description: PUT /fruits/:id
           operationId: FruitsUpdate
@@ -384,7 +384,7 @@ Feature: generate complete specs for API
               type: string
             required: true
             example: 'true'
-      "/fruits/{id}/upvote":
+      "/wapi/fruits/{id}/upvote":
         post:
           description: POST /fruits/:id/upvote
           operationId: FruitsUpvote
