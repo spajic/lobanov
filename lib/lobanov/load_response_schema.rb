@@ -25,7 +25,24 @@ module Lobanov
       )
       return nil unless response_schema_file_name
 
-      Support.read_relative(response_schema_file_name)
+      loaded_schema = Support.read_relative(response_schema_file_name)
+
+      expand_refs!(loaded_schema)
+
+      loaded_schema
+    end
+
+    private
+
+    def expand_refs!(loaded_schema)
+      props = loaded_schema['properties']
+      props.each do |key, value|
+        ref_file = value['$ref']
+        if ref_file
+          ref_content = Support.read_relative(ref_file)
+          props[key] = ref_content
+        end
+      end
     end
   end
 end

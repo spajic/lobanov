@@ -46,8 +46,7 @@ Feature: prevent unexpected schema changes
     - seasonal
     properties:
       name:
-        type: string
-        example: lemon
+        "$ref": "./components/schemas/FruitName.yaml"
       color:
         type: string
         example: yellow
@@ -57,6 +56,13 @@ Feature: prevent unexpected schema changes
       seasonal:
         type: boolean
         example: false
+    """
+
+    Given a file named "frontend/api-backend-specification/components/schemas/FruitName.yaml" with:
+    """yaml
+    ---
+    type: string
+    example: lemon
     """
 
     Given a file named "spec/requests/fruits_controller_spec.rb" with:
@@ -88,7 +94,7 @@ Feature: prevent unexpected schema changes
       ---
       type: object
       required:
-      -- name
+      - name
       - color
       - weight
       - seasonal
