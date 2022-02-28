@@ -9,6 +9,7 @@ module Lobanov
     def self.call(new_schema:, stored_schema:)
       prepared_new_schema = remove_unnecessary_fields(new_schema)
       prepared_stored_schema = remove_unnecessary_fields(stored_schema)
+      remove_nullable!(new_schema, stored_schema)
 
       return if prepared_new_schema == prepared_stored_schema
 
@@ -29,6 +30,19 @@ module Lobanov
       end
 
       schema
+    end
+
+    def self.remove_nullable!(new_schema, stored_schema)
+      if stored_schema['type'] == 'object'
+        stored_schema['properties'].each do |prop_name, prop_hash|
+          if prop_hash['nullable'] == true && !new_schema['properties'][prop_name]['type']
+            stored_schema['properties'].delete(prop_name)
+            new_schema['properties'].delete(prop_name)
+          end
+        end
+      elsif stored_schema['type'] == 'array'
+        remove_nullable!(new_schema['items'], stored_schema['items'])
+      end
     end
 
     def self.format_error(new_schema, stored_schema)
