@@ -15,7 +15,14 @@ module Lobanov
     end
 
     def self.read_relative(relative_path)
-      full_path = "#{Lobanov.specification_folder}/#{relative_path}"
+      full_path =
+        if relative_path.start_with?('../schemas/')
+          path = relative_path.gsub('../schemas/', '')
+          "#{Lobanov.specification_folder}/components/schemas/#{path}"
+        else
+          "#{Lobanov.specification_folder}/#{relative_path}"
+        end
+
       YAML.load_file(full_path)
     end
   end
