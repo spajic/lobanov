@@ -20,6 +20,19 @@ RSpec.describe Lobanov::Validator do
             type: string
             example: rejected
             nullable: true
+          apps:
+            type: object
+            properties:
+              tags:
+                type: array
+                minItems: 0
+                uniqueItems: true
+                items:
+                  type: string
+                  example:
+                    - btc
+                    - eth
+                    - usdt
       YAML
     end
 
@@ -33,11 +46,19 @@ RSpec.describe Lobanov::Validator do
             example: Alex
           rejection_comment:
             nullable: true
+          apps:
+            type: object
+            properties:
+              tags:
+                type: array
+                minItems: 0
+                uniqueItems: true
+                items: {}
       YAML
     end
 
     it 'allows to not have nullable property' do
-      expect(subject).to eq(nil)
+      expect(subject).to eq(nil), subject
     end
   end
 end

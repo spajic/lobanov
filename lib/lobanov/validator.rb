@@ -33,15 +33,25 @@ module Lobanov
     end
 
     def self.remove_nullable!(new_schema, stored_schema)
-      if stored_schema['type'] == 'object'
-        stored_schema['properties'].each do |prop_name, prop_hash|
-          if prop_hash['nullable'] == true && !new_schema['properties'][prop_name]['type']
-            stored_schema['properties'].delete(prop_name)
-            new_schema['properties'].delete(prop_name)
+      if stored_schema['type'] == 'array'
+        if stored_schema['minItems'] == 0 && [nil, {}].include?(new_schema['items'])
+          stored_schema.delete('items')
+          new_schema.delete('items')
+        end
+      elsif stored_schema['type'] == 'object'
+        stored_schema['properties'].each do |key, _value|
+          if remove_nullable!(
+            new_schema['properties'][key],
+            stored_schema['properties'][key]
+          ) == :delete_me
+            new_schema['properties'].delete(key)
+            stored_schema['properties'].delete(key)
           end
         end
-      elsif stored_schema['type'] == 'array'
-        remove_nullable!(new_schema['items'], stored_schema['items'])
+      else # primitive value
+        if stored_schema['nullable'] && !new_schema['type']
+          return :delete_me
+        end
       end
     end
 
