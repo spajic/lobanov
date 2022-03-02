@@ -15,6 +15,10 @@ module Lobanov
 
   class MissingExampleError < LobanovError; end
 
+  class MissingRequiredFieldError < LobanovError; end
+
+  class MissingNotNullableValueError < LobanovError; end
+
   def self.capture(&block)
     Spy.on(&block)
   end

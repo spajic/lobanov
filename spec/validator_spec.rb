@@ -20,6 +20,9 @@ RSpec.describe Lobanov::Validator do
             type: string
             example: rejected
             nullable: true
+          this_key_will_be_missing:
+            type: string
+            example: secret
           apps:
             type: object
             properties:

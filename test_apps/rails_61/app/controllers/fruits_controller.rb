@@ -28,6 +28,10 @@ class FruitsController < ApplicationController
         fruit.delete(:name)
       end
 
+      if params[:q] == 'with_integer_name'
+        fruit[:name] = 999
+      end
+
       render json: fruit
     else
       render json: {}, status: :not_found

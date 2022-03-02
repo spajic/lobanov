@@ -10,6 +10,7 @@ module Lobanov
       prepared_new_schema = remove_unnecessary_fields(new_schema)
       prepared_stored_schema = remove_unnecessary_fields(stored_schema)
       remove_nullable!(new_schema, stored_schema)
+      # remove_empty_props!(stored_schema)
 
       return if prepared_new_schema == prepared_stored_schema
 
@@ -32,26 +33,65 @@ module Lobanov
       schema
     end
 
+    # TODO: надо обойти все элементы stored_schema
+    # для каждого
+    #   если есть соответствующий элемент в new_schema - оставляем
+    #   если нет соответствующего ключа - удаляем из stored_schema если не required поле
+    #   если нет соответствующего значения - удаляем из обоих схем если nullable
     def self.remove_nullable!(new_schema, stored_schema)
-      if stored_schema['type'] == 'array'
-        if stored_schema['minItems'] == 0 && [nil, {}].include?(new_schema['items'])
-          stored_schema.delete('items')
-          new_schema.delete('items')
-        end
-      elsif stored_schema['type'] == 'object'
-        stored_schema['properties'].each do |key, _value|
-          if remove_nullable!(
-            new_schema['properties'][key],
-            stored_schema['properties'][key]
-          ) == :delete_me
-            new_schema['properties'].delete(key)
-            stored_schema['properties'].delete(key)
+      visit(stored_schema).each do |node|
+        path = node[:path]
+        stored_value = node[:value]
+        new_value = new_schema.dig(*path)
+
+        if new_value.nil?
+          requireds_path = path[0..-3] + ['required']
+          required_fields = stored_schema.dig(*requireds_path)
+          field_name = path.last
+
+          if required_fields&.include?(field_name)
+            raise MissingRequiredFieldError, path.join('->')
+          else
+            stored_schema.dig(*path[0..-2]).delete(path.last)
+          end
+        elsif new_value['type'].nil?
+          if stored_value['nullable'] || stored_schema.dig(*path[0..-2])['minItems'] == 0
+            stored_schema.dig(*path[0..-2]).delete(path.last)
+            new_schema.dig(*path[0..-2]).delete(path.last)
+          else
+            raise MissingNotNullableValueError, path.join('->')
           end
         end
-      else # primitive value
-        if stored_schema['nullable'] && !new_schema['type']
-          return :delete_me
+
+        if path.last == 'properties' && stored_value == {}
+          stored_schema.dig(*path[0..-3]).delete(path[-2])
+          new_schema.dig(*path[0..-3])&.delete(path[-2])
         end
+      end
+    end
+
+    def self.visit(schema)
+      Enumerator.new do |visitor|
+        go(schema, [], visitor)
+      end
+    end
+
+    # path is array of string keys
+    def self.go(schema, path, visitor)
+      current_position = (path == [] ? schema : schema.dig(*path))
+
+      if current_position['type'] == 'object'
+        props_path = path + ['properties']
+        schema.dig(*props_path).each do |prop_name, prop_value|
+          go(schema, props_path + [prop_name], visitor)
+        end
+        if schema.dig(*props_path) == {} # все пропсы удалили
+          visitor << {path: props_path, value: {}}
+        end
+      elsif current_position['type'] == 'array' && current_position['items']
+        go(schema, path + ['items'], visitor)
+      else
+        visitor << {path: path, value: current_position}
       end
     end
 

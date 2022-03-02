@@ -72,7 +72,7 @@ Feature: prevent unexpected schema changes
     RSpec.describe FruitsController, type: :request do
       describe 'GET #show' do
         it 'returns expected resource', :lobanov do
-          get('/wapi/fruits/2?q=without_name')
+          get('/wapi/fruits/2?q=with_integer_name')
 
           expect(response).to have_http_status(:ok)
           expect(json_body).to eq({color: 'yellow', weight: 50, seasonal: false})
@@ -99,8 +99,9 @@ Feature: prevent unexpected schema changes
       - weight
       - seasonal
       properties:
-      -  name:
+        name:
       -    type: string
+      +    type: integer
         color:
           type: string
         weight:
