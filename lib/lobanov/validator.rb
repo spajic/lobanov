@@ -55,15 +55,20 @@ module Lobanov
             stored_schema.dig(*path[0..-2]).delete(path.last)
           end
         elsif new_value['type'].nil?
-          if stored_value['nullable'] || stored_schema.dig(*path[0..-2])['minItems'] == 0
-            stored_schema.dig(*path[0..-2]).delete(path.last)
-            new_schema.dig(*path[0..-2]).delete(path.last)
+          parent_path = path[0..-2]
+
+          if parent_path == []
+            # do nothing
+          elsif stored_value['nullable'] ||
+              (parent_path != [] && stored_schema.dig(*parent_path)['minItems'] == 0)
+            stored_schema.dig(*parent_path).delete(path.last)
+            new_schema.dig(*parent_path).delete(path.last)
           else
             raise MissingNotNullableValueError, path.join('->')
           end
         end
 
-        if path.last == 'properties' && stored_value == {}
+        if path.last == 'properties' && path.size > 1 && stored_value == {}
           stored_schema.dig(*path[0..-3]).delete(path[-2])
           new_schema.dig(*path[0..-3])&.delete(path[-2])
         end
@@ -85,7 +90,7 @@ module Lobanov
         schema.dig(*props_path).each do |prop_name, prop_value|
           go(schema, props_path + [prop_name], visitor)
         end
-        if schema.dig(*props_path) == {} # все пропсы удалили
+        if schema.dig(*props_path) == {} # все пропсы удалили, или не было
           visitor << {path: props_path, value: {}}
         end
       elsif current_position['type'] == 'array' && current_position['items']
