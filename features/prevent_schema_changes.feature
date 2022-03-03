@@ -93,11 +93,6 @@ Feature: prevent unexpected schema changes
       Interaction 'GET /fruits/:id' failed! Schema changed:
       ---
       type: object
-      required:
-      - name
-      - color
-      - weight
-      - seasonal
       properties:
         name:
       -    type: string

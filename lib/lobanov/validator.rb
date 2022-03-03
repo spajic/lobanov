@@ -4,19 +4,19 @@ module Lobanov
   # Validates new_schema vs stored_schema and returns validation error
   # Schemas are ruby objects representing OpenApi3 schema
   class Validator
-    UNNECESSARY_FIELDS = %w[description example openapi info].freeze
+    UNNECESSARY_FIELDS = %w[description example openapi info required].freeze
 
     def self.call(new_schema:, stored_schema:)
+      remove_nullable!(new_schema, stored_schema)
       prepared_new_schema = remove_unnecessary_fields(new_schema)
       prepared_stored_schema = remove_unnecessary_fields(stored_schema)
-      remove_nullable!(new_schema, stored_schema)
-      # remove_empty_props!(stored_schema)
 
       return if prepared_new_schema == prepared_stored_schema
 
       format_error(prepared_new_schema, prepared_stored_schema)
     end
 
+    # TODO: переписать на Visitor
     def self.remove_unnecessary_fields(schema)
       return unless schema.is_a?(Hash)
 
@@ -39,7 +39,7 @@ module Lobanov
     #   если нет соответствующего ключа - удаляем из stored_schema если не required поле
     #   если нет соответствующего значения - удаляем из обоих схем если nullable
     def self.remove_nullable!(new_schema, stored_schema)
-      visit(stored_schema).each do |node|
+      Visitor.visit(stored_schema).each do |node|
         path = node[:path]
         stored_value = node[:value]
         new_value = new_schema.dig(*path)
@@ -72,31 +72,6 @@ module Lobanov
           stored_schema.dig(*path[0..-3]).delete(path[-2])
           new_schema.dig(*path[0..-3])&.delete(path[-2])
         end
-      end
-    end
-
-    def self.visit(schema)
-      Enumerator.new do |visitor|
-        go(schema, [], visitor)
-      end
-    end
-
-    # path is array of string keys
-    def self.go(schema, path, visitor)
-      current_position = (path == [] ? schema : schema.dig(*path))
-
-      if current_position['type'] == 'object'
-        props_path = path + ['properties']
-        schema.dig(*props_path).each do |prop_name, prop_value|
-          go(schema, props_path + [prop_name], visitor)
-        end
-        if schema.dig(*props_path) == {} # все пропсы удалили, или не было
-          visitor << {path: props_path, value: {}}
-        end
-      elsif current_position['type'] == 'array' && current_position['items']
-        go(schema, path + ['items'], visitor)
-      else
-        visitor << {path: path, value: current_position}
       end
     end
 

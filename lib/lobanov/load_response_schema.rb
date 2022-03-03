@@ -35,12 +35,14 @@ module Lobanov
     private
 
     def expand_refs!(loaded_schema)
-      props = loaded_schema['properties']
-      props.each do |key, value|
+      Visitor.visit(loaded_schema).each do |node|
+        path = node[:path]
+        value = node[:value]
+
         ref_file = value['$ref']
         if ref_file
           ref_content = Support.read_relative(ref_file)
-          props[key] = ref_content
+          loaded_schema.dig(*path[0..-2])[path.last] = ref_content
         end
       end
     end
