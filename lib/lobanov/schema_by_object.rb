@@ -60,8 +60,9 @@ module Lobanov
         # пустая строка тоже плохо, лучше в качестве примера дать заполненную
         if example.nil? || example == ''
           # raise MissingExampleError.new("for #{key.inspect} in #{obj}")
-          puts "❗️❗️❗️LOBANOV WARNING: Cannot find example for #{key.inspect} in:"
-          pp obj
+          # TODO: показывать в режиме VERBOSE_LOBANOV=true?
+          # puts "❗️❗️❗️LOBANOV WARNING: Cannot find example for #{key.inspect} in:"
+          # pp obj
         end
         # эта проверка неправильная, схема всегда генерится без примера
         # проблема просто в том, что схема перегенерируется, потому что не находится
