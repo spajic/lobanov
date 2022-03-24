@@ -28,8 +28,6 @@ module Lobanov
       loaded_schema = Support.read_relative(response_schema_file_name)
 
       expand_refs!(loaded_schema)
-
-      loaded_schema
     end
 
     private
@@ -42,9 +40,15 @@ module Lobanov
         ref_file = value['$ref']
         if ref_file
           ref_content = Support.read_relative(ref_file)
-          loaded_schema.dig(*path[0..-2])[path.last] = ref_content
+          if path == [] # only $ref in a file
+            return ref_content
+          else
+            loaded_schema.dig(*path[0..-2])[path.last] = ref_content
+          end
         end
       end
+
+      loaded_schema
     end
   end
 end
