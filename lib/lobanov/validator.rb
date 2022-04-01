@@ -44,6 +44,11 @@ module Lobanov
         stored_value = node[:value]
         new_value = new_schema.dig(*path)
 
+        # так бывает, если уже удалили все nulable поля в объекте и ничего не осталось
+        if new_value == {} && stored_value == {}
+          return
+        end
+
         if new_value.nil?
           requireds_path = path[0..-3] + ['required']
           required_fields = stored_schema.dig(*requireds_path)

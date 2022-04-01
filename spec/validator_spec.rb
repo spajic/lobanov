@@ -64,4 +64,52 @@ RSpec.describe Lobanov::Validator do
       expect(subject).to eq(nil), subject
     end
   end
+
+  context 'with object with all nullable fields' do
+    let(:stored_schema) do
+      YAML.load <<~YAML
+        type: object
+        required:
+          - fio
+        properties:
+          fio:
+            type: object
+            required:
+              - name
+              - surname
+            properties:
+              name:
+                type: string
+                example: Alex
+                nullable: true
+              surname:
+                type: string
+                example: Vasilyev
+                nullable: true
+      YAML
+    end
+
+    let(:new_schema) do
+      YAML.load <<~YAML
+        type: object
+        required:
+          - fio
+        properties:
+          fio:
+            type: object
+            required:
+              - name
+              - surname
+            properties:
+              name:
+                nullable: true
+              surname:
+                nullable: true
+      YAML
+    end
+
+    it 'allows to not have nullable property' do
+      expect(subject).to eq(nil), subject
+    end
+  end
 end
