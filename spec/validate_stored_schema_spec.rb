@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Lobanov::ValidateNullable do
+RSpec.describe Lobanov::ValidateStoredSchema do
   let(:subject) do
     described_class.call(stored_schema: stored_schema)
   end
@@ -21,6 +21,7 @@ RSpec.describe Lobanov::ValidateNullable do
             example: rejected
             nullable: true
           this_key_will_be_missing:
+            type: string
             nullable: true
           apps:
             type: object
@@ -29,17 +30,29 @@ RSpec.describe Lobanov::ValidateNullable do
                 type: array
                 minItems: 0
                 uniqueItems: true
+                example: []
               and_this_one_too:
                   nullable: true
       YAML
     end
 
+    let(:missing_types) do
+      ['properties->apps->properties->and_this_one_too']
+    end
+
+    let(:missing_examples) do
+      ['properties->this_key_will_be_missing','properties->apps->properties->and_this_one_too']
+    end
+
     let(:expected_errors) do
-      "properties->this_key_will_be_missing,\nproperties->apps->properties->and_this_one_too"
+      {
+        missing_types: missing_types,
+        missing_examples: missing_examples,
+      }.inspect
     end
 
     it 'raises error for nullable property' do
-      expect{ subject }.to raise_error(Lobanov::MissingNotNullableValueError, expected_errors)
+      expect{ subject }.to raise_error(Lobanov::MissingTypeOrExampleError, expected_errors)
     end
   end
 end

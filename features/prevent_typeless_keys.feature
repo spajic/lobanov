@@ -92,6 +92,6 @@ Feature: prevent typeless examples
 
     Then the output should contain failures:
     """
-    Lobanov::MissingNotNullableValueError:
-      properties->name
+    Lobanov::MissingTypeOrExampleError:
+      {:missing_types=>["properties->name"], :missing_examples=>["properties->name"]}
     """
