@@ -12,12 +12,63 @@ Feature: prevent typeless examples
         title: Test fruits API for Lobanov development
         description: API which is used to develop Lobanov gem.
         version: 0.0.1
-      paths: {}
+      paths:
+        "/wapi/fruits/{id}":
+          get:
+            description: GET /fruits/:id
+            operationId: FruitsShow
+            responses:
+              '200':
+                description: GET /fruits/:id -> 200
+                content:
+                  application/json:
+                    schema:
+                      "$ref": "./components/responses/FruitsShow200Response.yaml"
+            tags:
+            - lobanov
+            parameters:
+            - in: path
+              name: id
+              description: id
+              schema:
+                type: string
+              required: true
+              example: '2'
+            - in: query
+              name: q
+              description: q
+              schema:
+                type: string
+              required: true
+              example: with_null_name
       """
 
     Given an empty directory "frontend/api-backend-specification/components"
 
     Given an empty directory "frontend/api-backend-specification/components/schemas"
+
+    Given a file named "frontend/api-backend-specification/components/responses/FruitsShow200Response.yaml" with:
+    """yaml
+    ---
+    type: object
+    required:
+    - name
+    - color
+    - weight
+    - seasonal
+    properties:
+      name:
+        nullable: true
+      color:
+        type: string
+        example: yellow
+      weight:
+        type: integer
+        example: 50
+      seasonal:
+        type: boolean
+        example: false
+    """
 
     Given a file named "spec/requests/fruits_controller_spec.rb" with:
     """ruby
@@ -41,6 +92,6 @@ Feature: prevent typeless examples
 
     Then the output should contain failures:
     """
-    Lobanov::MissingExampleError
-      for "name" in {"name"=>nil, "color"=>"yellow", "weight"=>50, "seasonal"=>false}
+    Lobanov::MissingNotNullableValueError:
+      properties->name
     """

@@ -55,6 +55,8 @@ module Lobanov
         'application/json',
         'schema'
       )
+
+      ValidateNullable.call(stored_schema: stored_response_schema )
       error = Validator.call(new_schema: new_response_schema, stored_schema: stored_response_schema)
       return unless error
 

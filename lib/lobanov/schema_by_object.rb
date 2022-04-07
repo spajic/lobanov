@@ -59,7 +59,7 @@ module Lobanov
         # по nil мы не можем на вывести тип
         # пустая строка тоже плохо, лучше в качестве примера дать заполненную
         if example.nil? || example == ''
-          raise MissingExampleError.new("for #{key.inspect} in #{obj}")
+          # raise MissingExampleError.new("for #{key.inspect} in #{obj}")
           # TODO: показывать в режиме VERBOSE_LOBANOV=true?
           # puts "❗️❗️❗️LOBANOV WARNING: Cannot find example for #{key.inspect} in:"
           # pp obj
