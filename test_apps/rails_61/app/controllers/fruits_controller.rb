@@ -32,6 +32,10 @@ class FruitsController < ApplicationController
         fruit[:name] = 999
       end
 
+      if params[:q] == 'with_null_name'
+        fruit[:name] = nil
+      end
+
       render json: fruit
     else
       render json: {}, status: :not_found
