@@ -88,3 +88,27 @@ Feature: force lobanov for schema changes
     When I run `rspec spec/requests/fruits_controller_spec.rb`
 
     Then the examples should all pass
+
+    Then a yaml named "frontend/api-backend-specification/components/responses/FruitsShow200Response.yaml" should contain:
+    """yaml
+    ---
+    type: object
+    required:
+    - name
+    - color
+    - weight
+    - seasonal
+    properties:
+      name:
+        type: integer
+        example: 999
+      color:
+        type: string
+        example: yellow
+      weight:
+        type: integer
+        example: 50
+      seasonal:
+        type: boolean
+        example: false
+    """
