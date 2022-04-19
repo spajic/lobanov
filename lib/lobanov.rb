@@ -30,6 +30,10 @@ module Lobanov
   end
 
   def self.handle_captured_interactions(interactions, overwrite: false)
+    if ENV['FORCE_LOBANOV']
+      overwrite = true
+    end
+
     if interactions.size > 1
       raise LobanovError, 'Lobanov only supports one interaction per spec yet'
     end
