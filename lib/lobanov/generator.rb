@@ -3,6 +3,7 @@
 module Lobanov
   # Generates OpenAPI v3 schema for Interaction
   # Output is Ruby object representing schema, it may be serialized to yml|json
+
   class Generator
     extend Forwardable
 
@@ -37,15 +38,13 @@ module Lobanov
     end
 
     def request_body_name
-      camelized_path + 'RequestBody'
+      "#{camelized_path}RequestBody"
     end
 
     def camelized_path
       @camelized_path ||= begin
-        parts = path_parts_without_ids.map{|str| Support.camelize(str)} + [Support.camelize(controller_action)]
-        if parts[-1] == parts[-2] # /fruits/:id/reviews/:review_id/upvote
-          parts.pop
-        end
+        parts = path_parts_without_ids.map { |str| Support.camelize(str) } + [Support.camelize(controller_action)]
+        parts.pop if parts[-1] == parts[-2] # /fruits/:id/reviews/:review_id/upvote
         parts.join
       end
     end
@@ -68,7 +67,7 @@ module Lobanov
     end
 
     def path_parts
-      path_with_square_braces.split('/') - [""]
+      path_with_square_braces.split('/') - ['']
     end
 
     def path_parts_without_ids
@@ -94,20 +93,25 @@ module Lobanov
 
     def verb_schema
       params_schema = parameters_schema
-      if (verb == 'POST' || verb == 'PUT' || verb == 'PATCH') and payload != {}
+      if (verb == 'POST' || verb == 'PUT' || verb == 'PATCH') && (payload != {})
         body_schema = BodyParamsGenerator.call(payload)
       end
 
-      res = {
+      res = build_res
+
+      res.merge!({ 'parameters' => params_schema }) if parameters_schema
+      res.merge!({ 'requestBody' => body_schema }) if body_schema
+
+      res
+    end
+
+    def build_res
+      {
         'description' => "#{verb} #{endpoint_path}",
         'operationId' => camelized_path,
         'responses' => response_schema,
         'tags' => ['lobanov']
       }
-      res.merge!({'parameters' => params_schema}) if parameters_schema
-      res.merge!({'requestBody' => body_schema}) if body_schema
-
-      res
     end
 
     def parameters_schema

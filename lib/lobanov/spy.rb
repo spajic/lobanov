@@ -33,7 +33,7 @@ module Lobanov
 
     def call(overwrite: false)
       @block.call
-      Lobanov.handle_captured_interactions(@interactions, overwrite: overwrite)
+      Lobanov::HandleCapturedInteractions.call(@interactions, overwrite: overwrite)
     end
 
     def add_interaction_by_action_dispatch(request, response)

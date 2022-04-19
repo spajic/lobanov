@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-src = File.expand_path("../support/inflector/*.rb", __FILE__)
+src = File.expand_path('support/inflector/*.rb', __dir__)
 files = Dir.glob(src)
 files.each { |file| require file }
 

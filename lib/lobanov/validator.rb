@@ -6,8 +6,18 @@ module Lobanov
   class Validator
     UNNECESSARY_FIELDS = %w[description example openapi info required].freeze
 
-    def self.call(new_schema:, stored_schema:)
-      remove_nullable!(new_schema, stored_schema)
+    def self.call(*params)
+      new(*params).call
+    end
+
+    def initialize(new_schema:, stored_schema:)
+      @new_schema = new_schema
+      @stored_schema = stored_schema
+    end
+
+    def call
+      # remove_nullable!(new_schema, stored_schema)
+      RemoveNullable.call(new_schema: new_schema, stored_schema: stored_schema)
       prepared_new_schema = remove_unnecessary_fields(new_schema)
       prepared_stored_schema = remove_unnecessary_fields(stored_schema)
 
@@ -16,71 +26,32 @@ module Lobanov
       format_error(prepared_new_schema, prepared_stored_schema)
     end
 
+    private
+
+    attr_reader :new_schema, :stored_schema
+
     # TODO: переписать на Visitor
-    def self.remove_unnecessary_fields(schema)
+    def remove_unnecessary_fields(schema)
       return unless schema.is_a?(Hash)
 
       schema.each do |key, value|
-        if UNNECESSARY_FIELDS.include? key
-          schema.delete key
-        elsif value.is_a?(Array)
-          value.each { |v| remove_unnecessary_fields(v) }
-        elsif value.is_a?(Hash)
-          remove_unnecessary_fields(value)
-        end
+        remove_unnecessary_fields_step(schema, key, value)
       end
 
       schema
     end
 
-    # TODO: надо обойти все элементы stored_schema
-    # для каждого
-    #   если есть соответствующий элемент в new_schema - оставляем
-    #   если нет соответствующего ключа - удаляем из stored_schema если не required поле
-    #   если нет соответствующего значения - удаляем из обоих схем если nullable
-    def self.remove_nullable!(new_schema, stored_schema)
-      Visitor.visit(stored_schema).each do |node|
-        path = node[:path]
-        stored_value = node[:value]
-        new_value = new_schema.dig(*path)
-
-        # так бывает, если уже удалили все nulable поля в объекте и ничего не осталось
-        if new_value == {} && stored_value == {}
-          return
-        end
-
-        if new_value.nil?
-          requireds_path = path[0..-3] + ['required']
-          required_fields = stored_schema.dig(*requireds_path)
-          field_name = path.last
-
-          if required_fields&.include?(field_name)
-            raise MissingRequiredFieldError, path.join('->')
-          else
-            stored_schema.dig(*path[0..-2]).delete(path.last)
-          end
-        elsif new_value['type'].nil?
-          parent_path = path[0..-2]
-
-          if parent_path == []
-            # do nothing
-          elsif stored_value['nullable'] ||
-              (parent_path != [] && stored_schema.dig(*parent_path)['minItems'] == 0)
-            stored_schema.dig(*parent_path).delete(path.last)
-            new_schema.dig(*parent_path).delete(path.last)
-          else
-            raise MissingNotNullableValueError, path.join('->')
-          end
-        end
-
-        if path.last == 'properties' && path.size > 1 && stored_value == {}
-          stored_schema.dig(*path[0..-3]).delete(path[-2])
-          new_schema.dig(*path[0..-3])&.delete(path[-2])
-        end
+    def remove_unnecessary_fields_step(schema, key, value)
+      if UNNECESSARY_FIELDS.include? key
+        schema.delete key
+      elsif value.is_a?(Array)
+        value.each { |v| remove_unnecessary_fields(v) }
+      elsif value.is_a?(Hash)
+        remove_unnecessary_fields(value)
       end
     end
 
-    def self.format_error(new_schema, stored_schema)
+    def format_error(new_schema, stored_schema)
       require 'diffy'
       new_yaml = YAML.dump new_schema
       stored_yaml = YAML.dump stored_schema

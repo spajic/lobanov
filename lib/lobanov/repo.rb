@@ -54,10 +54,10 @@ module Lobanov
         path_schema.dig(verb, 'responses', status, 'content', 'application/json', 'schema')
       return path_schema unless extracted_schema
 
-      write(COMPONENTS_BASE + '/responses/' + response_component_name, extracted_schema)
+      write("#{COMPONENTS_BASE}/responses/#{response_component_name}", extracted_schema)
 
       path_schema[verb]['responses'][status]['content']['application/json']['schema'] =
-        {'$ref' => ref_to_component_file}
+        { '$ref' => ref_to_component_file }
 
       path_schema
     end
@@ -71,10 +71,10 @@ module Lobanov
         path_schema.dig(verb, 'requestBody', 'content', 'application/json', 'schema')
       return path_schema if extracted_body.nil?
 
-      write(BODIES_BASE + '/'  + generator.request_body_name, extracted_body)
+      write("#{BODIES_BASE}/#{generator.request_body_name}", extracted_body)
 
       path_schema[verb]['requestBody']['content']['application/json']['schema'] =
-        {'$ref' => ref_to_request_body_file}
+        { '$ref' => ref_to_request_body_file }
 
       path_schema
     end
@@ -99,7 +99,7 @@ module Lobanov
       File.write full_path, YAML.dump(object)
     end
 
-    def append_to_path!(index, path, object)
+    def append_to_path!(index, _path, object)
       content = index['paths'][path_with_curly_braces]
 
       # Если ответ с ошибкой, не обновляем parameters и requestBody, там что-то не то
@@ -108,20 +108,23 @@ module Lobanov
         object[verb].delete('requestBody')
       end
 
-      merged =
-        if content.nil?
-          object
-        elsif content[verb] # если уже было что-то для этого пути и этого HTTP-метода
-          content[verb]['responses'].merge!(object[verb]['responses'])
-          if object[verb]['parameters']
-            content[verb]['parameters'] = object[verb]['parameters']
-          end
-          content
-        else
-          content.merge(object)
-        end
+      merged = process_content(content, object)
 
       index['paths'][path_with_curly_braces] = merged
+    end
+
+    def process_content(content, object)
+      return object if content.nil?
+
+      return content.merge(object) unless content[verb]
+
+      merge_response(content, object)
+    end
+
+    def merge_response(content, object)
+      content[verb]['responses'].merge!(object[verb]['responses'])
+      content[verb]['parameters'] = object[verb]['parameters'] if object[verb]['parameters']
+      content
     end
 
     def read(path)

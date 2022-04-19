@@ -18,8 +18,8 @@ RSpec.describe Lobanov::SchemaByObject do
         'type' => 'object',
         'required' => %w[id name],
         'properties' => {
-          'id' => {'type' => 'integer', 'example' => 1},
-          'name' => {'type' => 'string', 'example' => 'test bot'}
+          'id' => { 'type' => 'integer', 'example' => 1 },
+          'name' => { 'type' => 'string', 'example' => 'test bot' }
         }
       }
     end
@@ -48,8 +48,8 @@ RSpec.describe Lobanov::SchemaByObject do
             'type' => 'object',
             'required' => %w[id name],
             'properties' => {
-              'id' => {'type' => 'integer', 'example' => 1},
-              'name' => {'type' => 'string', 'example' => 'test bot'}
+              'id' => { 'type' => 'integer', 'example' => 1 },
+              'name' => { 'type' => 'string', 'example' => 'test bot' }
             }
           }
         }
@@ -69,9 +69,9 @@ RSpec.describe Lobanov::SchemaByObject do
           'name' => 'test bot',
           'leverage_custom_value' => 0.123,
           'grid' => [
-            {price: 51_716.94, side: :sell, amount: 0.15967494, order_placed: true},
-            {price: 53_521.2, side: :sell, amount: 0.15967494, order_placed: true},
-            {price: 49_912.67, side: nil, amount: 0.15967494, order_placed: false}
+            { price: 51_716.94, side: :sell, amount: 0.15967494, order_placed: true },
+            { price: 53_521.2, side: :sell, amount: 0.15967494, order_placed: true },
+            { price: 49_912.67, side: nil, amount: 0.15967494, order_placed: false }
           ],
           'is_contract' => false
         }
@@ -87,9 +87,9 @@ RSpec.describe Lobanov::SchemaByObject do
             'type' => 'object',
             'required' => %w[id name leverage_custom_value grid is_contract],
             'properties' => {
-              'id' => {'type' => 'integer', 'example' => 1},
-              'name' => {'type' => 'string', 'example' => 'test bot'},
-              'leverage_custom_value' => {'type' => 'number', 'example' => 0.123},
+              'id' => { 'type' => 'integer', 'example' => 1 },
+              'name' => { 'type' => 'string', 'example' => 'test bot' },
+              'leverage_custom_value' => { 'type' => 'number', 'example' => 0.123 },
               'grid' => {
                 'type' => 'array',
                 'minItems' => 1,
@@ -98,14 +98,14 @@ RSpec.describe Lobanov::SchemaByObject do
                   'type' => 'object',
                   'required' => %w[price amount],
                   'properties' => {
-                    'price' => {'type' => 'number', 'example' => 51_716.94},
-                    'side' => {'type' => 'string', 'example' => :sell},
-                    'amount' => {'type' => 'number', 'example' => 0.15967494},
-                    'order_placed' => {'type' => 'boolean', 'example' => true}
+                    'price' => { 'type' => 'number', 'example' => 51_716.94 },
+                    'side' => { 'type' => 'string', 'example' => :sell },
+                    'amount' => { 'type' => 'number', 'example' => 0.15967494 },
+                    'order_placed' => { 'type' => 'boolean', 'example' => true }
                   }
                 }
               },
-              'is_contract' => {'type' => 'boolean', 'example' => false}
+              'is_contract' => { 'type' => 'boolean', 'example' => false }
             }
           }
         }
@@ -120,8 +120,8 @@ RSpec.describe Lobanov::SchemaByObject do
   context 'with array' do
     let(:obj) do
       [
-        {text: 'one'},
-        {text: 'two'}
+        { text: 'one' },
+        { text: 'two' }
       ]
     end
 

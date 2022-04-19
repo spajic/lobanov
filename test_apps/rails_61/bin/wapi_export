@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # берёт api-backend-specification/index.yaml и заменяет ссылки на инлайн
 # попробовал открыть в Insomnia наш index.ymal - не умеет работать с ссылками
@@ -7,7 +8,7 @@ require 'yaml'
 
 BASE = 'frontend/api-backend-specification'
 
-index = YAML.load_file(BASE + '/index.yaml')
+index = YAML.load_file("#{BASE}/index.yaml")
 
 index['paths'].each do |key, value|
   path_schema = YAML.load_file("#{BASE}/" + value['$ref'])

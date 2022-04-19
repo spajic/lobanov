@@ -29,7 +29,7 @@ module Lobanov
         'in' => 'path',
         'name' => name,
         'description' => name,
-        'schema' => {'type' => 'string'},
+        'schema' => { 'type' => 'string' },
         'required' => true,
         'example' => value.to_s
       }
