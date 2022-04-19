@@ -40,7 +40,7 @@ module Lobanov
       when Hash
         SchemaByObject.call(value)
       else
-        {'type' => 'string'}
+        { 'type' => 'string' }
       end
     end
   end

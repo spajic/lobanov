@@ -30,6 +30,7 @@ module Lobanov
       @body = params[:body]
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def self.from_action_dispatch(request, response)
       json_body =
         begin
@@ -57,6 +58,7 @@ module Lobanov
 
       new(params)
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def self.remove_ignored_namespaces(path)
       res = path

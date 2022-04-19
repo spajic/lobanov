@@ -9,7 +9,7 @@ RSpec.describe Lobanov::Validator do
 
   context 'with nullable fields' do
     let(:stored_schema) do
-      YAML.load <<~YAML
+      YAML.safe_load <<~YAML
         type: object
         required: [name]
         properties:
@@ -40,7 +40,7 @@ RSpec.describe Lobanov::Validator do
     end
 
     let(:new_schema) do
-      YAML.load <<~YAML
+      YAML.safe_load <<~YAML
         type: object
         required: [name]
         properties:
@@ -67,7 +67,7 @@ RSpec.describe Lobanov::Validator do
 
   context 'with object with all nullable fields' do
     let(:stored_schema) do
-      YAML.load <<~YAML
+      YAML.safe_load <<~YAML
         type: object
         required:
           - fio
@@ -90,7 +90,7 @@ RSpec.describe Lobanov::Validator do
     end
 
     let(:new_schema) do
-      YAML.load <<~YAML
+      YAML.safe_load <<~YAML
         type: object
         required:
           - fio

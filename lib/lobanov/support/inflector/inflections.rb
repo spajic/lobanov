@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable all
 module Inflector
-  extend self
+  module_function
 
   # A singleton instance of this class is yielded by Inflector.inflections,
   # which can then be used to specify additional inflection rules. If passed
@@ -51,9 +52,10 @@ module Inflector
       end
 
       private
-        def to_regex(string)
-          /\b#{::Regexp.escape(string)}\Z/i
-        end
+
+      def to_regex(string)
+        /\b#{::Regexp.escape(string)}\Z/i
+      end
     end
 
     def self.instance(locale = :en)
@@ -67,18 +69,20 @@ module Inflector
       instance(locale)
     end
 
-    attr_reader :plurals, :singulars, :uncountables, :humans, :acronyms
-
-    attr_reader :acronyms_camelize_regex, :acronyms_underscore_regex # :nodoc:
+    attr_reader :plurals, :singulars, :uncountables, :humans, :acronyms, :acronyms_camelize_regex, :acronyms_underscore_regex # :nodoc:
 
     def initialize
-      @plurals, @singulars, @uncountables, @humans, @acronyms = [], [], Uncountables.new, [], {}
+      @plurals = []
+      @singulars = []
+      @uncountables = Uncountables.new
+      @humans = []
+      @acronyms = {}
       define_acronym_regex_patterns
     end
 
     # Private, for the test suite.
     def initialize_dup(orig) # :nodoc:
-      %w(plurals singulars uncountables humans acronyms).each do |scope|
+      %w[plurals singulars uncountables humans acronyms].each do |scope|
         instance_variable_set("@#{scope}", orig.public_send(scope).dup)
       end
       define_acronym_regex_patterns
@@ -170,17 +174,17 @@ module Inflector
       @uncountables.delete(plural)
 
       s0 = singular[0]
-      srest = singular[1..-1]
+      srest = singular[1..]
 
       p0 = plural[0]
-      prest = plural[1..-1]
+      prest = plural[1..]
 
       if s0.upcase == p0.upcase
-        plural(/(#{s0})#{srest}$/i, '\1' + prest)
-        plural(/(#{p0})#{prest}$/i, '\1' + prest)
+        plural(/(#{s0})#{srest}$/i, "\\1#{prest}")
+        plural(/(#{p0})#{prest}$/i, "\\1#{prest}")
 
-        singular(/(#{s0})#{srest}$/i, '\1' + srest)
-        singular(/(#{p0})#{prest}$/i, '\1' + srest)
+        singular(/(#{s0})#{srest}$/i, "\\1#{srest}")
+        singular(/(#{p0})#{prest}$/i, "\\1#{srest}")
       else
         plural(/#{s0.upcase}(?i)#{srest}$/,   p0.upcase   + prest)
         plural(/#{s0.downcase}(?i)#{srest}$/, p0.downcase + prest)
@@ -241,11 +245,12 @@ module Inflector
     end
 
     private
-      def define_acronym_regex_patterns
-        @acronym_regex             = @acronyms.empty? ? /(?=a)b/ : /#{@acronyms.values.join("|")}/
-        @acronyms_camelize_regex   = /^(?:#{@acronym_regex}(?=\b|[A-Z_])|\w)/
-        @acronyms_underscore_regex = /(?:(?<=([A-Za-z\d]))|\b)(#{@acronym_regex})(?=\b|[^a-z])/
-      end
+
+    def define_acronym_regex_patterns
+      @acronym_regex             = @acronyms.empty? ? /(?=a)b/ : /#{@acronyms.values.join("|")}/
+      @acronyms_camelize_regex   = /^(?:#{@acronym_regex}(?=\b|[A-Z_])|\w)/
+      @acronyms_underscore_regex = /(?:(?<=([A-Za-z\d]))|\b)(#{@acronym_regex})(?=\b|[^a-z])/
+    end
   end
 
   # Yields a singleton instance of Inflector::Inflections so you can specify
@@ -272,8 +277,8 @@ end
 # This is a safety measure to keep existing applications from breaking.
 #++
 Inflector.inflections(:en) do |inflect|
-  inflect.plural(/$/, "s")
-  inflect.plural(/s$/i, "s")
+  inflect.plural(/$/, 's')
+  inflect.plural(/s$/i, 's')
   inflect.plural(/^(ax|test)is$/i, '\1es')
   inflect.plural(/(octop|vir)us$/i, '\1i')
   inflect.plural(/(octop|vir)i$/i, '\1i')
@@ -282,7 +287,7 @@ Inflector.inflections(:en) do |inflect|
   inflect.plural(/(buffal|tomat)o$/i, '\1oes')
   inflect.plural(/([ti])um$/i, '\1a')
   inflect.plural(/([ti])a$/i, '\1a')
-  inflect.plural(/sis$/i, "ses")
+  inflect.plural(/sis$/i, 'ses')
   inflect.plural(/(?:([^f])fe|([lr])f)$/i, '\1\2ves')
   inflect.plural(/(hive)$/i, '\1s')
   inflect.plural(/([^aeiouy]|qu)y$/i, '\1ies')
@@ -294,7 +299,7 @@ Inflector.inflections(:en) do |inflect|
   inflect.plural(/^(oxen)$/i, '\1')
   inflect.plural(/(quiz)$/i, '\1zes')
 
-  inflect.singular(/s$/i, "")
+  inflect.singular(/s$/i, '')
   inflect.singular(/(ss)$/i, '\1')
   inflect.singular(/(n)ews$/i, '\1ews')
   inflect.singular(/([ti])a$/i, '\1um')
@@ -322,12 +327,13 @@ Inflector.inflections(:en) do |inflect|
   inflect.singular(/(quiz)zes$/i, '\1')
   inflect.singular(/(database)s$/i, '\1')
 
-  inflect.irregular("person", "people")
-  inflect.irregular("man", "men")
-  inflect.irregular("child", "children")
-  inflect.irregular("sex", "sexes")
-  inflect.irregular("move", "moves")
-  inflect.irregular("zombie", "zombies")
+  inflect.irregular('person', 'people')
+  inflect.irregular('man', 'men')
+  inflect.irregular('child', 'children')
+  inflect.irregular('sex', 'sexes')
+  inflect.irregular('move', 'moves')
+  inflect.irregular('zombie', 'zombies')
 
-  inflect.uncountable(%w(equipment information rice money species series fish sheep jeans police))
+  inflect.uncountable(%w[equipment information rice money species series fish sheep jeans police])
 end
+# rubocop:enable all

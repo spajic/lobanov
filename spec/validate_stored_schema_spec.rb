@@ -9,7 +9,7 @@ RSpec.describe Lobanov::ValidateStoredSchema do
 
   context 'with nullable fields' do
     let(:stored_schema) do
-      YAML.load <<~YAML
+      YAML.safe_load <<~YAML
         type: object
         required: [name]
         properties:
@@ -41,18 +41,18 @@ RSpec.describe Lobanov::ValidateStoredSchema do
     end
 
     let(:missing_examples) do
-      ['properties->this_key_will_be_missing','properties->apps->properties->and_this_one_too']
+      ['properties->this_key_will_be_missing', 'properties->apps->properties->and_this_one_too']
     end
 
     let(:expected_errors) do
       {
         missing_types: missing_types,
-        missing_examples: missing_examples,
+        missing_examples: missing_examples
       }.inspect
     end
 
     it 'raises error for nullable property' do
-      expect{ subject }.to raise_error(Lobanov::MissingTypeOrExampleError, expected_errors)
+      expect { subject }.to raise_error(Lobanov::MissingTypeOrExampleError, expected_errors)
     end
   end
 end

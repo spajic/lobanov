@@ -1,0 +1,29 @@
+Style/Documentation:
+  Enabled: false
+
+AllCops:
+  Exclude:
+    - 'lib/lobanov/support/inflector/methods.rb'
+
+Metrics/BlockLength:
+  IgnoredMethods: ['describe', 'context', 'let']
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'test_apps/rails_61/bin/bundle'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'test_apps/rails_61/bin/bundle'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'test_apps/rails_61/bin/bundle'
+
+Metrics/ClassLength:
+  Exclude:
+    - 'lib/lobanov/generator.rb'
+

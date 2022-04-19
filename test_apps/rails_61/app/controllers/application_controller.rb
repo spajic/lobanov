@@ -9,8 +9,8 @@ class ApplicationController < ActionController::Base
 
   def bad_request(message, title: nil)
     respond_to do |format|
-      format.json {render json: {message: message, title: title}, status: :bad_request}
-      format.all {head :bad_request}
+      format.json { render json: { message: message, title: title }, status: :bad_request }
+      format.all { head :bad_request }
     end
   end
 end

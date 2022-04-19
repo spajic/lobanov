@@ -4,7 +4,15 @@ module Lobanov
   # Validates stored_schema and returns validation error for particular conditions
   # Schemas are ruby objects representing OpenApi3 schema
   class ValidateStoredSchema
-    def self.call(stored_schema:)
+    def self.call(*params)
+      new(*params).call
+    end
+
+    def initialize(stored_schema:)
+      @stored_schema = stored_schema
+    end
+
+    def call
       missing_type_paths = []
       missing_example_paths = []
 
@@ -12,23 +20,27 @@ module Lobanov
         path = node[:path]
         value = node[:value]
 
-        if value['type'].nil?
-          missing_type_paths << path.join('->')
-        end
+        missing_type_paths << path.join('->') if value['type'].nil?
 
-        if value['example'].nil?
-          missing_example_paths << path.join('->')
-        end
+        missing_example_paths << path.join('->') if value['example'].nil?
       end
 
       return if [missing_type_paths, missing_example_paths].all?(&:empty?)
 
+      raise_error(missing_type_paths, missing_example_paths)
+    end
+
+    private
+
+    attr_reader :stored_schema
+
+    def raise_error(missing_type_paths, missing_example_paths)
       error = {
         missing_types: missing_type_paths,
-        missing_examples: missing_example_paths,
+        missing_examples: missing_example_paths
       }.inspect
 
-      raise MissingTypeOrExampleError.new(error)
+      raise MissingTypeOrExampleError, error
     end
   end
 end
