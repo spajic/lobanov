@@ -12,5 +12,4 @@ gem 'rails', '~> 6.1.4', '>= 6.1.4.2'
 
 gem 'byebug', platforms: %i[mri mingw x64_mingw]
 gem 'rspec-rails', '5.1.0'
-# gem 'lobanov', github: 'spajic/lobanov'
-gem 'lobanov', path: '/Users/bagdenia/workspace/3commas/lobanov'
+gem 'lobanov', path: '../..'
