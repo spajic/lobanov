@@ -1,7 +1,7 @@
 PATH
-  remote: /Users/spajic/code/lobanov
+  remote: ../..
   specs:
-    lobanov (0.1.0)
+    lobanov (0.3.0)
       diffy
       json-schema-generator
 
@@ -81,7 +81,7 @@ GEM
       concurrent-ruby (~> 1.0)
     json-schema-generator (0.0.9)
       jsonpath
-    jsonpath (1.1.0)
+    jsonpath (1.1.2)
       multi_json
     loofah (2.13.0)
       crass (~> 1.0.2)
@@ -168,6 +168,7 @@ GEM
     zeitwerk (2.5.4)
 
 PLATFORMS
+  ruby
   x86_64-darwin-20
 
 DEPENDENCIES
