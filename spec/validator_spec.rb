@@ -39,29 +39,60 @@ RSpec.describe Lobanov::Validator do
       YAML
     end
 
-    let(:new_schema) do
-      YAML.safe_load <<~YAML
-        type: object
-        required: [name]
-        properties:
-          name:
-            type: string
-            example: Alex
-          rejection_comment:
-            nullable: true
-          apps:
-            type: object
-            properties:
-              tags:
-                type: array
-                minItems: 0
-                uniqueItems: true
-                items: {}
-      YAML
+    context 'with actually null value' do
+      let(:new_schema) do
+        YAML.safe_load <<~YAML
+          type: object
+          required: [name]
+          properties:
+            name:
+              type: string
+              example: Alex
+            rejection_comment:
+              nullable: true
+            apps:
+              type: object
+              properties:
+                tags:
+                  type: array
+                  minItems: 0
+                  uniqueItems: true
+                  items: {}
+        YAML
+      end
+
+      it 'returns no errors' do
+        expect(subject).to eq(nil), subject
+      end
     end
 
-    it 'allows to not have nullable property' do
-      expect(subject).to eq(nil), subject
+    context 'with actualy not null value' do
+      let(:new_schema) do
+        YAML.safe_load <<~YAML
+          type: object
+          required: [name]
+          properties:
+            name:
+              type: string
+              example: Alex
+            rejection_comment:
+              type: string
+              example: rejected
+              # nullable: true # генератор не догадается что поле nullable
+            apps:
+              type: object
+              properties:
+                tags:
+                  type: array
+                  minItems: 0
+                  uniqueItems: true
+                  items: {}
+        YAML
+      end
+
+      it 'returns no errors' do
+        expect(subject).to eq(nil), subject
+      end
     end
   end
 

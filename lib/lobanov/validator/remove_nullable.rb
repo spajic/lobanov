@@ -7,6 +7,7 @@
 #   если есть соответствующий элемент в new_schema - оставляем
 #   если нет соответствующего ключа - удаляем из stored_schema если не required поле
 #   если нет соответствующего значения - удаляем из обоих схем если nullable
+#   если есть значение - добавляем nullable в new_schema
 module Lobanov
   class Validator
     class RemoveNullable
@@ -37,16 +38,23 @@ module Lobanov
         # так бывает, если уже удалили все nulable поля в объекте и ничего не осталось
         return if new_value == {} && stored_value == {}
 
-        if new_value.nil?
-          process_nil_value(path)
-        elsif new_value['type'].nil?
-          process_nil_type(path, stored_value)
-        end
+        process_nil_value(new_value, path) || process_nil_type(new_value, path, stored_value)
+        process_empty_properties(stored_value, path)
 
-        process_empty_properties(path) if empty_properties?(path, stored_value)
+        take_nullable_from_stored_schema_to_new_schema(stored_value, new_value)
       end
 
-      def process_empty_properties(path)
+      # если поле вообще-то nullable, но в тесте по факту пришло
+      # то в схеме оно не будет сгенерено как Nullable - помогаем тут
+      def take_nullable_from_stored_schema_to_new_schema(stored_value, new_value)
+        return unless stored_value['nullable'] && new_value['example']
+
+        new_value['nullable'] = true
+      end
+
+      def process_empty_properties(stored_value, path)
+        return unless empty_properties?(path, stored_value)
+
         stored_schema.dig(*path[0..-3]).delete(path[-2])
         new_schema.dig(*path[0..-3])&.delete(path[-2])
       end
@@ -55,7 +63,9 @@ module Lobanov
         path.last == 'properties' && path.size > 1 && stored_value == {}
       end
 
-      def process_nil_value(path)
+      def process_nil_value(new_value, path)
+        return if new_value
+
         requireds_path = path[0..-3] + ['required']
         required_fields = stored_schema.dig(*requireds_path)
         field_name = path.last
@@ -65,7 +75,9 @@ module Lobanov
         stored_schema.dig(*path[0..-2]).delete(path.last)
       end
 
-      def process_nil_type(path, stored_value)
+      def process_nil_type(new_value, path, stored_value)
+        return if new_value&.dig('type')
+
         parent_path = path[0..-2]
 
         return if parent_path == []
