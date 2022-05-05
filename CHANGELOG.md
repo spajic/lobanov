@@ -1,5 +1,12 @@
 ## Next Release
 
+
+## 0.4.1 (2022-05-06)
+
+### Fixed
+
+* Fixed version.rb to match release tag
+
 ## 0.4.0 (2022-05-06)
 
 ### Fixed
