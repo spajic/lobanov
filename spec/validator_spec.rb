@@ -7,6 +7,118 @@ RSpec.describe Lobanov::Validator do
     described_class.call(new_schema: new_schema, stored_schema: stored_schema)
   end
 
+  context 'with enum in stored schema' do
+    let(:stored_schema) do
+      YAML.safe_load <<~YAML
+        type: object
+        required: [sort_direction]
+        properties:
+          sort_direction:
+            type: string
+            enum:
+              - asc
+              - desc
+            example: asc
+          item:
+            type: object
+            properties:
+              nested_enum:
+                type: string
+                example: one
+                enum:
+                  - one
+                  - two
+      YAML
+    end
+
+    let(:correct_new_schema) do
+      YAML.safe_load <<~YAML
+        type: object
+        required: [sort_direction]
+        properties:
+          sort_direction:
+            type: string
+            example: asc
+          item:
+            type: object
+            required: [nested_enum]
+            properties:
+              nested_enum:
+                type: string
+                example: one
+      YAML
+    end
+
+    context 'when new schema is correct' do
+      let(:new_schema) { correct_new_schema }
+
+      it 'works without errors' do
+        expect(subject).to eq(nil), subject
+      end
+    end
+
+    context 'when new schema has value that does not belong to enum' do
+      let(:new_schema) do
+        YAML.safe_load <<~YAML
+          type: object
+          required: [sort_direction]
+          properties:
+            sort_direction:
+              type: string
+              example: FFF
+            item:
+              type: object
+              required: [nested_enum]
+              properties:
+                nested_enum:
+                  type: string
+                  example: UUU
+        YAML
+      end
+
+      it 'raises an error' do
+        expected_msg =
+          "Invalid enum value in new schema! properties->sort_direction. \n"\
+          'Expected ["asc", "desc"], got "FFF"'
+        expect { subject }.to raise_error(Lobanov::InvalidEnumError, expected_msg)
+      end
+    end
+
+    context 'when stored schema is incorrect' do
+      let(:stored_schema) do
+        YAML.safe_load <<~YAML
+          type: object
+          required: [sort_direction]
+          properties:
+            sort_direction:
+              type: string
+              enum:
+                - asc
+                - desc
+              example: FFFUUU
+            item:
+              type: object
+              properties:
+                nested_enum:
+                  type: string
+                  example: one
+                  enum:
+                    - one
+                    - two
+        YAML
+      end
+
+      let(:new_schema) { correct_new_schema }
+
+      it 'raises an error' do
+        expected_msg =
+          "Invalid enum value in stored schema! properties->sort_direction. \n"\
+          'Expected ["asc", "desc"], got "FFFUUU"'
+        expect { subject }.to raise_error(Lobanov::InvalidEnumError, expected_msg)
+      end
+    end
+  end
+
   context 'with nullable fields' do
     let(:stored_schema) do
       YAML.safe_load <<~YAML

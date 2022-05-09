@@ -1,6 +1,12 @@
 ## Next Release
 
 
+## 0.5.0 (2022-05-10)
+
+### New
+
+* Support enums in schemas. Do not fail if enum is present in stored schema. Check that actual value belongs to enum.
+
 ## 0.4.1 (2022-05-06)
 
 ### Fixed

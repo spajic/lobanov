@@ -21,6 +21,8 @@ module Lobanov
 
   class MissingTypeOrExampleError < LobanovError; end
 
+  class InvalidEnumError < LobanovError; end
+
   def self.capture(&block)
     Spy.on(&block)
   end

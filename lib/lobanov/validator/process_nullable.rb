@@ -10,7 +10,7 @@
 #   если есть значение - добавляем nullable в new_schema
 module Lobanov
   class Validator
-    class RemoveNullable
+    class ProcessNullable
       def self.call(*params)
         new(*params).call
       end

@@ -4,7 +4,7 @@ module Lobanov
   # Validates new_schema vs stored_schema and returns validation error
   # Schemas are ruby objects representing OpenApi3 schema
   class Validator
-    UNNECESSARY_FIELDS = %w[description example openapi info required].freeze
+    UNNECESSARY_FIELDS = %w[description example openapi info required enum].freeze
 
     def self.call(*params)
       new(*params).call
@@ -16,8 +16,8 @@ module Lobanov
     end
 
     def call
-      # remove_nullable!(new_schema, stored_schema)
-      RemoveNullable.call(new_schema: new_schema, stored_schema: stored_schema)
+      ProcessNullable.call(new_schema: new_schema, stored_schema: stored_schema)
+      ProcessEnums.call(new_schema: new_schema, stored_schema: stored_schema)
       prepared_new_schema = remove_unnecessary_fields(new_schema)
       prepared_stored_schema = remove_unnecessary_fields(stored_schema)
 
