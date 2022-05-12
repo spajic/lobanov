@@ -1,5 +1,10 @@
 ## Next Release
 
+## 0.5.1 (2022-05-13)
+
+### Fixed
+
+* Fix a crash in case when field is optional and nullable in stored schema and in fact null.
 
 ## 0.5.0 (2022-05-10)
 

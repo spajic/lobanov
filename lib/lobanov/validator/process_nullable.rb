@@ -44,10 +44,10 @@ module Lobanov
         take_nullable_from_stored_schema_to_new_schema(stored_value, new_value)
       end
 
-      # если поле вообще-то nullable, но в тесте по факту пришло
+      # если поле в stored schema nullable, но в тесте по факту пришло
       # то в схеме оно не будет сгенерено как Nullable - помогаем тут
       def take_nullable_from_stored_schema_to_new_schema(stored_value, new_value)
-        return unless stored_value['nullable'] && new_value['example']
+        return unless stored_value['nullable'] && new_value && new_value['example']
 
         new_value['nullable'] = true
       end
