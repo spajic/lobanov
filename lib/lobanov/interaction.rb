@@ -30,6 +30,14 @@ module Lobanov
       @body = params[:body]
     end
 
+    def operation_id
+      GenerateOperationId.call(self)
+    end
+
+    def path_with_square_braces
+      GeneratePathWithSquareBraces.call(self)
+    end
+
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def self.from_action_dispatch(request, response)
       json_body =

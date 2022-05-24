@@ -20,7 +20,7 @@ module Lobanov
       if overwrite?
         repo.store_schema
       else
-        ValidateStoredSchema.call(stored_schema: stored_response_schema)
+        ValidateStoredSchema.call(stored_schema: stored_response_schema, operation_id: interaction.operation_id)
         error = Validator.call(new_schema: new_response_schema, stored_schema: stored_response_schema)
         return unless error
 

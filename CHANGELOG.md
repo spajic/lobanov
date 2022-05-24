@@ -1,5 +1,11 @@
 ## Next Release
 
+## 0.6.0 (2022-05-24)
+
+### Fixed
+
+* Fix unreadable output of MissingTypeOrExampleError and replace useless stacktrace with (ノಠ益ಠ)ノ彡┻━┻
+
 ## 0.5.1 (2022-05-13)
 
 ### Fixed

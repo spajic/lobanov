@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe Lobanov::ValidateStoredSchema do
   let(:subject) do
-    described_class.call(stored_schema: stored_schema)
+    described_class.call(stored_schema: stored_schema, operation_id: 'OperationId')
   end
 
   context 'with nullable fields' do
@@ -37,11 +37,11 @@ RSpec.describe Lobanov::ValidateStoredSchema do
     end
 
     let(:missing_types) do
-      ['properties->apps->properties->and_this_one_too']
+      ['properties->apps->and_this_one_too']
     end
 
     let(:missing_examples) do
-      ['properties->this_key_will_be_missing', 'properties->apps->properties->and_this_one_too']
+      ['properties->this_key_will_be_missing', 'properties->apps->and_this_one_too']
     end
 
     let(:expected_errors) do
@@ -52,7 +52,18 @@ RSpec.describe Lobanov::ValidateStoredSchema do
     end
 
     it 'raises error for nullable property' do
-      expect { subject }.to raise_error(Lobanov::MissingTypeOrExampleError, expected_errors)
+      expected_error = <<~STRING
+        Problem with OperationId
+
+        Missing types:
+        properties->apps->and_this_one_too
+
+        Missing examples:
+        properties->this_key_will_be_missing
+        properties->apps->and_this_one_too
+      STRING
+
+      expect { subject }.to raise_error(Lobanov::MissingTypeOrExampleError, expected_error)
     end
   end
 end

@@ -16,7 +16,7 @@ Then(/^the output should contain (failures|these lines):$/) do |_, lines|
     next if line.blank?
 
     expect(out).to match(/#{Regexp.escape(line)}/)
-    out.gsub!(/.*?#{Regexp.escape(line)}/m, '')
+    out = out.sub(/.*?#{Regexp.escape(line)}/m, '')
   end
 end
 

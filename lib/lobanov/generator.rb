@@ -11,13 +11,14 @@ module Lobanov
 
     def_delegator :@interaction, :verb
     def_delegator :@interaction, :endpoint_path
-    def_delegator :@interaction, :controller_action
     def_delegator :@interaction, :path_info
     def_delegator :@interaction, :path_params
     def_delegator :@interaction, :query_params
     def_delegator :@interaction, :payload
     def_delegator :@interaction, :body
     def_delegator :@interaction, :status
+    def_delegator :@interaction, :operation_id
+    def_delegator :@interaction, :path_with_square_braces
 
     def initialize(interaction:)
       @interaction = interaction
@@ -34,44 +35,16 @@ module Lobanov
     end
 
     def response_component_name
-      "#{camelized_path}#{status}Response"
+      "#{operation_id}#{status}Response"
     end
 
     def request_body_name
-      "#{camelized_path}RequestBody"
-    end
-
-    def camelized_path
-      @camelized_path ||= begin
-        parts = path_parts_without_ids.map { |str| Support.camelize(str) } + [Support.camelize(controller_action)]
-        parts.pop if parts[-1] == parts[-2] # /fruits/:id/reviews/:review_id/upvote
-        parts.join
-      end
-    end
-
-    # users/:user_id/pets/:pet_id -> users/[user_id]/pets/[pet_id]
-    def path_with_square_braces
-      # res = endpoint_path.dup.gsub(%r{^/}, '') # убираем /, если строка начинается с него
-      res = endpoint_path.dup
-      ids = res.scan(/(:\w*)/).flatten # [':user_id', ':pet_id']
-      ids.each do |id|
-        res.gsub!(id, "[#{id.gsub(':', '')}]")
-      end
-
-      res.gsub('//', '/')
+      "#{operation_id}RequestBody"
     end
 
     def path_with_curly_braces
       prefix = Lobanov.namespaces_to_ignore.join('/')
       "/#{prefix}/#{path_with_square_braces.gsub('[', '{').gsub(']', '}')}".gsub('//', '/')
-    end
-
-    def path_parts
-      path_with_square_braces.split('/') - ['']
-    end
-
-    def path_parts_without_ids
-      path_parts.reject { |part| part.start_with?('[') }
     end
 
     def paths
@@ -108,7 +81,7 @@ module Lobanov
     def build_res
       {
         'description' => "#{verb} #{endpoint_path}",
-        'operationId' => camelized_path,
+        'operationId' => operation_id,
         'responses' => response_schema,
         'tags' => ['lobanov']
       }

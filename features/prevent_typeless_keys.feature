@@ -93,5 +93,11 @@ Feature: prevent typeless examples
     Then the output should contain failures:
     """
     Lobanov::MissingTypeOrExampleError:
-      {:missing_types=>["properties->name"], :missing_examples=>["properties->name"]}
+      Problem with FruitsShow
+
+      Missing types:
+      properties->name
+
+      Missing examples:
+      properties->name
     """
