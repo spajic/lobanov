@@ -7,6 +7,106 @@ RSpec.describe Lobanov::Validator do
     described_class.call(new_schema: new_schema, stored_schema: stored_schema)
   end
 
+  context 'with array with minItems: 0' do
+    let(:stored_schema) do
+      YAML.safe_load <<~YAML
+        type: array
+        uniqueItems: true
+        minItems: 0
+        items:
+          type: object
+          required:
+            - email
+            - provider
+          properties:
+            email:
+              type: string
+              example: fff@uuu.com
+            provider:
+              type: string
+              example: facebook
+      YAML
+    end
+
+    context 'when new_schema actually has items' do
+      let(:new_schema) do
+        YAML.safe_load <<~YAML
+          type: array
+          uniqueItems: true
+          minItems: 1
+          items:
+            type: object
+            required:
+              - email
+              - provider
+            properties:
+              email:
+                type: string
+                example: fff@uuu.com
+              provider:
+                type: string
+                example: facebook
+        YAML
+      end
+
+      it 'works without errors' do
+        expect(subject).to eq(nil), subject
+      end
+    end
+
+    context 'when new_schema has empty array' do
+      let(:new_schema) do
+        YAML.safe_load <<~YAML
+          type: array
+          minItems: 0
+          uniqueItems: true
+          items:
+            example:
+        YAML
+      end
+
+      it 'works without errors' do
+        expect(subject).to eq(nil), subject
+      end
+    end
+  end
+
+  context 'with stored array with minItems: 1' do
+    let(:stored_schema) do
+      YAML.safe_load <<~YAML
+        type: array
+        uniqueItems: true
+        minItems: 1
+        items:
+          type: object
+          required:
+            - email
+            - provider
+          properties:
+            email:
+              type: string
+              example: fff@uuu.com
+            provider:
+              type: string
+              example: facebook
+      YAML
+    end
+
+    let(:new_schema) do
+      YAML.safe_load <<~YAML
+        type: array
+        uniqueItems: true
+        minItems: 0
+        items:
+          example:
+      YAML
+    end
+
+    it 'returns error: do not allow empty array if stored minItems > 0' do
+      expect { subject }.to raise_error(Lobanov::MissingRequiredFieldError)
+    end
+  end
+
   context 'with enum in stored schema' do
     let(:stored_schema) do
       YAML.safe_load <<~YAML

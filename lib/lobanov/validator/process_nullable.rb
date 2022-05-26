@@ -33,15 +33,20 @@ module Lobanov
       def process_node(node)
         path = node[:path]
         stored_value = node[:value]
-        new_value = new_schema.dig(*path)
+        new_value =
+          path == [] ? new_schema : new_schema.dig(*path)
 
         # так бывает, если уже удалили все nulable поля в объекте и ничего не осталось
-        return if new_value == {} && stored_value == {}
+        return if empty?(new_value) && empty?(stored_value)
 
         process_nil_value(new_value, path) || process_nil_type(new_value, path, stored_value)
         process_empty_properties(stored_value, path)
 
         take_nullable_from_stored_schema_to_new_schema(stored_value, new_value)
+      end
+
+      def empty?(val)
+        [{}, nil].include?(val)
       end
 
       # если поле в stored schema nullable, но в тесте по факту пришло

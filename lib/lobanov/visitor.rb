@@ -21,6 +21,7 @@ module Lobanov
       if object?(current_position)
         go_object_branch(schema, path, visitor)
       elsif array?(current_position)
+        visitor << { path: path, value: current_position }
         go(schema, path + ['items'], visitor)
       else
         visitor << { path: path, value: current_position }
@@ -28,10 +29,14 @@ module Lobanov
     end
 
     def object?(current_position)
+      return false unless current_position
+
       current_position['type'] == 'object'
     end
 
     def array?(current_position)
+      return false unless current_position
+
       current_position['type'] == 'array' && current_position['items']
     end
 

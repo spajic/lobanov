@@ -1,5 +1,11 @@
 ## Next Release
 
+## 0.6.2 (2022-05-26)
+
+### Fixed
+
+* Allow array to be empty when it has minItems: 0.
+
 ## 0.6.1 (2022-05-26)
 
 ### Fixed

@@ -25,8 +25,13 @@ module Lobanov
         # Может быть пустой объект в корне (пустой ответ render json: {})
         next if path == ['properties'] && value == {}
 
-        missing_type_paths << path.join('->') if value['type'].nil?
-        missing_example_paths << path.join('->') if value['example'].nil?
+        if value['type'].nil?
+          missing_type_paths << path.join('->')
+        end
+
+        if value['type'] != 'array' && value['example'].nil?
+          missing_example_paths << path.join('->')
+        end
       end
 
       raise_error(missing_type_paths, missing_example_paths)
