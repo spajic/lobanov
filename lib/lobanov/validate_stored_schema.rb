@@ -22,13 +22,12 @@ module Lobanov
       Visitor.visit(stored_schema).each do |node|
         path = node[:path]
         value = node[:value]
+        # Может быть пустой объект в корне (пустой ответ render json: {})
+        next if path == ['properties'] && value == {}
 
         missing_type_paths << path.join('->') if value['type'].nil?
-
         missing_example_paths << path.join('->') if value['example'].nil?
       end
-
-      return if [missing_type_paths, missing_example_paths].all?(&:empty?)
 
       raise_error(missing_type_paths, missing_example_paths)
     end
@@ -36,6 +35,8 @@ module Lobanov
     private
 
     def raise_error(missing_type_paths, missing_example_paths)
+      return if [missing_type_paths, missing_example_paths].all?(&:empty?)
+
       error = {
         operation_id: operation_id,
         missing_types: missing_type_paths,

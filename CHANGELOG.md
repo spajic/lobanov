@@ -1,5 +1,11 @@
 ## Next Release
 
+## 0.6.1 (2022-05-26)
+
+### Fixed
+
+* Fix validation fail for empty response (render json: {}). Missing examples and missing types error was raised.
+
 ## 0.6.0 (2022-05-24)
 
 ### Fixed

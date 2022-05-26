@@ -7,6 +7,19 @@ RSpec.describe Lobanov::ValidateStoredSchema do
     described_class.call(stored_schema: stored_schema, operation_id: 'OperationId')
   end
 
+  context 'with empty object at root' do
+    let(:stored_schema) do
+      YAML.safe_load <<~YAML
+        type: object
+        properties: {}
+      YAML
+    end
+
+    it 'works without errors' do
+      expect(subject).to eq(nil), subject
+    end
+  end
+
   context 'with nullable fields' do
     let(:stored_schema) do
       YAML.safe_load <<~YAML

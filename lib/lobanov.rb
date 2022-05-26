@@ -13,8 +13,6 @@ module Lobanov
 
   class NonroutableRequestError < LobanovError; end
 
-  class MissingExampleError < LobanovError; end
-
   class MissingRequiredFieldError < LobanovError; end
 
   class MissingNotNullableValueError < LobanovError; end
