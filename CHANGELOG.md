@@ -1,5 +1,11 @@
 ## Next Release
 
+## 0.6.3 (2022-05-27)
+
+### Fixed
+
+* Fix a crash when generating example for array and value is numeric.
+
 ## 0.6.2 (2022-05-26)
 
 ### Fixed

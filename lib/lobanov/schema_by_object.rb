@@ -59,7 +59,7 @@ module Lobanov
     end
 
     def add_example_array(obj, schema, skey, key)
-      example = obj[key].detect { |hash| !hash.empty? }
+      example = obj[key].detect { |val| val.is_a?(Numeric) || !val.empty? }
       return if schema['properties'][skey]['items'].empty?
 
       add_examples_to_schema(schema['properties'][skey]['items'], example)
