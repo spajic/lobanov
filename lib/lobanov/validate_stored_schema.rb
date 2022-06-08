@@ -25,6 +25,11 @@ module Lobanov
         # Может быть пустой объект в корне (пустой ответ render json: {})
         next if path == ['properties'] && value == {}
 
+        # у object не должно быть example, примеры внутри properties
+        if value['type'] == 'object'
+          next
+        end
+
         if value['type'].nil?
           missing_type_paths << path.join('->')
         end
@@ -55,13 +60,20 @@ module Lobanov
 
     def format_error(error)
       res = +"Problem with #{error[:operation_id]}\n"
-      res << "\nMissing types:\n"
-      error[:missing_types].each { |err| res << err << "\n" }
-      res << "\nMissing examples:\n"
-      error[:missing_examples].each { |err| res << err << "\n" }
+      res += format_errors_paths('Missing types', error[:missing_types])
+      res += format_errors_paths('Missing examples', error[:missing_examples])
 
       res.gsub!('->properties->', '->')
 
+      res
+    end
+
+    def format_errors_paths(category, paths)
+      return '' if paths&.empty?
+
+      res = +''
+      res << "\n#{category}:\n"
+      paths.each { |path| res += "#{path}\n" }
       res
     end
   end

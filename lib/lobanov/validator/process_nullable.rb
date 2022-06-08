@@ -26,6 +26,11 @@ module Lobanov
         Visitor.visit(stored_schema).each do |node|
           process_node(node)
         end
+
+        {
+          new_schema: new_schema,
+          stored_schema: stored_schema
+        }
       end
 
       private
@@ -87,7 +92,9 @@ module Lobanov
 
         return if parent_path == []
 
-        raise MissingNotNullableValueError, path.join('->') unless nil_type?(stored_value, parent_path)
+        unless nil_type?(stored_value, parent_path)
+          raise MissingNotNullableValueError, path.join('->')
+        end
 
         stored_schema.dig(*parent_path).delete(path.last)
         new_schema.dig(*parent_path).delete(path.last)
@@ -95,7 +102,12 @@ module Lobanov
 
       def nil_type?(stored_value, parent_path)
         stored_value['nullable'] ||
-          (parent_path != [] && (stored_schema.dig(*parent_path)['minItems']).zero?)
+          (parent_path != [] && allow_min_items?(parent_path))
+      end
+
+      def allow_min_items?(parent_path)
+        val = stored_schema.dig(*parent_path)['minItems']
+        val&.zero?
       end
     end
   end

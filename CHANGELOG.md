@@ -1,5 +1,16 @@
 ## Next Release
 
+## 0.6.4 (2022-06-08)
+
+### Fixed
+
+* Fix validation in case when all required properties are present but nulls.
+* Fix output of MissingTypeOrExampleError: when group (examples / types) is empty it is omitted from output.
+
+### Fixed
+
+* Fix a crash when generating example for array and value is numeric.
+
 ## 0.6.3 (2022-05-27)
 
 ### Fixed

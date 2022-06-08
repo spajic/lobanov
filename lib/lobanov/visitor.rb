@@ -20,6 +20,7 @@ module Lobanov
 
       if object?(current_position)
         go_object_branch(schema, path, visitor)
+        visitor << { path: path, value: current_position }
       elsif array?(current_position)
         visitor << { path: path, value: current_position }
         go(schema, path + ['items'], visitor)
@@ -45,7 +46,10 @@ module Lobanov
       schema.dig(*props_path).each do |prop_name, _prop_value|
         go(schema, props_path + [prop_name], visitor)
       end
-      visitor << { path: props_path, value: {} } if schema.dig(*props_path) == {} # все пропсы удалили, или не было
+
+      if schema.dig(*props_path) == {} # все пропсы удалили, или не было
+        visitor << { path: props_path, value: {} }
+      end
     end
   end
 end
