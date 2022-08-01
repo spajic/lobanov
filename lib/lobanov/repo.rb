@@ -38,7 +38,7 @@ module Lobanov
     end
 
     def index_path
-      "#{Lobanov.specification_folder}/index.yaml"
+      "#{Lobanov.specification_folder}/openapi.yaml"
     end
 
     def store_schema
