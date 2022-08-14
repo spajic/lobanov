@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'open3'
+
 module Lobanov
   # Handles captured interactions
   class HandleCapturedInteractions
@@ -19,9 +21,11 @@ module Lobanov
 
       if overwrite?
         repo.store_schema
+        single_copy
       else
         ValidateStoredSchema.call(stored_schema: stored_response_schema, operation_id: interaction.operation_id)
         error = Validator.call(new_schema: new_response_schema, stored_schema: stored_response_schema)
+        single_copy
         return unless error
 
         raise SchemaMismatchError, build_error_message(interaction, error)
@@ -29,6 +33,10 @@ module Lobanov
     end
 
     private
+
+    def single_copy
+      system "swagger-cli bundle #{Lobanov.index_path} -o #{Lobanov.specification_folder}/openapi_single.yaml --type yaml"
+    end
 
     def overwrite?
       return true if ENV['FORCE_LOBANOV']
