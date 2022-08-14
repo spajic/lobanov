@@ -8,6 +8,10 @@ Feature: force lobanov for schema changes
     """yaml
     ---
     openapi: 3.0.1
+    info:
+      title: Test fruits API for Lobanov development
+      description: API which is used to develop Lobanov gem.
+      version: 0.0.1
     paths:
       "/wapi/fruits/{id}":
         get:
@@ -34,6 +38,8 @@ Feature: force lobanov for schema changes
                   schema:
                     "$ref": "./components/responses/FruitsShow200Response.yaml"
     """
+
+    Given a file named "frontend/api-backend-specification/openapi_single.yaml" does not exist
 
     Given a file named "frontend/api-backend-specification/components/responses/FruitsShow200Response.yaml" with:
     """yaml
@@ -111,4 +117,57 @@ Feature: force lobanov for schema changes
       seasonal:
         type: boolean
         example: false
+    """
+
+    Then a yaml named "frontend/api-backend-specification/openapi_single.yaml" should contain:
+    """yaml
+    ---
+    openapi: 3.0.1
+    info:
+      title: Test fruits API for Lobanov development
+      description: API which is used to develop Lobanov gem.
+      version: 0.0.1
+    paths:
+      '/wapi/fruits/{id}':
+        get:
+          parameters:
+            - in: path
+              name: id
+              description: id
+              schema:
+                type: string
+              required: true
+              example: '2'
+            - in: query
+              name: q
+              description: q
+              schema:
+                type: string
+              required: true
+              example: with_integer_name
+          responses:
+            '200':
+              description: 'GET /fruits/:id -> 200'
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    required:
+                      - name
+                      - color
+                      - weight
+                      - seasonal
+                    properties:
+                      name:
+                        type: integer
+                        example: 999
+                      color:
+                        type: string
+                        example: yellow
+                      weight:
+                        type: integer
+                        example: 50
+                      seasonal:
+                        type: boolean
+                        example: false
     """

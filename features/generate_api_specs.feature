@@ -15,6 +15,8 @@ Feature: generate complete specs for API
       paths: {}
       """
 
+    Given a file named "frontend/api-backend-specification/openapi_single.yaml" does not exist
+
     Given an empty directory "frontend/api-backend-specification/components"
 
     Given an empty directory "frontend/api-backend-specification/components/schemas"
@@ -613,3 +615,394 @@ Feature: generate complete specs for API
           type: boolean
           example: true
       """
+
+    Then a yaml named "frontend/api-backend-specification/openapi_single.yaml" should contain:
+    """yaml
+    ---
+    openapi: 3.0.1
+    info:
+      title: Test fruits API for Lobanov development
+      description: API which is used to develop Lobanov gem.
+      version: 0.0.1
+    paths:
+      '/wapi/fruits/{fruit_id}/reviews/{id}':
+        get:
+          description: 'GET /fruits/:fruit_id/reviews/:id'
+          operationId: FruitsReviewsShow
+          responses:
+            '200':
+              description: 'GET /fruits/:fruit_id/reviews/:id -> 200'
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    required:
+                      - text
+                      - positive
+                    properties:
+                      text:
+                        type: string
+                        example: 'review #1'
+                      positive:
+                        type: boolean
+                        example: true
+          tags:
+            - lobanov
+          parameters:
+            - in: path
+              name: fruit_id
+              description: fruit_id
+              schema:
+                type: string
+              required: true
+              example: '1'
+            - in: path
+              name: id
+              description: id
+              schema:
+                type: string
+              required: true
+              example: '1'
+      '/wapi/fruits/{fruit_id}/reviews':
+        get:
+          description: 'GET /fruits/:fruit_id/reviews'
+          operationId: FruitsReviewsIndex
+          responses:
+            '200':
+              description: 'GET /fruits/:fruit_id/reviews -> 200'
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    minItems: 1
+                    uniqueItems: true
+                    items:
+                      type: object
+                      required:
+                        - text
+                      properties:
+                        text:
+                          type: string
+                          example: 'review #1'
+                        positive:
+                          type: boolean
+                          example: true
+          tags:
+            - lobanov
+          parameters:
+            - in: path
+              name: fruit_id
+              description: fruit_id
+              schema:
+                type: string
+              required: true
+              example: '1'
+        post:
+          description: 'POST /fruits/:fruit_id/reviews'
+          operationId: FruitsReviewsCreate
+          responses:
+            '201':
+              description: 'POST /fruits/:fruit_id/reviews -> 201'
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties: {}
+          tags:
+            - lobanov
+          parameters:
+            - in: path
+              name: fruit_id
+              description: fruit_id
+              schema:
+                type: string
+              required: true
+              example: '1'
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  required:
+                    - text
+                    - positive
+                  properties:
+                    text:
+                      type: string
+                      example: hello
+                    positive:
+                      type: boolean
+                      example: true
+      '/wapi/fruits/{fruit_id}/reviews/stats':
+        get:
+          description: 'GET /fruits/:fruit_id/reviews/stats'
+          operationId: FruitsReviewsStats
+          responses:
+            '200':
+              description: 'GET /fruits/:fruit_id/reviews/stats -> 200'
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    required:
+                      - avg
+                    properties:
+                      avg:
+                        type: number
+                        example: 5
+          tags:
+            - lobanov
+          parameters:
+            - in: path
+              name: fruit_id
+              description: fruit_id
+              schema:
+                type: string
+              required: true
+              example: '1'
+      /wapi/fruits:
+        get:
+          description: GET /fruits
+          operationId: FruitsIndex
+          responses:
+            '200':
+              description: GET /fruits -> 200
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    required:
+                      - items
+                    properties:
+                      items:
+                        type: array
+                        minItems: 1
+                        uniqueItems: true
+                        items:
+                          type: object
+                          required:
+                            - name
+                            - weight
+                          properties:
+                            name:
+                              type: string
+                              example: orange
+                            color:
+                              type: string
+                              example: orange
+                            weight:
+                              type: integer
+                              example: 100
+                            seasonal:
+                              type: boolean
+                              example: false
+          tags:
+            - lobanov
+        post:
+          description: POST /fruits
+          operationId: FruitsCreate
+          responses:
+            '201':
+              description: POST /fruits -> 201
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties: {}
+            '400':
+              description: POST /fruits -> 400
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    required:
+                      - message
+                      - title
+                    properties:
+                      message:
+                        type: string
+                        example: |-
+                          param is missing or the value is empty: name
+                          Did you mean?  action
+                                         format
+                                         controller
+                                         color
+                      title:
+                        type: string
+                        example: Bad request
+          tags:
+            - lobanov
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  required:
+                    - name
+                    - color
+                    - weight
+                    - seasonal
+                  properties:
+                    name:
+                      type: string
+                      example: apple
+                    color:
+                      type: string
+                      example: green
+                    weight:
+                      type: integer
+                      example: 150
+                    seasonal:
+                      type: boolean
+                      example: false
+      '/wapi/fruits/{id}':
+        put:
+          description: 'PUT /fruits/:id'
+          operationId: FruitsUpdate
+          responses:
+            '200':
+              description: 'PUT /fruits/:id -> 200'
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties: {}
+          tags:
+            - lobanov
+          parameters:
+            - in: path
+              name: id
+              description: id
+              schema:
+                type: string
+              required: true
+              example: '1'
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  required:
+                    - name
+                    - color
+                    - weight
+                    - seasonal
+                  properties:
+                    name:
+                      type: string
+                      example: apple
+                    color:
+                      type: string
+                      example: green
+                    weight:
+                      type: integer
+                      example: 150
+                    seasonal:
+                      type: boolean
+                      example: false
+        delete:
+          description: 'DELETE /fruits/:id'
+          operationId: FruitsDestroy
+          responses:
+            '200':
+              description: 'DELETE /fruits/:id -> 200'
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties: {}
+          tags:
+            - lobanov
+          parameters:
+            - in: path
+              name: id
+              description: id
+              schema:
+                type: string
+              required: true
+              example: '1'
+        get:
+          description: 'GET /fruits/:id'
+          operationId: FruitsShow
+          responses:
+            '200':
+              description: 'GET /fruits/:id -> 200'
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    required:
+                      - name
+                      - color
+                      - weight
+                      - seasonal
+                    properties:
+                      name:
+                        type: string
+                        example: lemon
+                      color:
+                        type: string
+                        example: yellow
+                      weight:
+                        type: integer
+                        example: 50
+                      seasonal:
+                        type: boolean
+                        example: false
+            '401':
+              description: 'GET /fruits/:id -> 401'
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties: {}
+            '404':
+              description: 'GET /fruits/:id -> 404'
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties: {}
+          tags:
+            - lobanov
+          parameters:
+            - in: path
+              name: id
+              description: id
+              schema:
+                type: string
+              required: true
+              example: '2'
+            - in: query
+              name: q
+              description: q
+              schema:
+                type: string
+              required: true
+              example: 'true'
+      '/wapi/fruits/{id}/upvote':
+        post:
+          description: 'POST /fruits/:id/upvote'
+          operationId: FruitsUpvote
+          responses:
+            '201':
+              description: 'POST /fruits/:id/upvote -> 201'
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties: {}
+          tags:
+            - lobanov
+          parameters:
+            - in: path
+              name: id
+              description: id
+              schema:
+                type: string
+              required: true
+              example: '5'
+    """
