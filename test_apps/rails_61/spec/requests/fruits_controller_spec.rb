@@ -8,7 +8,7 @@ RSpec.describe FruitsController, type: :request do
       get('/wapi/fruits/2?q=with_integer_name')
 
       expect(response).to have_http_status(:ok)
-      expect(json_body).to eq({ color: 'yellow', weight: 50, seasonal: false })
+      expect(json_body).to eq({ color: 'yellow', weight: 50, name: 999, seasonal: false })
     end
   end
 end

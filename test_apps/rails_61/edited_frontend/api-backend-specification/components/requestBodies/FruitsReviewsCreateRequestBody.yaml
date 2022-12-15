@@ -1,2 +1,12 @@
 ---
-$ref: '../schemas/FruitReview.yaml'
+type: object
+required:
+- text
+- positive
+properties:
+  text:
+    type: string
+    example: hello
+  positive:
+    type: boolean
+    example: true

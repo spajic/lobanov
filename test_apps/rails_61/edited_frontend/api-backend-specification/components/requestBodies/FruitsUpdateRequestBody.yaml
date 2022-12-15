@@ -1,2 +1,20 @@
 ---
-$ref: '../schemas/Fruit.yaml'
+type: object
+required:
+- name
+- color
+- weight
+- seasonal
+properties:
+  name:
+    type: string
+    example: apple
+  color:
+    type: string
+    example: green
+  weight:
+    type: integer
+    example: 150
+  seasonal:
+    type: boolean
+    example: false
