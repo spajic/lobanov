@@ -10,4 +10,16 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  namespace :api do
+    namespace :v6 do
+      resources :vegetables do
+        member { post 'upvote' }
+
+        resources :reviews, module: 'vegetables' do
+          collection { get 'stats' }
+        end
+      end
+    end
+  end
 end

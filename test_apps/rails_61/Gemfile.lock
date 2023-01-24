@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    lobanov (0.3.0)
+    lobanov (0.6.4)
       diffy
       json-schema-generator
 
@@ -73,7 +73,7 @@ GEM
     concurrent-ruby (1.1.9)
     crass (1.0.6)
     diff-lcs (1.5.0)
-    diffy (3.4.0)
+    diffy (3.4.2)
     erubi (1.10.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -94,6 +94,8 @@ GEM
     minitest (5.15.0)
     multi_json (1.15.0)
     nio4r (2.5.8)
+    nokogiri (1.13.1-arm64-darwin)
+      racc (~> 1.4)
     nokogiri (1.13.1-x86_64-darwin)
       racc (~> 1.4)
     pry (0.14.1)
@@ -168,7 +170,7 @@ GEM
     zeitwerk (2.5.4)
 
 PLATFORMS
-  ruby
+  arm64-darwin-21
   x86_64-darwin-20
 
 DEPENDENCIES
@@ -184,4 +186,4 @@ RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   2.2.20
+   2.3.25

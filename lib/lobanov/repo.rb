@@ -11,10 +11,6 @@ module Lobanov
   class Repo
     extend Forwardable
 
-    COMPONENTS_BASE = 'frontend/api-backend-specification/components'
-    PATHS_BASE = 'frontend/api-backend-specification/paths'
-    BODIES_BASE = "#{COMPONENTS_BASE}/requestBodies"
-
     attr_reader :interaction
 
     def_delegator :generator, :response_component_name
@@ -37,8 +33,21 @@ module Lobanov
       @status ||= generator.status.to_s
     end
 
+    def api_marker
+      @api_marker ||= generator.api_marker
+    end
+
     def index_path
-      "#{Lobanov.specification_folder}/index.yaml"
+      "#{Lobanov.specification_folder}/#{index_path_marker}/index.yaml"
+    end
+
+    def index_path_marker
+      if api_marker == 'wapi'
+        'wapi'
+      else
+        version_number = api_marker.last
+        "private/v#{version_number}"
+      end
     end
 
     def store_schema
@@ -54,7 +63,7 @@ module Lobanov
         path_schema.dig(verb, 'responses', status, 'content', 'application/json', 'schema')
       return path_schema unless extracted_schema
 
-      write("#{COMPONENTS_BASE}/responses/#{response_component_name}", extracted_schema)
+      write("#{components_base}/responses/#{response_component_name}", extracted_schema)
 
       path_schema[verb]['responses'][status]['content']['application/json']['schema'] =
         { '$ref' => ref_to_component_file }
@@ -71,7 +80,7 @@ module Lobanov
         path_schema.dig(verb, 'requestBody', 'content', 'application/json', 'schema')
       return path_schema if extracted_body.nil?
 
-      write("#{BODIES_BASE}/#{generator.request_body_name}", extracted_body)
+      write("#{bodies_base}/#{generator.request_body_name}", extracted_body)
 
       path_schema[verb]['requestBody']['content']['application/json']['schema'] =
         { '$ref' => ref_to_request_body_file }
@@ -84,7 +93,7 @@ module Lobanov
     end
 
     def update_index(path_schema)
-      index = YAML.load_file(index_path)
+      index = find_index
 
       append_to_path!(index, path_with_curly_braces, path_schema)
 
@@ -135,6 +144,36 @@ module Lobanov
       dirname = File.dirname(path)
       FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
       File.write(path, '---') unless File.exist?(path)
+    end
+
+    def find_index
+      begin
+        YAML.load_file(index_path)
+      rescue Errno::ENOENT
+        # If new api version was created at first lobanov iteration we don't have index file
+        initialize_index_sample
+      end
+    end
+
+    def initialize_index_sample
+      {
+        'paths' => {
+          path_with_curly_braces => {}
+        }
+      }
+    end
+
+    def components_base
+      if api_marker == 'wapi'
+        "#{Lobanov.specification_folder}/#{api_marker}/components"
+      else
+        version_number = api_marker.last
+        "#{Lobanov.specification_folder}/private/v#{version_number}/components"
+      end
+    end
+
+    def bodies_base
+      "#{components_base}/requestBodies"
     end
   end
 end

@@ -7,6 +7,7 @@ module Lobanov
 
     attr_reader(
       :verb,
+      :api_marker,
       :endpoint_path,
       :controller_action,
       :path_info,
@@ -19,6 +20,7 @@ module Lobanov
 
     def initialize(**params)
       @verb = params[:verb]
+      @api_marker = params[:api_marker]
       @endpoint_path = params[:endpoint_path]
       @controller_action = params[:controller_action]
       @path_info = params[:path_info]
@@ -50,11 +52,13 @@ module Lobanov
           raise error_message
         end
 
+      api_marker = api_marker(request.path_info)
       params = {
         verb: request.method,
-        endpoint_path: remove_ignored_namespaces(route_name(request)),
+        api_marker: api_marker,
+        endpoint_path: remove_ignored_namespaces(route_name(request), api_marker),
         controller_action: controller_action(request),
-        path_info: remove_ignored_namespaces(request.path_info),
+        path_info: remove_ignored_namespaces(request.path_info, api_marker),
         path_params: request.env["#{PREFIX}.path_parameters"].stringify_keys.except('format'),
         query_params: request.env["#{PREFIX}.query_parameters"],
         payload: request.env["#{PREFIX}.request_parameters"].merge(
@@ -68,12 +72,9 @@ module Lobanov
     end
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-    def self.remove_ignored_namespaces(path)
+    def self.remove_ignored_namespaces(path, api_marker)
       res = path
-      Lobanov.namespaces_to_ignore.each do |namespace|
-        res.gsub!(namespace, '')
-      end
-
+      res.gsub!(api_marker, '')
       res.gsub('//', '/')
     end
 
@@ -88,6 +89,15 @@ module Lobanov
 
       message = "Cannot find named route for: #{request.env['HTTP_HOST']}#{request.path_info}"
       raise NonroutableRequestError, message
+    end
+
+    def self.api_marker(path_info)
+      splitted_route = path_info.split('/').reject(&:empty?)
+      main_marker = splitted_route.first
+      case main_marker
+      when 'wapi' then 'wapi'
+      when 'api' then "#{main_marker}/#{splitted_route.second}"
+      end
     end
   end
 end
