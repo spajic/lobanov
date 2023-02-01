@@ -102,6 +102,31 @@ Feature: prevent typeless examples
       properties->name
     """
 
+    Given a file named "frontend/api-backend-specification/wapi/components/responses/FruitsShow200Response.yaml" with:
+    """yaml
+    ---
+    type: object
+    required:
+    - name
+    - color
+    - weight
+    - seasonal
+    properties:
+      name:
+        type: string
+        example: lemon
+        nullable: true
+      color:
+        type: string
+        example: yellow
+      weight:
+        type: integer
+        example: 50
+      seasonal:
+        type: boolean
+        example: false
+    """
+
   Scenario: basic usage vegetables controller
     When I cd to "../../test_apps/rails_61"
 
@@ -209,3 +234,28 @@ Feature: prevent typeless examples
       Missing examples:
       properties->name
     """
+
+    Given a file named "frontend/api-backend-specification/private/v6/components/responses/VegetablesShow200Response.yaml" with:
+      """yaml
+      ---
+      type: object
+      required:
+      - name
+      - color
+      - weight
+      - seasonal
+      properties:
+        name:
+          type: string
+          example: potato
+          nullable: true
+        color:
+          type: string
+          example: yellow
+        weight:
+          type: integer
+          example: 50
+        seasonal:
+          type: boolean
+          example: false
+      """

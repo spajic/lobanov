@@ -49,6 +49,8 @@ module Lobanov
         ref_content = Support.read_relative(ref_file, api_marker)
         return ref_content if path == [] # only $ref in a file
 
+        expand_refs!(ref_content) # to parse nested $ref's
+
         loaded_schema.dig(*path[0..-2])[path.last] = ref_content
       end
 
