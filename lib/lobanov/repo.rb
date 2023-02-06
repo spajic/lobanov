@@ -11,10 +11,6 @@ module Lobanov
   class Repo
     extend Forwardable
 
-    COMPONENTS_BASE = 'frontend/api-backend-specification/components'
-    PATHS_BASE = 'frontend/api-backend-specification/paths'
-    BODIES_BASE = "#{COMPONENTS_BASE}/requestBodies"
-
     attr_reader :interaction
 
     def_delegator :generator, :response_component_name
@@ -54,7 +50,7 @@ module Lobanov
         path_schema.dig(verb, 'responses', status, 'content', 'application/json', 'schema')
       return path_schema unless extracted_schema
 
-      write("#{COMPONENTS_BASE}/responses/#{response_component_name}", extracted_schema)
+      write("#{components_base}/responses/#{response_component_name}", extracted_schema)
 
       path_schema[verb]['responses'][status]['content']['application/json']['schema'] =
         { '$ref' => ref_to_component_file }
@@ -71,7 +67,7 @@ module Lobanov
         path_schema.dig(verb, 'requestBody', 'content', 'application/json', 'schema')
       return path_schema if extracted_body.nil?
 
-      write("#{BODIES_BASE}/#{generator.request_body_name}", extracted_body)
+      write("#{bodies_base}/#{generator.request_body_name}", extracted_body)
 
       path_schema[verb]['requestBody']['content']['application/json']['schema'] =
         { '$ref' => ref_to_request_body_file }
@@ -92,6 +88,22 @@ module Lobanov
     end
 
     private
+
+    def folder
+      Lobanov.specification_folder
+    end
+
+    def components_base
+      [folder, 'components'].join('/')
+    end
+
+    def paths_base
+      [folder, 'paths'].join('/')
+    end
+
+    def bodies_base
+      [components_base, 'requestBodies'].join('/')
+    end
 
     def write(path, object)
       full_path = "#{path}.yaml"
