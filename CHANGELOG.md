@@ -1,5 +1,9 @@
 ## Next Release
 
+## 0.6.5 (2023-02-06)
+
+* Fix hardcoded path for frontend/api-backend-specification  (because of the issue some files were generated in hardcoded folder instead of configured folder)
+
 ## 0.6.4 (2022-06-08)
 
 ### Fixed
