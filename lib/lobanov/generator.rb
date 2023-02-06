@@ -10,6 +10,7 @@ module Lobanov
     attr_reader :interaction
 
     def_delegator :@interaction, :verb
+    def_delegator :@interaction, :api_marker
     def_delegator :@interaction, :endpoint_path
     def_delegator :@interaction, :path_info
     def_delegator :@interaction, :path_params
@@ -43,8 +44,11 @@ module Lobanov
     end
 
     def path_with_curly_braces
-      prefix = Lobanov.namespaces_to_ignore.join('/')
-      "/#{prefix}/#{path_with_square_braces.gsub('[', '{').gsub(']', '}')}".gsub('//', '/')
+      if path_with_square_braces == '/'
+        "/#{api_marker}/#{path_info.gsub('[', '{').gsub(']', '}')}".gsub('//', '/')
+      else
+        "/#{api_marker}/#{path_with_square_braces.gsub('[', '{').gsub(']', '}')}".gsub('//', '/')
+      end
     end
 
     def paths
