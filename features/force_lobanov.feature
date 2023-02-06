@@ -4,7 +4,7 @@ Feature: force lobanov for schema changes
   Scenario: basic usage
     When I cd to "../../test_apps/rails_61"
 
-    Given a file named "frontend/api-backend-specification/index.yaml" with:
+    Given a file named "frontend/api-backend-specification/wapi/index.yaml" with:
     """yaml
     ---
     openapi: 3.0.1
@@ -35,7 +35,7 @@ Feature: force lobanov for schema changes
                     "$ref": "./components/responses/FruitsShow200Response.yaml"
     """
 
-    Given a file named "frontend/api-backend-specification/components/responses/FruitsShow200Response.yaml" with:
+    Given a file named "frontend/api-backend-specification/wapi/components/responses/FruitsShow200Response.yaml" with:
     """yaml
     ---
     type: object
@@ -60,7 +60,7 @@ Feature: force lobanov for schema changes
         example: dumb
     """
 
-    Given a file named "frontend/api-backend-specification/components/schemas/FruitName.yaml" with:
+    Given a file named "frontend/api-backend-specification/wapi/components/schemas/FruitName.yaml" with:
     """yaml
     ---
     type: string
@@ -89,7 +89,120 @@ Feature: force lobanov for schema changes
 
     Then the examples should all pass
 
-    Then a yaml named "frontend/api-backend-specification/components/responses/FruitsShow200Response.yaml" should contain:
+    Then a yaml named "frontend/api-backend-specification/wapi/components/responses/FruitsShow200Response.yaml" should contain:
+    """yaml
+    ---
+    type: object
+    required:
+    - name
+    - color
+    - weight
+    - seasonal
+    properties:
+      name:
+        type: integer
+        example: 999
+      color:
+        type: string
+        example: yellow
+      weight:
+        type: integer
+        example: 50
+      seasonal:
+        type: boolean
+        example: false
+    """
+
+  Scenario: basic usage
+    When I cd to "../../test_apps/rails_61"
+
+    Given a file named "frontend/api-backend-specification/private/v6/index.yaml" with:
+    """yaml
+    ---
+    paths:
+      "/api/v6/vegetables/{id}":
+        get:
+          description: GET /vegetables/:id
+          operationId: VegetablesShow
+          responses:
+            '200':
+              description: GET /vegetables/:id -> 200
+              content:
+                application/json:
+                  schema:
+                    "$ref": "./components/responses/VegetablesShow200Response.yaml"
+          tags:
+          - lobanov
+          parameters:
+          - in: path
+            name: id
+            description: id
+            schema:
+              type: string
+            required: true
+            example: '2'
+          - in: query
+            name: q
+            description: q
+            schema:
+              type: string
+            required: true
+            example: with_integer_name
+    """
+
+    Given a file named "frontend/api-backend-specification/private/v6/components/responses/VegetablesShow200Response.yaml" with:
+    """yaml
+    ---
+    type: object
+    required:
+    - name
+    - color
+    - weight
+    - seasonal
+    properties:
+      name:
+        "$ref": "./components/schemas/VegetableName.yaml"
+      color:
+        type: string
+        example: yellow
+      weight:
+        type: integer
+        example: 50
+      seasonal:
+        type: boolean
+        example: false
+    """
+
+    Given a file named "frontend/api-backend-specification/private/v6/components/schemas/VegetableName.yaml" with:
+    """yaml
+    ---
+    type: string
+    example: potato
+    """
+
+    Given a file named "spec/requests/vegetables_controller_spec.rb" with:
+    """ruby
+    require 'rails_helper'
+
+    RSpec.describe Api::V6::VegetablesController, type: :request do
+      describe 'GET #show' do
+        it 'returns expected resource', :lobanov do
+          get('/api/v6/vegetables/2?q=with_integer_name')
+
+          expect(response).to have_http_status(:ok)
+          expect(json_body).to eq({color: 'yellow', name: 999, seasonal: false, weight: 50})
+        end
+      end
+    end
+    """
+
+    Given I append "true" to the environment variable "FORCE_LOBANOV"
+
+    When I run `rspec spec/requests/vegetables_controller_spec.rb`
+
+    Then the examples should all pass
+
+    Then a yaml named "frontend/api-backend-specification/private/v6/components/responses/VegetablesShow200Response.yaml" should contain:
     """yaml
     ---
     type: object

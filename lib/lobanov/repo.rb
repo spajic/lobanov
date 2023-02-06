@@ -33,8 +33,21 @@ module Lobanov
       @status ||= generator.status.to_s
     end
 
+    def api_marker
+      @api_marker ||= generator.api_marker
+    end
+
     def index_path
-      "#{Lobanov.specification_folder}/index.yaml"
+      "#{Lobanov.specification_folder}/#{index_path_marker}/index.yaml"
+    end
+
+    def index_path_marker
+      if api_marker == 'wapi'
+        'wapi'
+      else
+        version_number = api_marker.last
+        "private/v#{version_number}"
+      end
     end
 
     def store_schema
@@ -80,7 +93,7 @@ module Lobanov
     end
 
     def update_index(path_schema)
-      index = YAML.load_file(index_path)
+      index = find_index
 
       append_to_path!(index, path_with_curly_braces, path_schema)
 
@@ -147,6 +160,36 @@ module Lobanov
       dirname = File.dirname(path)
       FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
       File.write(path, '---') unless File.exist?(path)
+    end
+
+    def find_index
+      begin
+        YAML.load_file(index_path)
+      rescue Errno::ENOENT
+        # If new api version was created at first lobanov iteration we don't have index file
+        initialize_index_sample
+      end
+    end
+
+    def initialize_index_sample
+      {
+        'paths' => {
+          path_with_curly_braces => {}
+        }
+      }
+    end
+
+    def components_base
+      if api_marker == 'wapi'
+        "#{Lobanov.specification_folder}/#{api_marker}/components"
+      else
+        version_number = api_marker.last
+        "#{Lobanov.specification_folder}/private/v#{version_number}/components"
+      end
+    end
+
+    def bodies_base
+      "#{components_base}/requestBodies"
     end
   end
 end

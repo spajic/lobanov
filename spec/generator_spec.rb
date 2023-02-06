@@ -12,6 +12,7 @@ RSpec.describe Lobanov::Generator do
       let(:interaction) do
         Lobanov::Interaction.new(
           verb: 'GET',
+          api_marker: 'wapi',
           endpoint_path: '/fruits/:id/reviews/:review_id',
           controller_action: 'show',
           path_info: '/fruits/1/reviews/2.json',
@@ -34,6 +35,7 @@ RSpec.describe Lobanov::Generator do
       let(:interaction) do
         Lobanov::Interaction.new(
           verb: 'POST',
+          api_marker: 'wapi',
           endpoint_path: '/fruits/:id/reviews/:review_id/upvote',
           controller_action: 'upvote',
           path_info: '/fruits/1/reviews/2/upvote.json',
@@ -57,6 +59,7 @@ RSpec.describe Lobanov::Generator do
     let(:grid_bots_interaction) do
       Lobanov::Interaction.new(
         verb: 'GET',
+        api_marker: 'wapi',
         endpoint_path: '/grid_bots/:id',
         path_info: '/grid_bots/1.json',
         path_params: { 'id' => '1' },
@@ -91,14 +94,6 @@ RSpec.describe Lobanov::Generator do
           }
         }
       )
-    end
-
-    before(:all) do
-      Lobanov.configure { |config| config.namespaces_to_ignore = ['wapi'] }
-    end
-
-    after(:all) do
-      Lobanov.configure { |config| config.namespaces_to_ignore = [] }
     end
 
     let(:interaction) { grid_bots_interaction }

@@ -52,7 +52,8 @@ module Lobanov
       @stored_response_schema ||= LoadResponseSchema.new(
         path_with_curly_braces: generator.path_with_curly_braces,
         verb: generator.verb.downcase,
-        status: generator.status.to_s
+        status: generator.status.to_s,
+        api_marker: generator.api_marker
       ).call
     end
 
