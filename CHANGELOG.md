@@ -1,5 +1,9 @@
 ## Next Release
 
+## 0.7.0 (2023-02-06)
+
+* Add experimental support for multiple schemas (not only frontend/api-backend-specification and wapi)
+
 ## 0.6.5 (2023-02-06)
 
 * Fix hardcoded path for frontend/api-backend-specification  (because of the issue some files were generated in hardcoded folder instead of configured folder)
