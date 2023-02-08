@@ -5,7 +5,6 @@ Feature: Change storage folder
     Given a file named "config/initializers/lobanov_initializer.rb" with:
       """rb
       Lobanov.configure do |config|
-        config.namespaces_to_ignore = ['wapi']
         config.specification_folder = 'fffuuu'
       end
       """

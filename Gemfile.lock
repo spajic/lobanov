@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lobanov (0.6.4)
+    lobanov (0.7.0)
       diffy
       json-schema-generator
 
@@ -56,7 +56,7 @@ GEM
       cucumber-core (~> 10.1, >= 10.1.0)
       cucumber-cucumber-expressions (~> 14.0, >= 14.0.0)
     diff-lcs (1.5.0)
-    diffy (3.4.0)
+    diffy (3.4.2)
     ffi (1.15.5)
     json-schema-generator (0.0.9)
       jsonpath
@@ -134,4 +134,4 @@ DEPENDENCIES
   standard
 
 BUNDLED WITH
-   2.3.25
+   2.3.19
