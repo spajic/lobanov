@@ -34,9 +34,7 @@ paths:
       operationId: FruitsCreate
       responses:
         '201':
-          description: POST /fruits -> 201
-          content:
-            $ref: '#components/responses/EmptyResponse'
+          $ref: '#/components/responses/EmptyResponse'
         '400':
           description: POST /fruits -> 400
           content:
@@ -107,8 +105,10 @@ components:
           example: false
   responses:
     EmptyResponse:
-      application/json:
-        schema:
-          type: object
-          properties: {}
+      description: Empty response standard
+      content:
+        application/json:
+          schema:
+            type: object
+            properties: {}
 
