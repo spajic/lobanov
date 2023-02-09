@@ -8,4 +8,4 @@ properties:
     minItems: 1
     uniqueItems: true
     items:
-      $ref: '../schemas/Fruit.yaml'
+      $ref: '#componets/schemas/Fruit'

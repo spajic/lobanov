@@ -45,3 +45,12 @@ paths:
           application/json:
             schema:
               $ref: ./components/requestBodies/FruitsCreateRequestBody.yaml
+components:
+  schemas:
+    RgbColor: 
+      $ref: ./components/schemas/reusable/RgbColor.yaml
+    Fruit:
+      $ref: ./components/schemas/Fruit.yaml
+  responses:
+    EmptyResponse:
+      $ref: ./components/responses/shared/EmptyResponse.yaml

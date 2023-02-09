@@ -6,7 +6,7 @@ required:
 - weight
 properties:
   rgb_color:
-    $ref: ../schemas/reusable/RgbColor.yaml
+    $ref: '#components/schemas/RgbColor'
   name:
     type: string
     example: orange

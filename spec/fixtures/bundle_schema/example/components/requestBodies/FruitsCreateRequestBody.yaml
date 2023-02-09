@@ -1,4 +1,0 @@
----
-type: object
-$ref: '../schemas/Fruit.yaml'
-
