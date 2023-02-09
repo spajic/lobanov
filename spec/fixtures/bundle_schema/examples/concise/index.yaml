@@ -26,11 +26,7 @@ paths:
       operationId: FruitsCreate
       responses:
         '201':
-          description: POST /fruits -> 201
-          content:
-            application/json:
-              schema:
-                $ref: ./components/responses/FruitsCreate201Response.yaml
+          $ref: '#/components/responses/EmptyResponse'
         '400':
           description: POST /fruits -> 400
           content:
