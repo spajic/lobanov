@@ -1,0 +1,18 @@
+---
+type: object
+required:
+- message
+- title
+properties:
+  message:
+    type: string
+    example: |-
+      param is missing or the value is empty: name
+      Did you mean?  action
+                     format
+                     controller
+                     color
+  title:
+    type: string
+    example: Bad request
+
