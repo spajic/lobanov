@@ -1,4 +1,0 @@
----
-type: object
-$ref: '#components/schemas/schemas/Fruit'
-
