@@ -1,4 +1,4 @@
 ---
 type: object
-$ref: '#components/schemas/schemas/Fruit'
+$ref: ../schemas/Fruit.yaml
 
