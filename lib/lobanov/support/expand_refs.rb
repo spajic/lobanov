@@ -4,24 +4,24 @@ module Lobanov
   module Support
     class ExpandRefs
       def self.call(schema)
-        Lobanov::Visitor.visit(schema).each do |node|
+        Lobanov::RefVisitor.visit(schema).each do |node|
           path = node[:path]
           value = node[:value]
 
           ref = value['$ref']
-          next unless ref 
 
-          result = schema.clone
           if ref.start_with?('#')
             raise LobanovError, "Reference to internal schema is not supported yet: #{ref}"
           else
             ref_schema = Support.read_relative(ref)
-            expanded_ref_schema = self.call(ref_schema)
-            result.dig(*path[0..-2])[path.last] = expanded_ref_schema 
+            binding.pry
+            # expanded_ref_schema = self.call(ref_schema) # recursion here
+            # schema.dig(*path[0..-2])[path.last] = expanded_ref_schema 
+             schema.dig(*path[0..-2])[path.last] = ref_schema 
           end
-          
-          result
         end
+
+        schema
       end
     end
   end
