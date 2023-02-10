@@ -15,7 +15,9 @@ module Lobanov
           else
             ref_schema = Support.read_relative_from_path(ref, index_folder)
             expanded_ref_schema = self.call(ref_schema, index_folder) # recursion here
-            if path == [] 
+            if expanded_ref_schema == ref_schema
+              # nothing to do
+            elsif path == [] # expanded schema contains only the ref and nothing else
               schema = expanded_ref_schema
             else
               schema.dig(*path[0..-2])[path.last] = expanded_ref_schema 
