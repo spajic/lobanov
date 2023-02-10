@@ -23,12 +23,16 @@ module Lobanov
           "private/v#{version_number}"
         end
 
+      read_relative_from_path(relative_path, "#{Lobanov.specification_folder}/#{api_marker_path}/")
+    end
+
+    def self.read_relative_from_path(relative_path, path)
       full_path =
         if relative_path.start_with?('../schemas/')
           path = relative_path.gsub('../schemas/', '')
-          "#{Lobanov.specification_folder}/#{api_marker_path}/components/schemas/#{path}"
+          "#{path}/components/schemas/#{path}"
         else
-          "#{Lobanov.specification_folder}/#{api_marker_path}/#{relative_path}"
+          "#{path}/#{relative_path}"
         end
 
       YAML.load_file(full_path)
