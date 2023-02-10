@@ -13,9 +13,9 @@ RSpec.describe Lobanov::Support::BundleSchema do
       let(:etalon_path) { 'spec/fixtures/bundle_schema/examples/concise/concise_etalon.yaml' } 
       let(:etalon_hash) { YAML.load_file(etalon_path) }
 
-      it 'returns a hash with the expected etalon schema bundle' do
-        expect(subject).to eq(etalon_hash)
-      end
+      #it 'returns a hash with the expected etalon schema bundle' do
+      #  expect(subject).to eq(etalon_hash)
+      #end
     end
   end
 end

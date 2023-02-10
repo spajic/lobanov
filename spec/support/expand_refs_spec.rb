@@ -13,7 +13,7 @@ RSpec.describe Lobanov::Support::BundleSchema do
       let(:schema) { YAML.load_file(index_folder + '/index.yaml') } 
       let(:etalon) { YAML.load_file(index_folder + '/verbose_etalon.yaml') }
       it 'returns expected etalon result' do 
-        binding.pry
+        File.write('result.yaml', YAML.dump(subject))
         expect(subject).to eq(etalon)
       end
     end
