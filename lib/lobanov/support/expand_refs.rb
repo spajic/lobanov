@@ -4,13 +4,9 @@ module Lobanov
   module Support
     class ExpandRefs
       def self.call(schema, index_folder)
-        recursion = true
         Lobanov::RefVisitor.visit(schema).each do |node|
           path = node[:path]
           value = node[:value]
-          puts "✅"
-          puts path.join('->')
-          puts value
 
           ref = value['$ref']
 
@@ -28,8 +24,6 @@ module Lobanov
         end
 
         schema
-#      rescue StandardError => e
-#        binding.pry
       end
     end
   end
