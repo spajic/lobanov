@@ -15,9 +15,9 @@ module Lobanov
           else
             ref_schema = Support.read_relative_from_path(ref, index_folder)
             binding.pry
-            # expanded_ref_schema = self.call(ref_schema) # recursion here
-            # schema.dig(*path[0..-2])[path.last] = expanded_ref_schema 
-             schema.dig(*path[0..-2])[path.last] = ref_schema 
+            expanded_ref_schema = self.call(ref_schema, index_folder) # recursion here
+            schema.dig(*path[0..-2])[path.last] = expanded_ref_schema 
+            # schema.dig(*path[0..-2])[path.last] = ref_schema 
           end
         end
 
