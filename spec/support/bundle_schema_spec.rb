@@ -3,19 +3,30 @@
 require 'spec_helper'
 
 RSpec.describe Lobanov::Support::BundleSchema do 
-  let(:subject) do 
-    Lobanov::Support::BundleSchema.call(path_to_index)  
-  end
-
   describe 'saves a single-file schema bundle given a path to index.yaml' do 
     context 'with concise schema' do 
-      let(:path_to_index) { 'spec/fixtures/bundle_schema/examples/concise/index.yaml' }
-      let(:etalon_path) { 'spec/fixtures/bundle_schema/examples/concise/concise_etalon.yaml' } 
-      let(:etalon_hash) { YAML.load_file(etalon_path) }
+      let(:index_folder) { 'spec/fixtures/bundle_schema/examples/verbose' }
+      let(:etalon_path) { "#{index_folder}/verbose_etalon.yaml" } 
+      let(:result_path) { "#{index_folder}/openapi_single.yaml" }
 
-      #it 'returns a hash with the expected etalon schema bundle' do
-      #  expect(subject).to eq(etalon_hash)
-      #end
+      def clear_file
+        FileUtils.rm_f(result_path)
+      end
+
+      before do
+        clear_file 
+      end
+
+      it 'writes expected content to expected file' do
+        Lobanov::Support::BundleSchema.call(index_folder: index_folder)
+        generated_bundle = YAML.load_file(result_path)
+        etalon = YAML.load_file(etalon_path)
+        expect(generated_bundle).to eq(etalon)
+      end
+
+      after do 
+        clear_file
+      end
     end
   end
 end
