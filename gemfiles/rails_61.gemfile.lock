@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    lobanov (0.6.4)
+    lobanov (0.7.1)
       diffy
       json-schema-generator
 
@@ -117,7 +117,7 @@ GEM
       cucumber-core (~> 10.1, >= 10.1.0)
       cucumber-cucumber-expressions (~> 14.0, >= 14.0.0)
     diff-lcs (1.5.0)
-    diffy (3.4.0)
+    diffy (3.4.2)
     erubi (1.10.0)
     ffi (1.15.5)
     globalid (1.0.0)
@@ -266,4 +266,4 @@ DEPENDENCIES
   standard
 
 BUNDLED WITH
-   2.3.25
+   2.3.19

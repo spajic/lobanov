@@ -1,5 +1,9 @@
 ## Next Release
 
+## 0.7.1 (2023-02-13)
+
+* Add support to bundle openapi schema into single file via Lobanov::Support (and without swagger-cli)
+
 ## 0.7.0 (2023-02-06)
 
 * Add experimental support for multiple schemas (not only frontend/api-backend-specification and wapi)

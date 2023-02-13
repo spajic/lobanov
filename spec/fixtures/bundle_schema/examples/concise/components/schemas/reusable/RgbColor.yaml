@@ -1,0 +1,18 @@
+---
+title: RgbColor
+type: object
+required:
+- r
+- g
+- b
+properties:
+  r:
+    type: integer
+    example: 100
+  g:
+    type: integer
+    example: 150
+  b:
+    type: integer
+    example: 200
+

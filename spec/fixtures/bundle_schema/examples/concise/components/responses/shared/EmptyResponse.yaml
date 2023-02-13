@@ -1,0 +1,7 @@
+---
+description: Empty response standard
+content: 
+  application/json:
+    schema:
+      type: object
+      properties: {}
