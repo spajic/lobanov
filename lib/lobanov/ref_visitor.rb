@@ -2,6 +2,8 @@
 
 module Lobanov
   # Given a schema Hash, returns an Enumerator of all nodes, that are references to external schemas
+  # Note! #/references to registered components are ignored, like '#/components/schemas/Fruit'
+  #
   # Each node is a Hash with two keys: :path and :value
   # :path is an array of string keys, that can be used to access the node in the schema
   # :value is the value of the node
