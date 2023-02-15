@@ -6,7 +6,7 @@ required:
 - weight
 properties:
   rgb_color:
-    $ref: ../schemas/reusable/RgbColor.yaml 
+    $ref: ../schemas/reusable/colors/RgbColor.yaml 
   name:
     type: string
     example: orange
@@ -16,4 +16,3 @@ properties:
   seasonal: # optional property
     type: boolean
     example: false
-

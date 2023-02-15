@@ -1,6 +1,8 @@
 ---
 title: RgbColor
 type: object
+example: 
+  $ref: "../../../../examples/colors/black.yaml" 
 required:
 - r
 - g

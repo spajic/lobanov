@@ -36,6 +36,10 @@ paths:
                         rgb_color:
                           title: RgbColor
                           type: object
+                          example:
+                            - r: 0
+                            - g: 0
+                            - b: 0
                           required:
                             - r
                             - g
@@ -110,6 +114,10 @@ paths:
                 rgb_color:
                   title: RgbColor
                   type: object
+                  example:
+                    - r: 0
+                    - g: 0
+                    - b: 0
                   required:
                     - r
                     - g
@@ -133,4 +141,3 @@ paths:
                 seasonal:
                   type: boolean
                   example: false
-
