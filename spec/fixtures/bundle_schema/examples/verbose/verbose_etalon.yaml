@@ -26,43 +26,7 @@ paths:
                     minItems: 1
                     uniqueItems: true
                     items:
-                      type: object
-                      title: Fruit
-                      required:
-                        - rgb_color
-                        - name
-                        - weight
-                      properties:
-                        rgb_color:
-                          title: RgbColor
-                          type: object
-                          example:
-                            - r: 0
-                            - g: 0
-                            - b: 0
-                          required:
-                            - r
-                            - g
-                            - b
-                          properties:
-                            r:
-                              type: integer
-                              example: 100
-                            g:
-                              type: integer
-                              example: 150
-                            b:
-                              type: integer
-                              example: 200
-                        name:
-                          type: string
-                          example: orange
-                        weight:
-                          type: integer
-                          example: 100
-                        seasonal:
-                          type: boolean
-                          example: false
+                      $ref: '#/components/schemas/Fruit'
       tags:
         - lobanov
     post:
@@ -97,6 +61,18 @@ paths:
                   title:
                     type: string
                     example: Bad request
+        '404':
+          description: GET /fruits -> 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyResponse'
+        '500':
+          description: GET /fruits -> 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
       tags:
         - lobanov
       requestBody:
@@ -104,40 +80,48 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              title: Fruit
-              required:
-                - rgb_color
-                - name
-                - weight
-              properties:
-                rgb_color:
-                  title: RgbColor
-                  type: object
-                  example:
-                    - r: 0
-                    - g: 0
-                    - b: 0
-                  required:
-                    - r
-                    - g
-                    - b
-                  properties:
-                    r:
-                      type: integer
-                      example: 100
-                    g:
-                      type: integer
-                      example: 150
-                    b:
-                      type: integer
-                      example: 200
-                name:
-                  type: string
-                  example: orange
-                weight:
-                  type: integer
-                  example: 100
-                seasonal:
-                  type: boolean
-                  example: false
+              $ref: '#/components/schemas/Fruit'
+components:
+  schemas:
+    Fruit:
+      type: object
+      title: Fruit
+      required:
+        - rgb_color
+        - name
+        - weight
+      properties:
+        rgb_color:
+          title: RgbColor
+          type: object
+          example:
+            - r: 0
+            - g: 0
+            - b: 0
+          required:
+            - r
+            - g
+            - b
+          properties:
+            r:
+              type: integer
+              example: 100
+            g:
+              type: integer
+              example: 150
+            b:
+              type: integer
+              example: 200
+        name:
+          type: string
+          example: orange
+        weight:
+          type: integer
+          example: 100
+        seasonal:
+          type: boolean
+          example: false
+    EmptyResponse:
+      description: The specified resource was not found.
+    InternalErrorResponse:
+      description: Internal error happened
