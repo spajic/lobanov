@@ -12,6 +12,9 @@ module Lobanov
   #   path: ['paths', '/users', 'get', 'responses', '200', 'content', 'application/json', 'schema']
   #   value: { '$ref' => './components/responses/UsersIndex200Response.yaml' }
   # }
+  #
+  # NOTE: this visitor is not strictly a visitor, it also modifies the schema!
+  # And this side effect is used. 
   class RefToRegisterVisitor
     attr_reader :registered_components
 
