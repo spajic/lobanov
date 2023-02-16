@@ -14,7 +14,6 @@ module Lobanov
   # }
   class RefToRegisterVisitor
     attr_reader :registered_components
-    attr_reader :current_folder
 
     def self.visit(schema:, registered_components:, current_folder:)
       new.visit(schema: schema, registered_components: registered_components, current_folder: current_folder)
@@ -22,37 +21,43 @@ module Lobanov
 
     def visit(schema:, registered_components:, current_folder:)
       @registered_components = registered_components
-      @current_folder = current_folder
 
       Enumerator.new do |visitor|
-        go(schema, [], visitor)
+        go(schema, [], visitor, current_folder)
       end
     end
 
     private
 
     # path is array of string keys
-    def go(schema, path, visitor)
+    def go(schema, path, visitor, current_folder)
       current_position = (path == [] ? schema : schema.dig(*path))
 
       return if path[0] == 'components' 
 
-      if ref_to_register_node?(current_position)
-        visitor << { path: path, value: current_position }
+      if ref_to_register_node?(current_position, current_folder)
+        ref = current_position['$ref']
+        expanded_value = Pathname.new(current_folder).join(ref).to_s
+        visitor << { path: path, value: { '$ref' => registered_components[expanded_value] }}
       elsif ref_node?(current_position)
-        # TODO: process the node recursively
+        ref_pathname = Pathname.new(current_folder).join(current_position['$ref'])
+        ref_content = YAML.load_file(ref_pathname)
+        schema.dig(*path[0..-2])[path.last] = ref_content
+        go(schema, path, visitor, ref_pathname.parent.to_s)
       elsif current_position.is_a?(Hash)
-        current_position.keys.each { |key| go(schema, path + [key], visitor) }
+        current_position.keys.each { |key| go(schema, path + [key], visitor, current_folder) }
       end
     end
 
-    def ref_to_register_node?(current_position)
+    def ref_to_register_node?(current_position, current_folder)
       return false unless current_position.is_a?(Hash)
       return false unless current_position.keys == ['$ref']
 
-      # TODO: transform to absolute path here
       ref = current_position['$ref']
-      ref.is_a?(String) && registered_components.key?(ref)
+      return false unless ref.is_a?(String) 
+
+      ref_path = Pathname.new(current_folder).join(ref).to_s
+      registered_components.key?(ref_path)
     end
 
     def ref_node?(current_position)

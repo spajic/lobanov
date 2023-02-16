@@ -19,12 +19,14 @@ RSpec.describe Lobanov::Support::CollectRegisteredComponents do
 
   let(:expected_result) do
     {
-      './components/schemas/Fruit.yaml' => '#/components/schemas/Fruit',
-      './components/schemas/404Response.yaml' => '#/components/schemas/EmptyResponse',
+      'path/to/index/components/schemas/Fruit.yaml' => '#/components/schemas/Fruit',
+      'path/to/index/components/schemas/404Response.yaml' => '#/components/schemas/EmptyResponse',
     }
   end
 
-  let(:subject) { described_class.call(components_section: components_section) }
+  let(:root_folder) { 'path/to/index' }
+
+  let(:subject) { described_class.call(components_section: components_section, root_folder: root_folder) }
 
   it 'collects the hash of registered components' do
     expect(subject).to eq(expected_result) 
