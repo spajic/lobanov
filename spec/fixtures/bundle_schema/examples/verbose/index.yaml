@@ -65,3 +65,5 @@ components:
       "$ref": "./components/schemas/404Response.yaml"
     InternalErrorResponse:
       description: Internal error happened
+    HiddenComponentReference: 
+      "$ref": "./components/schemas/HiddenReference.yaml"

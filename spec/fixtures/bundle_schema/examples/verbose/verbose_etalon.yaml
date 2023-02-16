@@ -125,3 +125,5 @@ components:
       description: The specified resource was not found.
     InternalErrorResponse:
       description: Internal error happened
+    HiddenComponentReference:
+      $ref: '#/components/schemas/Fruit'
