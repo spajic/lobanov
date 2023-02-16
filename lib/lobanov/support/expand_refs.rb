@@ -3,7 +3,12 @@
 module Lobanov
   module Support
     class ExpandRefs
-      def self.call(schema, current_folder)
+      # TODO: наверно проще всю логику сделать здесь
+      # - [ ] передать сюда registered_components
+      # - [ ] если реф в registered_components, то заменить его на registered_components[ref]
+      # - [ ] если реф не в registered_components, то загрузить файл по пути ref
+      # - [ ] исключение для schema['components']['schemas'] первого уровня - там всегда загужаем файл
+      def self.call(schema, current_folder, registered_components:)
         current_path = Pathname.new(current_folder)
 
         Lobanov::RefVisitor.visit(schema).each do |node|
@@ -14,8 +19,14 @@ module Lobanov
           ref_path = current_path.join(ref)
           ref_folder = ref_path.parent
 
-          ref_schema = Support.read_relative_from_path(ref, current_path)
-          expanded_ref_schema = self.call(ref_schema, ref_folder) # recursion here
+          ref_schema =
+            if registered_components.key?(ref_path.to_s) && !(path.size == 3 && path[0] == 'components' && path[1] == 'schemas')
+              {'$ref' => registered_components[ref_path.to_s]}
+            else
+              YAML.load_file(Pathname.new(current_folder).join(ref)) 
+            end
+          expanded_ref_schema = self.call(ref_schema, ref_folder, registered_components: registered_components) # recursion here
+
           if path == [] # expanded schema contains only the ref and nothing else
             schema = expanded_ref_schema
           elsif path.size == 1

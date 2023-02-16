@@ -10,26 +10,28 @@ module Lobanov
     class BundleSchema
       def self.call(index_folder: Lobanov.specification_folder, output_file_name: 'openapi_single.yaml')
         schema = YAML.load_file("#{index_folder}/index.yaml")
+        registered_components = collect_registered_components(schema, index_folder)
+        ExpandRefs.call(schema, index_folder, registered_components: registered_components)
+        File.write("#{index_folder}/#{output_file_name}", schema.to_yaml)
+      end
 
+      def self.collect_registered_components(schema, index_folder)
+        CollectRegisteredComponents.call(
+          components_section: schema['components'],
+          root_folder: index_folder
+        )
+      end
+
+      def self.use_registered_components!(schema:, index_folder:, registered_components:)
         RefToRegisterVisitor.visit(
           schema: schema, 
-          registered_components: registered_components(schema, index_folder),
+          registered_components: registered_components,
           current_folder: index_folder,
         ).each do |node|
           path = node[:path]
           component_ref = node[:value]
           schema.dig(*path[0..-2])[path.last] = component_ref
         end
-
-        expanded_schema = ExpandRefs.call(schema, index_folder)
-        File.write("#{index_folder}/#{output_file_name}", expanded_schema.to_yaml)
-      end
-
-      def self.registered_components(schema, index_folder)
-        CollectRegisteredComponents.call(
-          components_section: schema['components'],
-          root_folder: index_folder
-        )
       end
     end
   end
