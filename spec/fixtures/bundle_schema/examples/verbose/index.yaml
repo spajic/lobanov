@@ -37,6 +37,18 @@ paths:
             application/json:
               schema:
                 $ref: ./components/responses/FruitsCreate400Response.yaml
+        '404':
+           description: GET /fruits -> 404
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/EmptyResponse' 
+        '500':
+          description: GET /fruits -> 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
       tags:
         - lobanov
       requestBody:
@@ -45,3 +57,13 @@ paths:
           application/json:
             schema:
               $ref: ./components/requestBodies/FruitsCreateRequestBody.yaml
+components:
+  schemas:
+    Fruit:
+      "$ref": ./components/schemas/Fruit.yaml
+    EmptyResponse:
+      "$ref": "./components/schemas/404Response.yaml"
+    InternalErrorResponse:
+      description: Internal error happened
+    HiddenComponentReference: 
+      "$ref": "./components/schemas/HiddenReference.yaml"

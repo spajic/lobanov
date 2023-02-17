@@ -27,9 +27,7 @@ module Lobanov
     end
 
     def self.read_relative_from_path(relative_path, path)
-      ref_path = relative_path.gsub('../schemas/', 'components/schemas/')
-
-      YAML.load_file("#{path}/#{ref_path}")
+      YAML.load_file("#{path}/#{relative_path}")
     end
   end
 end

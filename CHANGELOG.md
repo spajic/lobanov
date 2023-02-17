@@ -1,5 +1,9 @@
 ## Next Release
 
+## 0.7.2 (2023-02-17)
+
+* Support relative refs and registered components in Lobanov::Support::BundleSchema
+
 ## 0.7.1 (2023-02-13)
 
 * Add support to bundle openapi schema into single file via Lobanov::Support (and without swagger-cli)

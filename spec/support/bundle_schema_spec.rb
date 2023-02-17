@@ -21,6 +21,13 @@ RSpec.describe Lobanov::Support::BundleSchema do
         Lobanov::Support::BundleSchema.call(index_folder: index_folder)
         generated_bundle = YAML.load_file(result_path)
         etalon = YAML.load_file(etalon_path)
+        if generated_bundle != etalon
+          File.write("#{index_folder}/verbose_generated.yaml", generated_bundle.to_yaml)
+          puts "❌" * 30
+          puts "Files don't match. Generated file is saved to #{index_folder}/verbose_generated.yaml"
+          puts "Compare with #{index_folder}/verbose_etalon.yaml"
+          puts "❌" * 30
+        end
         expect(generated_bundle).to eq(etalon)
       end
 
