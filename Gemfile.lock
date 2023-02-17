@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lobanov (0.7.2)
+    lobanov (0.7.3)
       diffy
       json-schema-generator
 

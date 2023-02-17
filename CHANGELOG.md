@@ -1,5 +1,9 @@
 ## Next Release
 
+## 0.7.3 (2023-02-17)
+
+* Some bugs were found on 3commas specs after update to 0.7.2. Fix them here 
+
 ## 0.7.2 (2023-02-17)
 
 * Support relative refs and registered components in Lobanov::Support::BundleSchema
