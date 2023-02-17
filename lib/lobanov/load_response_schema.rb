@@ -13,15 +13,19 @@ module Lobanov
 
     def call
       begin
-        index = YAML.load_file(index_path)
+        index = YAML.load_file(base_path.join('index.yaml'))
       rescue Errno::ENOENT
         return
       end
       response_schema_file_name = index.dig(*dig_args)
       return nil unless response_schema_file_name
 
-      loaded_schema = Support.read_relative(response_schema_file_name, api_marker)
-      expand_refs!(loaded_schema)
+      loaded_schema = YAML.load_file(base_path.join(response_schema_file_name))
+      Lobanov::Support::ExpandRefs.call(
+        loaded_schema,
+        base_path.join('components/responses').to_s, 
+        registered_components: {}
+      )
     end
 
     private
@@ -38,32 +42,15 @@ module Lobanov
        '$ref']
     end
 
-    def expand_refs!(loaded_schema)
-      Visitor.visit(loaded_schema).each do |node|
-        path = node[:path]
-        value = node[:value]
-
-        ref_file = value['$ref']
-        next unless ref_file
-
-        ref_content = Support.read_relative(ref_file, api_marker)
-        return ref_content if path == [] # only $ref in a file
-
-        expand_refs!(ref_content) # to parse nested $ref's
-
-        loaded_schema.dig(*path[0..-2])[path.last] = ref_content
-      end
-
-      loaded_schema
-    end
-
-    def index_path
-      if api_marker == 'wapi'
-        "#{Lobanov.specification_folder}/wapi/index.yaml"
-      else
-        version_number = api_marker.last
-        "#{Lobanov.specification_folder}/private/v#{version_number}/index.yaml"
-      end
+    def base_path
+      path = 
+        if api_marker == 'wapi'
+          "#{Lobanov.specification_folder}/wapi"
+        else
+          version_number = api_marker.last
+          "#{Lobanov.specification_folder}/private/v#{version_number}"
+        end
+      Pathname.new(path)
     end
   end
 end
