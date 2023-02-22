@@ -36,5 +36,37 @@ RSpec.describe Lobanov::Support::BundleSchema do
       end
     end
   end
+
+  describe 'postprocess_yaml' do
+    context 'when yaml has trailing spaces' do
+      let(:yaml) do 
+        # There is a trailing space after `type: `
+        <<~YAML
+          ---
+          components:
+            schemas:
+              User:
+                type: 
+                other_prop: 1
+        YAML
+      end
+
+      # No trailing space here
+      let(:expected_yaml) do 
+        <<~YAML
+          ---
+          components:
+            schemas:
+              User:
+                type:
+                other_prop: 1
+        YAML
+      end
+      
+      it 'removes these trailing spaces' do 
+        expect(described_class.postprocess_yaml!(+yaml)).to eq(expected_yaml)
+      end
+    end
+  end
 end
 

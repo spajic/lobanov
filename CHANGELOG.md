@@ -1,5 +1,10 @@
 ## Next Release
 
+## 0.7.4 (2023-02-22)
+
+* Some users have different results of BundleSchema. They have trailing spaces. 
+Add the postprocess step to BundleSchema and delete trailing spaces there.
+
 ## 0.7.3 (2023-02-17)
 
 * Some bugs were found on 3commas specs after update to 0.7.2. Fix them here 
