@@ -12,7 +12,15 @@ module Lobanov
         schema = YAML.load_file("#{index_folder}/index.yaml")
         registered_components = collect_registered_components(schema, index_folder)
         ExpandRefs.call(schema, index_folder, registered_components: registered_components)
-        File.write("#{index_folder}/#{output_file_name}", schema.to_yaml)
+        result = schema.to_yaml
+        postprocess_yaml!(result)
+        File.write("#{index_folder}/#{output_file_name}", result)
+      end
+
+      # Introduced to remove trailing spaces from yaml
+      # They occured in some cases due to version of psych probably
+      def self.postprocess_yaml!(yaml)
+        yaml.gsub!(": \n", ":\n")
       end
 
       def self.collect_registered_components(schema, index_folder)
