@@ -1,9 +1,5 @@
 # Lobanov [![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/lobanov`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -30,7 +26,6 @@ So you can start small. You can generate schema only for what you want.
 - You can run just one spec to update the schema. No need to run all specs.
 - It allows to modify schema by hand and keep the changes.
 - No DSL. Nothing new to learn, just add `:lobanov` tag and you are all set.
-- Schema is generated automatically, you can tweak it if you want.
 - Ability to generate a directory with convenient structure for manual work
 with openapi-schema. And automatically bundle it to single file for export.
 - It validates the API response in your spec against stored schema. 
@@ -43,6 +38,9 @@ on how-to write openapi specs.
 - It works both with controller specs and request specs.
 - (We plan to) support sinatra to be able to use lobanov with microservices.
 - Support for rails 6.1 and (we plan to) rails 7.0
+
+## Features and Usage 
+TODO
 
 ## Alternatives and related projects
 
@@ -109,11 +107,10 @@ That was the inspiration for rspec-openapi
 ### lurker
 TODO
 
-## Usage
-
 ### Что должен уметь Lobanov: checklist
 
 #### Now
+TODO: use this checklist for `Features and Usage` section
 
 - [ ] надо подумать, как бы обозначать обязательность для query-параметров (возможно они все *не обязательные* по дефолту)
 - [ ] Надо договориться, как работать с ошибками
@@ -124,19 +121,19 @@ TODO
   - [x] GET /fruits/:id,
   - [ ] GET /resources/:id/reviews
   - [ ] GET /resources/:id/reviews/:review_id
-- [ ] ронять тест, если схема ответа изменилась
-- [ ] для POST, PUT, DELETE важно сохранять схему параметров запроса (в components/params?)
+- [+] ронять тест, если схема ответа изменилась
+- [+] для POST, PUT, DELETE важно сохранять схему параметров запроса (в components/params?)
   - [x] POST
   - [x] PUT
   - [x] DELETE
-- [ ] генерировать схемы передаваемых параметров
+- [+] генерировать схемы передаваемых параметров
   - [x] path params
   - [x] body params
-  - [ ] query params - есть, но покрыть спеком
-- [ ] требовать чтобы для examples все поля были заполнены (протестировать)
+  - [+] query params - есть, но покрыть спеком
+- [+] требовать чтобы для examples все поля были заполнены (протестировать)
 
 #### Later
-- [ ] уметь работать с enums, когда поле может принимать известное множество значений
+- [x] уметь работать с enums, когда поле может принимать известное множество значений
 - [ ] (?) требовать стандартной схемы для успешного ответа POST, PUT, DELETE
 
 #### Notes
