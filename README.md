@@ -9,7 +9,7 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'lobanov'
+gem 'lobanov', github: 'spajic/lobanov', tag: 'v0.0.0' # see Changelog.md
 ```
 
 And then execute:
@@ -19,6 +19,30 @@ And then execute:
 Or install it yourself as:
 
     $ gem install lobanov
+
+## Why Lobanov
+There is a couple of similar projects (see the section and comparison below)
+
+What I see as key strong / unique points of Lobanov:
+- Easy to introduce to large codebase. You just add `:lobanov` tag to one spec.
+When another.
+So you can start small. You can generate schema only for what you want.
+- You can run just one spec to update the schema. No need to run all specs.
+- It allows to modify schema by hand and keep the changes.
+- No DSL. Nothing new to learn, just add `:lobanov` tag and you are all set.
+- Schema is generated automatically, you can tweak it if you want.
+- Ability to generate a directory with convenient structure for manual work
+with openapi-schema. And automatically bundle it to single file for export.
+- It validates the API response in your spec against stored schema. 
+So you can prevent accidental breaking of contract.
+- It automatically and consistently generates schema 
+with Convention over Configuration approach. 
+This leads to a clean and structured result, 
+that would be difficult to do by hand, even having developer documentation
+on how-to write openapi specs.
+- It works both with controller specs and request specs.
+- (We plan to) support sinatra to be able to use lobanov with microservices.
+- Support for rails 6.1 and (we plan to) rails 7.0
 
 ## Alternatives and related projects
 
@@ -277,16 +301,42 @@ end
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### Publishing of new versions
+For now we just use git tags like v0.1.1 and refer to them from Gemfile
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+We do not push to Rubygems now. 
 
-For testing in multiple versions of key dependencies, the Appraisal gem is used. To run the default test_app cucumber feature tests, use the following command:
+### Specs
+
+#### Cucumber
+
+First of all, testing for lobanov is a bit intricated.
+
+What we need to test is something like
 
 ```
-bundle exec appraisal rails-61 cucumber
+If I have some rails app and some specs and some stored openapi schema
+When I run rspec tests
+What will be results of the specs run?
+And how files will change?
 ```
+
+To test this behavior we use `Cucumber` scenarios.
+
+To run these scenarios use `bundle exec appraisal rails-61 cucumber`
+
+#### Appraisal
+Even more, we have to test lobanov with different versions of Rails.
+
+Because the internals on which we rely to hook into rails routes may change.
+
+To achieve this we use [Appraisal gem](https://github.com/thoughtbot/appraisal)
+
+For now we only have rails-61 example app, but we have plans to support rails-7.
+
+Execute `bundle exec appraisal install` to setup appraisal.
+
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/lobanov.
+Bug reports and pull requests are welcome on GitHub at https://github.com/spajic/lobanov.
