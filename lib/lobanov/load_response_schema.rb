@@ -20,7 +20,8 @@ module Lobanov
       response_schema_file_name = index.dig(*dig_args)
       return nil unless response_schema_file_name
 
-      loaded_schema = YAML.load_file(base_path.join(response_schema_file_name))
+      schema_path = base_path.join(response_schema_file_name)
+      loaded_schema = YAML.load_file(schema_path)
       Lobanov::Support::ExpandRefs.call(
         loaded_schema,
         base_path.join('components/responses').to_s, 
