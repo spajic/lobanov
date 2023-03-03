@@ -333,6 +333,11 @@ For now we only have rails-61 example app, but we have plans to support rails-7.
 
 Execute `bundle exec appraisal install` to setup appraisal.
 
+#### RSpec unit-tests
+And also we have RSpec specs to test Lobanov internals in unit-test fashion.
+
+Run the test suite with `rspec`
+
 
 ## Contributing
 
