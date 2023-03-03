@@ -338,6 +338,18 @@ And also we have RSpec specs to test Lobanov internals in unit-test fashion.
 
 Run the test suite with `rspec`
 
+#### Generated rspec tests for test apps
+And finally it may be useful to launch specs of generated 
+test apps.
+
+This may be handy for debug. If cucumber will encounter binding.pry during
+it's execution it will halt. So to debug you may launch test-app spec directly. 
+
+```
+cd test_apps/rails_61
+rspec spec/requests/fruits_controller_spec.rb
+```
+
 
 ## Contributing
 
