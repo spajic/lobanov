@@ -4,6 +4,13 @@ Feature: prevent unexpected schema changes
   Scenario: basic usage for wapi
     When I cd to "../../test_apps/rails_61"
 
+    Given a file named "config/initializers/lobanov_initializer.rb" with:
+      """rb
+      Lobanov.configure do |config|
+        config.specification_folder = 'frontend/api-backend-specification'
+      end
+      """
+      
     Given a file named "frontend/api-backend-specification/wapi/index.yaml" with:
     """yaml
     ---
@@ -46,7 +53,7 @@ Feature: prevent unexpected schema changes
     - seasonal
     properties:
       name:
-        "$ref": "./components/schemas/FruitName.yaml"
+        "$ref": "../schemas/FruitName.yaml"
       color:
         type: string
         example: yellow
@@ -75,7 +82,7 @@ Feature: prevent unexpected schema changes
           get('/wapi/fruits/2?q=with_integer_name')
 
           expect(response).to have_http_status(:ok)
-          expect(json_body).to eq({color: 'yellow', weight: 50, seasonal: false})
+	  expect(json_body).to eq({color: 'yellow', weight: 50, seasonal: false, name: 999})
         end
       end
     end
@@ -108,6 +115,13 @@ Feature: prevent unexpected schema changes
   Scenario: basic usage for private/v6 
     When I cd to "../../test_apps/rails_61"
 
+    Given a file named "config/initializers/lobanov_initializer.rb" with:
+      """rb
+      Lobanov.configure do |config|
+        config.specification_folder = 'frontend/api-backend-specification'
+      end
+      """
+      
     Given a file named "frontend/api-backend-specification/private/v6/index.yaml" with:
     """yaml
     ---
