@@ -1,7 +1,7 @@
 Feature: prevent unexpected schema changes
   When you write lobanov specs for REST JSON API
 
-  Scenario: basic usage
+  Scenario: basic usage for wapi
     When I cd to "../../test_apps/rails_61"
 
     Given a file named "frontend/api-backend-specification/wapi/index.yaml" with:
@@ -105,7 +105,7 @@ Feature: prevent unexpected schema changes
       type: boolean
     """
 
-  Scenario: basic usage
+  Scenario: basic usage for private/v6 
     When I cd to "../../test_apps/rails_61"
 
     Given a file named "frontend/api-backend-specification/private/v6/index.yaml" with:
