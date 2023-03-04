@@ -167,7 +167,7 @@ Feature: prevent unexpected schema changes
     - seasonal
     properties:
       name:
-        "$ref": "./components/schemas/VegetableName.yaml"
+        "$ref": "../schemas/VegetableName.yaml"
       color:
         type: string
         example: yellow
