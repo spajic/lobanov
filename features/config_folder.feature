@@ -13,7 +13,7 @@ Feature: Change storage folder
     Given an empty directory "fffuuu"
     Given an empty directory "fffuuu/components"
     Given an empty directory "fffuuu/schemas"
-    Given a file named "fffuuu/index.yaml" with:
+    Given a file named "fffuuu/wapi/index.yaml" with:
       """yaml
       ---
       openapi: 3.0.1
@@ -44,7 +44,7 @@ Feature: Change storage folder
 
     Then the examples should all pass
 
-    Then a yaml named "fffuuu/index.yaml" should contain:
+    Then a yaml named "fffuuu/wapi/index.yaml" should contain:
     """yaml
     ---
     openapi: 3.0.1
@@ -75,7 +75,7 @@ Feature: Change storage folder
 
     """
 
-    Then a yaml named "fffuuu/components/requestBodies/FruitsCreateRequestBody.yaml" should contain:
+    Then a yaml named "fffuuu/wapi/components/requestBodies/FruitsCreateRequestBody.yaml" should contain:
     """yaml
     ---
     type: object
@@ -99,7 +99,7 @@ Feature: Change storage folder
         example: false
     """
 
-    Then a yaml named "fffuuu/components/responses/FruitsCreate201Response.yaml" should contain:
+    Then a yaml named "fffuuu/wapi/components/responses/FruitsCreate201Response.yaml" should contain:
     """yaml
     ---
     type: object
