@@ -24,7 +24,7 @@ module Lobanov
       loaded_schema = YAML.load_file(schema_path)
       Lobanov::Support::ExpandRefs.call(
         loaded_schema,
-        base_path.join('components/responses').to_s, 
+        base_path.join('components/responses').to_s,
         registered_components: {}
       )
     end
