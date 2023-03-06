@@ -97,7 +97,10 @@ Feature: prevent unexpected schema changes
     Lobanov::SchemaMismatchError
       LOBANOV DETECTED SCHEMA MISMATCH!
 
-      Interaction 'GET /fruits/:id' failed! Schema changed:
+      Interaction: 'GET /fruits/:id'
+      Response file: frontend/api-backend-specification/wapi/components/responses/FruitsShow200Response.yaml
+
+      Schema diff:
       ---
       type: object
       properties:
@@ -211,7 +214,10 @@ Feature: prevent unexpected schema changes
     Lobanov::SchemaMismatchError
       LOBANOV DETECTED SCHEMA MISMATCH!
 
-      Interaction 'GET /vegetables/:id' failed! Schema changed:
+      Interaction: 'GET /vegetables/:id'
+      Response file: frontend/api-backend-specification/private/v6/components/responses/VegetablesShow200Response.yaml
+
+      Schema diff:
       ---
       type: object
       properties:

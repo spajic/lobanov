@@ -57,12 +57,7 @@ module Lobanov
     end
 
     def stored_response_schema
-      @stored_response_schema ||= LoadResponseSchema.new(
-        path_with_curly_braces: generator.path_with_curly_braces,
-        verb: generator.verb.downcase,
-        status: generator.status.to_s,
-        api_marker: generator.api_marker
-      ).call
+      @stored_response_schema ||= LoadResponseSchema.call(interaction)
     end
 
     def new_schema
@@ -85,7 +80,9 @@ module Lobanov
     def build_error_message(interaction, validation_error)
       interaction_name = "#{interaction.verb} #{interaction.endpoint_path}"
       "LOBANOV DETECTED SCHEMA MISMATCH!\n\n" \
-        "Interaction '#{interaction_name}' failed! Schema changed:\n" \
+        "Interaction: '#{interaction_name}'\n" \
+        "Response file: #{FindResponseForInteraction.call(interaction)}\n" \
+        "\nSchema diff:\n"\
         "#{validation_error}\n\n"
     end
   end

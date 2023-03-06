@@ -37,7 +37,26 @@ module Lobanov
     end
 
     def path_with_square_braces
-      GeneratePathWithSquareBraces.call(self)
+      @path_with_square_braces ||= GeneratePathWithSquareBraces.call(self)
+    end
+
+    def path_with_curly_braces
+      if path_with_square_braces == '/'
+        "/#{api_marker}/#{path_info.gsub('[', '{').gsub(']', '}')}".gsub('//', '/')
+      else
+        "/#{api_marker}/#{path_with_square_braces.gsub('[', '{').gsub(']', '}')}".gsub('//', '/')
+      end
+    end
+
+    def base_path
+      path =
+        if api_marker == 'wapi'
+          "#{Lobanov.specification_folder}/wapi"
+        else
+          version_number = api_marker.last
+          "#{Lobanov.specification_folder}/private/v#{version_number}"
+        end
+      Pathname.new(path)
     end
 
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
