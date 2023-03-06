@@ -20,6 +20,7 @@ module Lobanov
     def_delegator :@interaction, :status
     def_delegator :@interaction, :operation_id
     def_delegator :@interaction, :path_with_square_braces
+    def_delegator :@interaction, :path_with_curly_braces
 
     def initialize(interaction:)
       @interaction = interaction
@@ -41,14 +42,6 @@ module Lobanov
 
     def request_body_name
       "#{operation_id}RequestBody"
-    end
-
-    def path_with_curly_braces
-      if path_with_square_braces == '/'
-        "/#{api_marker}/#{path_info.gsub('[', '{').gsub(']', '}')}".gsub('//', '/')
-      else
-        "/#{api_marker}/#{path_with_square_braces.gsub('[', '{').gsub(']', '}')}".gsub('//', '/')
-      end
     end
 
     def paths
