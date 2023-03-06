@@ -1,5 +1,12 @@
 ## Next Release
 
+## 0.8.0 (2023-03-06)
+
+* Update message in the case of LOBANOV SCHEMA MISMATCH. 
+Print the path to response file.
+
+* Group related endpoints with tags (IN PROGRESS)
+
 ## 0.7.4 (2023-02-22)
 
 * Some users have different results of BundleSchema. They have trailing spaces. 
