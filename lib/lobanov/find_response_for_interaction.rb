@@ -9,6 +9,8 @@ module Lobanov
         return
       end
       relative_path = index.dig(*dig_args(interaction))
+      return nil unless relative_path
+
       interaction.base_path.join(relative_path)
     end
 
