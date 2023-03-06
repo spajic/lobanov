@@ -80,7 +80,9 @@ module Lobanov
     def build_error_message(interaction, validation_error)
       interaction_name = "#{interaction.verb} #{interaction.endpoint_path}"
       "LOBANOV DETECTED SCHEMA MISMATCH!\n\n" \
-        "Interaction '#{interaction_name}' failed! Schema changed:\n" \
+        "Interaction: '#{interaction_name}'\n" \
+        "Response file: #{FindResponseForInteraction.call(interaction)}\n" \
+        "\nSchema diff:\n"\
         "#{validation_error}\n\n"
     end
   end
