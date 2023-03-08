@@ -4,6 +4,8 @@ Feature: generate complete specs for API
   Scenario: basic usage
     When I cd to "../../test_apps/rails_61"
 
+    Given a directory "frontend" does not exist
+
     Given a file named "frontend/api-backend-specification/wapi/index.yaml" with:
       """yaml
       ---
@@ -14,12 +16,6 @@ Feature: generate complete specs for API
         version: 0.0.1
       paths: {}
       """
-
-    Given an empty directory "frontend/api-backend-specification/wapi/components"
-
-    Given an empty directory "frontend/api-backend-specification/wapi/components/schemas"
-
-    Given an empty directory "frontend/api-backend-specification/private"
 
     Given a file named "frontend/api-backend-specification/private/v6/components/responses/VegetablesShow200Response.yaml" with:
       """yaml
@@ -573,7 +569,7 @@ Feature: generate complete specs for API
             schema:
               type: string
             required: true
-            example: with_integer_name
+            example: 'true'
         put:
           description: PUT /vegetables/:id
           operationId: VegetablesUpdate
