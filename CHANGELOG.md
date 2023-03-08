@@ -1,11 +1,16 @@
 ## Next Release
 
 ## 0.8.0 (2023-03-08)
+### New
+* Group related endpoints with tags
 
-* Update message in the case of LOBANOV SCHEMA MISMATCH. 
+* Update message in case of LOBANOV SCHEMA MISMATCH. 
 Print the path to response file.
 
-* Group related endpoints with tags
+### Internal
+* Make all cucumber scenarios green!
+* Improve cucumber specs stability (stop using `Given an empty folder`)
+* Add ability to setup a breakpoint in cucumber (`Given a breakpoint`)
 
 ## 0.7.4 (2023-02-22)
 
