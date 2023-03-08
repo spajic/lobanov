@@ -9,10 +9,8 @@ Feature: Change storage folder
       end
       """
 
-    # TODO: this setup should not be necessary
-    Given an empty directory "fffuuu"
-    Given an empty directory "fffuuu/components"
-    Given an empty directory "fffuuu/schemas"
+    Given a directory "fffuuu" does not exist
+
     Given a file named "fffuuu/wapi/index.yaml" with:
       """yaml
       ---
@@ -66,6 +64,7 @@ Feature: Change storage folder
                     "$ref": "./components/responses/FruitsCreate201Response.yaml"
           tags:
           - lobanov
+          - Fruits
           requestBody:
             required: true
             content:

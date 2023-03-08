@@ -80,7 +80,7 @@ module Lobanov
         'description' => "#{verb} #{endpoint_path}",
         'operationId' => operation_id,
         'responses' => response_schema,
-        'tags' => ['lobanov']
+        'tags' => ['lobanov'] + GenerateInteractionTags.call(interaction)
       }
     end
 

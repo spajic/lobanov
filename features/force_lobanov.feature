@@ -10,7 +10,7 @@ Feature: force lobanov for schema changes
       end
       """
 
-    Given an empty directory "frontend"
+    Given a directory "frontend" does not exist
 
     Given a file named "frontend/api-backend-specification/wapi/index.yaml" with:
     """yaml
@@ -124,7 +124,7 @@ Feature: force lobanov for schema changes
   Scenario: basic usage
     When I cd to "../../test_apps/rails_61"
 
-    Given an empty directory "frontend"
+    Given a directory "frontend" does not exist
 
     Given a file named "frontend/api-backend-specification/private/v6/index.yaml" with:
     """yaml

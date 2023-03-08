@@ -3,6 +3,8 @@ Feature: prevent typeless examples
 
   Scenario: basic usage fruits controller
     When I cd to "../../test_apps/rails_61"
+     
+    Given a directory "frontend" does not exist
 
     Given a file named "frontend/api-backend-specification/wapi/index.yaml" with:
       """yaml
@@ -42,10 +44,6 @@ Feature: prevent typeless examples
               required: true
               example: with_null_name
       """
-
-    Given an empty directory "frontend/api-backend-specification/wapi/components"
-
-    Given an empty directory "frontend/api-backend-specification/wapi/components/schemas"
 
     Given a file named "frontend/api-backend-specification/wapi/components/responses/FruitsShow200Response.yaml" with:
     """yaml
@@ -175,10 +173,6 @@ Feature: prevent typeless examples
               required: true
               example: with_integer_name
       """
-
-    Given an empty directory "frontend/api-backend-specification/private/v6/components"
-
-    Given an empty directory "frontend/api-backend-specification/private/v6/components/schemas"
 
     Given a file named "frontend/api-backend-specification/private/v6/components/responses/VegetablesShow200Response.yaml" with:
       """yaml

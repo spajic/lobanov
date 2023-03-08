@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+Given('a breakpoint') do 
+  binding.pry
+end
 
 Then(/^the example(s)? should( all)? pass$/) do |_, _|
   puts all_output
