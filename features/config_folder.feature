@@ -64,6 +64,7 @@ Feature: Change storage folder
                     "$ref": "./components/responses/FruitsCreate201Response.yaml"
           tags:
           - lobanov
+          - Fruits
           requestBody:
             required: true
             content:

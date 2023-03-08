@@ -290,6 +290,7 @@ Feature: generate complete specs for API
           operationId: FruitsReviewsShow
           tags:
           - lobanov
+          - Fruits
           responses:
             '200':
               description: GET /fruits/:fruit_id/reviews/:id -> 200
@@ -318,6 +319,7 @@ Feature: generate complete specs for API
           operationId: FruitsReviewsIndex
           tags:
           - lobanov
+          - Fruits  
           responses:
             '200':
               description: GET /fruits/:fruit_id/reviews -> 200
@@ -338,6 +340,7 @@ Feature: generate complete specs for API
           operationId: FruitsReviewsCreate
           tags:
           - lobanov
+          - Fruits
           responses:
             '201':
               description: POST /fruits/:fruit_id/reviews -> 201
@@ -365,6 +368,7 @@ Feature: generate complete specs for API
           operationId: FruitsReviewsStats
           tags:
           - lobanov
+          - Fruits
           responses:
             '200':
               description: GET /fruits/:fruit_id/reviews/stats -> 200
@@ -386,6 +390,7 @@ Feature: generate complete specs for API
           operationId: FruitsIndex
           tags:
           - lobanov
+          - Fruits
           responses:
             '200':
               description: GET /fruits -> 200
@@ -398,6 +403,7 @@ Feature: generate complete specs for API
           operationId: FruitsCreate
           tags:
           - lobanov
+          - Fruits
           responses:
             '201':
               description: POST /fruits -> 201
@@ -423,6 +429,7 @@ Feature: generate complete specs for API
           operationId: FruitsUpdate
           tags:
           - lobanov
+          - Fruits
           responses:
             '200':
               description: PUT /fruits/:id -> 200
@@ -449,6 +456,7 @@ Feature: generate complete specs for API
           operationId: FruitsDestroy
           tags:
           - lobanov
+          - Fruits
           responses:
             '200':
               description: DELETE /fruits/:id -> 200
@@ -469,6 +477,7 @@ Feature: generate complete specs for API
           operationId: FruitsShow
           tags:
           - lobanov
+          - Fruits
           responses:
             '404':
               description: GET /fruits/:id -> 404
@@ -509,6 +518,7 @@ Feature: generate complete specs for API
           operationId: FruitsUpvote
           tags:
           - lobanov
+          - Fruits
           responses:
             '201':
               description: POST /fruits/:id/upvote -> 201
@@ -555,6 +565,7 @@ Feature: generate complete specs for API
                     "$ref": "./components/responses/VegetablesShow200Response.yaml"
           tags:
           - lobanov
+          - Vegetables
           parameters:
           - in: path
             name: id
@@ -582,6 +593,7 @@ Feature: generate complete specs for API
                     "$ref": "./components/responses/VegetablesUpdate200Response.yaml"
           tags:
           - lobanov
+          - Vegetables
           parameters:
           - in: path
             name: id
@@ -608,6 +620,7 @@ Feature: generate complete specs for API
                     "$ref": "./components/responses/VegetablesDestroy200Response.yaml"
           tags:
           - lobanov
+          - Vegetables
           parameters:
           - in: path
             name: id
@@ -629,6 +642,7 @@ Feature: generate complete specs for API
                     "$ref": "./components/responses/VegetablesIndex200Response.yaml"
           tags:
           - lobanov
+          - Vegetables
         post:
           description: POST /vegetables
           operationId: VegetablesCreate
@@ -647,6 +661,7 @@ Feature: generate complete specs for API
                     "$ref": "./components/responses/VegetablesCreate400Response.yaml"
           tags:
           - lobanov
+          - Vegetables
           requestBody:
             required: true
             content:
@@ -666,6 +681,7 @@ Feature: generate complete specs for API
                     "$ref": "./components/responses/VegetablesUpvote201Response.yaml"
           tags:
           - lobanov
+          - Vegetables
           parameters:
           - in: path
             name: id
