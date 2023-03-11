@@ -1,5 +1,6 @@
 ## Next Release
 
+## 0.8.1 (2023-03-12)
 ### New
 * Allow to UPDATE_TAGS:
 set this ENV var and lobanov will update tags of operations.
