@@ -39,8 +39,29 @@ on how-to write openapi specs.
 - (We plan to) support sinatra to be able to use lobanov with microservices.
 - Support for rails 6.1 and (we plan to) rails 7.0
 
-## Features and Usage 
+##  Usage and Features
 TODO
+
+### Flags
+
+#### FORCE_LOBANOV
+If this ENV-variable is set, all `:lobanov` tags would work as `:lobanov`
+
+This may be useful in case whey you want to rebuild a bunch of schemas. 
+
+#### UPDATE_TAGS
+If this ENV-variable is set, `lobanov` would update tags of operations.
+
+It would affect only operations covered by the specs that would be executed.
+
+It would not validate schema.
+
+It would merge existing tags with tags that would be calculated this time. 
+
+This may be useful when `lobanov` logic of generating tags is being updated.
+And you want to incorporate new tags to your schema.
+
+In that case you should launch your complete test suite with `UPDATE_TAGS=1`.
 
 ## Alternatives and related projects
 

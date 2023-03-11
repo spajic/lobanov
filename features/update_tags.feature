@@ -1,5 +1,6 @@
 Feature: UPDATE_TAGS in existing schema
   Scenario: you have openapi-schema and you want to update tags in it
+    # Note that schema is incorrect, but this is not validated
     When I cd to "../../test_apps/rails_61"
 
     Given a file named "config/initializers/lobanov_initializer.rb" with:
@@ -60,7 +61,7 @@ Feature: UPDATE_TAGS in existing schema
         type: boolean
         example: false
       some:
-        example: dumb
+        example: FFFFUUUUUU, THIS SCHEMA IS BROKEN! 
     """
 
     Given a file named "frontend/api-backend-specification/wapi/components/schemas/FruitName.yaml" with:
