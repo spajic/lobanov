@@ -58,6 +58,13 @@ module Lobanov
       update_index(path_schema)
     end
 
+    def store_new_tags
+      index = find_index 
+      node = index.dig('paths', path_with_curly_braces, verb)
+      node['tags'] |= GenerateInteractionTags.call(interaction)
+      File.write(index_path, index.to_yaml)
+    end
+
     def extract_component_schema_to_file(path_schema)
       extracted_schema =
         path_schema.dig(verb, 'responses', status, 'content', 'application/json', 'schema')

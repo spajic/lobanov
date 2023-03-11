@@ -171,7 +171,7 @@ Feature: force lobanov for schema changes
     - seasonal
     properties:
       name:
-        "$ref": "./components/schemas/VegetableName.yaml"
+        "$ref": "../components/schemas/VegetableName.yaml"
       color:
         type: string
         example: yellow

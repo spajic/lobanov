@@ -21,6 +21,9 @@ module Lobanov
 
       if overwrite?
         repo.store_schema
+      elsif update_tags?
+        # Note that: no validation of schema in that case
+        repo.store_new_tags
       else
         ValidateStoredSchema.call(
           stored_schema: stored_response_schema,
@@ -42,6 +45,10 @@ module Lobanov
       return true if ENV['FORCE_LOBANOV']
 
       overwrite || stored_response_schema.blank?
+    end
+
+    def update_tags?
+      ENV['UPDATE_TAGS'] ? true : false
     end
 
     def interaction
