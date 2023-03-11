@@ -45,7 +45,6 @@ RSpec.describe Lobanov::GenerateInteractionTags do
     end
 
     it 'returns expected tags' do
-      puts interaction.operation_id
       expect(subject).to eq(%w[MiniApps])
     end
   end
