@@ -1,5 +1,10 @@
 ## Next Release
 
+## 0.8.2 (2023-03-13)
+### Fix
+* Fix a bug in UPDATE_TAGS in case when initial tags were emtpy.
+In that case the resulting tags were `true`.
+
 ## 0.8.1 (2023-03-12)
 ### New
 * Allow to UPDATE_TAGS:

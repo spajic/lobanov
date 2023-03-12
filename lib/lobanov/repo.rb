@@ -59,8 +59,9 @@ module Lobanov
     end
 
     def store_new_tags
-      index = find_index 
+      index = find_index
       node = index.dig('paths', path_with_curly_braces, verb)
+      node['tags'] ||= []
       node['tags'] |= GenerateInteractionTags.call(interaction)
       File.write(index_path, index.to_yaml)
     end
