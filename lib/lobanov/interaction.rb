@@ -87,7 +87,7 @@ module Lobanov
         body: json_body
       }
 
-      new(params)
+      new(**params)
     end
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 

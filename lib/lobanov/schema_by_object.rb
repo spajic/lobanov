@@ -7,8 +7,8 @@ module Lobanov
     UNWANTED_FIELDS = %w[$schema description].freeze
     COMMENT_FOR_GENERATED_SCHEMA = ''
 
-    def self.call(*params)
-      new.call(*params)
+    def self.call(...)
+      new.call(...)
     end
 
     def call(obj)

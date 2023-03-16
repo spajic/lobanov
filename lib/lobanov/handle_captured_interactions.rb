@@ -3,8 +3,8 @@
 module Lobanov
   # Handles captured interactions
   class HandleCapturedInteractions
-    def self.call(*params)
-      new(*params).call
+    def self.call(...)
+      new(...).call
     end
 
     attr_reader :interactions, :overwrite

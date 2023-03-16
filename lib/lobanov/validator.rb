@@ -6,8 +6,8 @@ module Lobanov
   class Validator
     UNNECESSARY_FIELDS = %w[description example openapi info required enum minItems].freeze
 
-    def self.call(*params)
-      new(*params).call
+    def self.call(...)
+      new(...).call
     end
 
     def initialize(new_schema:, stored_schema:)

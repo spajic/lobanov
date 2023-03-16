@@ -15,8 +15,8 @@ module Lobanov
   # Если в stored_schema minItems > 0,
   # то не разрешаем minItems = 0 в new_schema
   class ProcessEmptyArrays
-    def self.call(*params)
-      new(*params).call
+    def self.call(...)
+      new(...).call
     end
 
     attr_reader :new_schema, :stored_schema

@@ -2,8 +2,8 @@
 
 module Lobanov
   class ProcessEnums
-    def self.call(*params)
-      new(*params).call
+    def self.call(...)
+      new(...).call
     end
 
     attr_reader :new_schema, :stored_schema

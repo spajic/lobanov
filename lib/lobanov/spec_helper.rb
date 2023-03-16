@@ -3,13 +3,25 @@
 # Tie to RSpec
 module Lobanov
   module SpecHelper
-    module Rails
+    # We override the method from ActionController::TestRequest
+    # action_controller/test_case.rb (this is for controller specs)
+    # def process(action,
+    #   method: "GET", params: nil, session: nil, body: nil, flash: {}, format: nil, xhr: false, as: nil
+    # )
+    # And there is another method (for request specs)
+    # def process(method, path, params: nil, headers: nil, env: nil, xhr: false, as: nil)
+    # This is in lib/action_dispatch/testing/integration.rb
+    module RailsControllerSpec
       extend ActiveSupport::Concern
 
+      # We need to override method defined in
+      # class TestCase
+      #   module Behavior
+      #     module ClassMethods
       module ClassMethods
-        module LobanovSession
-          def process(*)
-            super.tap do
+        module LobanovBehavior
+          def process(action, **keywords)
+            super(action, **keywords).tap do
               if Lobanov::Spy.enabled?
                 Lobanov::Spy
                   .current
@@ -20,19 +32,31 @@ module Lobanov
         end
 
         def new(*)
-          super.extend(LobanovSession)
+          super.extend(LobanovBehavior)
+        end
+      end
+    end
+
+    module RailsRequestSpec
+      def process(method, path, **keywords)
+        super(method, path, **keywords).tap do
+          if Lobanov::Spy.enabled?
+            Lobanov::Spy
+              .current
+              .add_interaction_by_action_dispatch(@request, @response)
+          end
         end
       end
     end
   end
 end
 
-if defined?(ActionDispatch::Integration::Session)
-  ActionDispatch::Integration::Session.include Lobanov::SpecHelper::Rails
+if defined?(ActionController::TestCase::Behavior)
+  ActionController::TestCase::Behavior.include Lobanov::SpecHelper::RailsControllerSpec
 end
 
-if defined?(ActionController::TestCase::Behavior)
-  ActionController::TestCase::Behavior.include Lobanov::SpecHelper::Rails
+if defined?(ActionDispatch::Integration::Session)
+  ActionDispatch::Integration::Session.prepend Lobanov::SpecHelper::RailsRequestSpec
 end
 
 if defined?(RSpec)

@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    lobanov (0.8.1)
+    lobanov (0.8.2)
       diffy
       json-schema-generator
 
@@ -183,7 +183,7 @@ DEPENDENCIES
   rspec-rails (= 5.1.0)
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 3.0.5p211
 
 BUNDLED WITH
    2.3.25

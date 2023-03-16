@@ -6,8 +6,8 @@ module Lobanov
   class ValidateStoredSchema
     attr_reader :stored_schema, :operation_id
 
-    def self.call(*params)
-      new(*params).call
+    def self.call(...)
+      new(...).call
     end
 
     def initialize(stored_schema:, operation_id:)
