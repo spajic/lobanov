@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lobanov (0.8.2)
+    lobanov (0.9.0)
       diffy
       json-schema-generator
 
@@ -134,4 +134,4 @@ DEPENDENCIES
   standard
 
 BUNDLED WITH
-   2.3.19
+   2.3.25

@@ -1,5 +1,12 @@
 ## Next Release
 
+## 0.9.0 (2023-03-16)
+### Breaking
+* Possibly break Ruby 2.6 compatibility
+
+### New
+* Support Ruby 3.0
+
 ## 0.8.2 (2023-03-13)
 ### Fix
 * Fix a bug in UPDATE_TAGS in case when initial tags were emtpy.
