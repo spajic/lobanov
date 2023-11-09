@@ -7,8 +7,11 @@ module Lobanov
       # keys are file paths, for example './components/schemas/Fruit.yaml'
       # values are registered components refs, for example '#/components/schemas/Fruit'
       def self.call(components_section:, root_folder:)
+        schemas = components_section&.dig('schemas')
+        return {} unless schemas
+
         registered_components = {}
-        components_section['schemas'].each do |(component_name, component_value)|
+        schemas.each do |(component_name, component_value)|
           # component_name is like 'Fruit' 
           # component value is like { '$ref' => './components/schemas/Fruit.yaml' }
           next unless component_value['$ref']
