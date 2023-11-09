@@ -1,11 +1,12 @@
-Feature: Change storage folder
-  Scenario: User configured sotrage folder via lobanov_initializer.rb
+Feature: Change the storage folder
+  Scenario: A user has configured the storage folder via lobanov_initializer.rb
     When I cd to "../../test_apps/rails_61"
 
     Given a file named "config/initializers/lobanov_initializer.rb" with:
       """rb
       Lobanov.configure do |config|
         config.specification_folder = 'fffuuu'
+        config.namespaces = {'wapi' => 'wapi', 'api/v6' => 'private/v6'}
       end
       """
 

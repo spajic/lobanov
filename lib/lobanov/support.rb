@@ -15,15 +15,7 @@ module Lobanov
     end
 
     def self.read_relative(relative_path, api_marker)
-      api_marker_path =
-        if api_marker == 'wapi'
-          'wapi'
-        elsif api_marker == 'papi'
-          'papi'
-        else
-          version_number = api_marker.last
-          "private/v#{version_number}"
-        end
+      api_marker_path = Lobanov.namepaces[api_marker]
 
       read_relative_from_path(relative_path, "#{Lobanov.specification_folder}/#{api_marker_path}/")
     end

@@ -17,7 +17,7 @@ module Lobanov
 
     def set_default_configuration
       self.specification_folder = DEFAULT_SPECIFICATION_FOLDER
-      self.namespaces = {}
+      self.namespaces = {} # { 'wapi' => 'wapi', 'api/v6' => 'private/v6' }
     end
   end
 end

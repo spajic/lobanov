@@ -42,14 +42,7 @@ module Lobanov
     end
 
     def index_path_marker
-      if api_marker == 'wapi'
-        'wapi'
-      elsif api_marker == 'papi'
-        'papi'
-      else
-        version_number = api_marker.last
-        "private/v#{version_number}"
-      end
+      Lobanov.namespaces[api_marker]
     end
 
     def store_schema
@@ -190,14 +183,7 @@ module Lobanov
     end
 
     def components_base
-      if api_marker == 'wapi'
-        "#{Lobanov.specification_folder}/#{api_marker}/components"
-      elsif api_marker == 'papi'
-        "#{Lobanov.specification_folder}/#{api_marker}/components"
-      else
-        version_number = api_marker.last
-        "#{Lobanov.specification_folder}/private/v#{version_number}/components"
-      end
+      "#{Lobanov.specification_folder}/#{Lobanov.namespaces[api_marker]}/components"
     end
 
     def bodies_base

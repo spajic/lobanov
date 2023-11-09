@@ -49,15 +49,7 @@ module Lobanov
     end
 
     def base_path
-      path =
-        if api_marker == 'wapi'
-          "#{Lobanov.specification_folder}/wapi"
-        elsif api_marker == 'papi'
-          "#{Lobanov.specification_folder}/papi"
-        else
-          version_number = api_marker.last
-          "#{Lobanov.specification_folder}/private/v#{version_number}"
-        end
+      path = "#{Lobanov.specification_folder}/#{Lobanov.namespaces[api_marker]}"
       Pathname.new(path)
     end
 
@@ -113,13 +105,15 @@ module Lobanov
     end
 
     def self.api_marker(path_info)
-      splitted_route = path_info.split('/').reject(&:empty?)
-      main_marker = splitted_route.first
-      case main_marker
-      when 'wapi' then 'wapi'
-      when 'papi' then 'papi'
-      when 'api' then "#{main_marker}/#{splitted_route.second}"
+      main_marker = ''
+      Lobanov.namespaces.each_key do |key|
+        if path_info.starts_with? "/#{key}"
+          main_marker = key
+          break
+        end
       end
+
+      main_marker
     end
   end
 end
