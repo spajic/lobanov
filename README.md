@@ -313,9 +313,21 @@ put:
 
 ```ruby
 Lobanov.configure do |config|
-  config.specification_folder = 'fffuuu'
+  config.specification_folder = 'openapi'
+  config.namespaces = {
+    'wapi' => 'wapi',
+    'api/v6' => 'private/v6',
+  }
 end
 ```
+
+With the above setup, Lobanov would work as following.
+
+For api-calls to `/wapi/any_resource` it would maintain a subdirectory `openapi/wapi` with all the folders and files, describing this openapi schema.
+
+For api-calls to `/api/v6/any_resource` it would maintain an analogous subdirectory `openapi/private/v6`.
+
+For any other api-calls like `/any/other/root` it would maintain openapi description in the root of `openapi` folder.
 
 ## Development
 
