@@ -44,6 +44,8 @@ module Lobanov
     def index_path_marker
       if api_marker == 'wapi'
         'wapi'
+      elsif api_marker == 'papi'
+        'papi'
       else
         version_number = api_marker.last
         "private/v#{version_number}"
@@ -189,6 +191,8 @@ module Lobanov
 
     def components_base
       if api_marker == 'wapi'
+        "#{Lobanov.specification_folder}/#{api_marker}/components"
+      elsif api_marker == 'papi'
         "#{Lobanov.specification_folder}/#{api_marker}/components"
       else
         version_number = api_marker.last

@@ -18,6 +18,8 @@ module Lobanov
       api_marker_path =
         if api_marker == 'wapi'
           'wapi'
+        elsif api_marker == 'papi'
+          'papi'
         else
           version_number = api_marker.last
           "private/v#{version_number}"

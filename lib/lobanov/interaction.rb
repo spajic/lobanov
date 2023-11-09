@@ -52,6 +52,8 @@ module Lobanov
       path =
         if api_marker == 'wapi'
           "#{Lobanov.specification_folder}/wapi"
+        elsif api_marker == 'papi'
+          "#{Lobanov.specification_folder}/papi"
         else
           version_number = api_marker.last
           "#{Lobanov.specification_folder}/private/v#{version_number}"
@@ -115,6 +117,7 @@ module Lobanov
       main_marker = splitted_route.first
       case main_marker
       when 'wapi' then 'wapi'
+      when 'papi' then 'papi'
       when 'api' then "#{main_marker}/#{splitted_route.second}"
       end
     end
