@@ -1,5 +1,13 @@
 ## Next Release
 
+## 0.10.0 (2023-11-09)
+### Breaking
+* Introduce Lobanov.namespaces config setting. You have to set it up in your initializer.
+
+## 0.9.1 (2023-11-09)
+### Fix
+* Remove an accidental require of 'pry' that caused dependency on this gem
+
 ## 0.9.0 (2023-03-16)
 ### Breaking
 * Possibly break Ruby 2.6 compatibility
