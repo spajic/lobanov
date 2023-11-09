@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'pry'
-
 module Lobanov
   class SchemaByObject
     UNWANTED_FIELDS = %w[$schema description].freeze
