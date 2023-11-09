@@ -2,9 +2,10 @@
 
 module Lobanov
   module Configuration
-    SPECIFICATION_FOLDER = 'frontend/api-backend-specification'
+    DEFAULT_SPECIFICATION_FOLDER = 'frontend/api-backend-specification'
 
     attr_accessor :specification_folder
+    attr_accessor :namespaces # hash like {'v1' => 'private/v1', 'wapi' => 'wapi'}
 
     def configure
       yield self
@@ -15,7 +16,8 @@ module Lobanov
     end
 
     def set_default_configuration
-      self.specification_folder = SPECIFICATION_FOLDER
+      self.specification_folder = DEFAULT_SPECIFICATION_FOLDER
+      self.namespaces = {}
     end
   end
 end
