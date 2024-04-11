@@ -65,18 +65,17 @@ module Lobanov
           raise error_message
         end
 
-      api_marker = api_marker(request.path_info)
+      dispatcher = Lobanov.dispatcher.new(request)
+
       params = {
-        verb: request.method,
-        api_marker: api_marker,
-        endpoint_path: remove_ignored_namespaces(route_name(request), api_marker),
-        controller_action: controller_action(request),
-        path_info: remove_ignored_namespaces(request.path_info, api_marker),
-        path_params: request.env["#{PREFIX}.path_parameters"].stringify_keys.except('format'),
-        query_params: request.env["#{PREFIX}.query_parameters"],
-        payload: request.env["#{PREFIX}.request_parameters"].merge(
-          request.env["#{PREFIX}.query_parameters"]
-        ).stringify_keys.except('action', 'controller', 'format', '_method'),
+        verb: dispatcher.method,
+        api_marker: dispatcher.api_marker,
+        endpoint_path: dispatcher.remove_ignored_namespaces(dispatcher.route_name),
+        controller_action: dispatcher.controller_action,
+        path_info: dispatcher.remove_ignored_namespaces(dispatcher.path_info),
+        path_params: dispatcher.path_params,
+        query_params: dispatcher.query_params,
+        payload: dispatcher.payload,
         status: response.status,
         body: json_body
       }
@@ -84,36 +83,5 @@ module Lobanov
       new(**params)
     end
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
-
-    def self.remove_ignored_namespaces(path, api_marker)
-      res = path
-      res.gsub!(api_marker, '')
-      res.gsub('//', '/')
-    end
-
-    def self.controller_action(request)
-      Rails.application.routes.recognize_path(request.url, method: request.method)[:action]
-    end
-
-    def self.route_name(request)
-      Rails.application.routes.router.recognize(request) do |route, _params|
-        return route.path.spec.to_s.sub('(.:format)', '')
-      end
-
-      message = "Cannot find named route for: #{request.env['HTTP_HOST']}#{request.path_info}"
-      raise NonroutableRequestError, message
-    end
-
-    def self.api_marker(path_info)
-      main_marker = ''
-      Lobanov.namespaces.each_key do |key|
-        if path_info.starts_with? "/#{key}"
-          main_marker = key
-          break
-        end
-      end
-
-      main_marker
-    end
   end
 end

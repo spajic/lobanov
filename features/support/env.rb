@@ -2,7 +2,8 @@
 
 require 'aruba/cucumber'
 
-example_path = File.expand_path('../../test_apps/rails_61', __dir__)
+test_app =  ARGV.dup.last.sub('@', '')
+example_path = File.expand_path("../../test_apps/#{test_app}", __dir__)
 
 require "#{example_path}/config/environment"
 

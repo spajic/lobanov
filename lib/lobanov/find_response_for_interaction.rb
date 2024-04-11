@@ -4,7 +4,7 @@ module Lobanov
   class FindResponseForInteraction
     def self.call(interaction)
       begin
-        index = YAML.load_file(interaction.base_path.join('index.yaml'))
+        index = ::YAML.load_file(interaction.base_path.join('index.yaml'))
       rescue Errno::ENOENT
         return
       end

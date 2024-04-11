@@ -48,15 +48,31 @@ module Lobanov
         end
       end
     end
+
+    module RackRequestSpec
+      def process_request(uri, env)
+        super(uri, env).tap do
+          if Lobanov::Spy.enabled?
+            Lobanov::Spy
+              .current
+              .add_interaction_by_action_dispatch(last_request, last_response)
+          end
+        end
+      end
+    end
   end
 end
 
-if defined?(ActionController::TestCase::Behavior)
-  ActionController::TestCase::Behavior.include Lobanov::SpecHelper::RailsControllerSpec
-end
+if defined? Rails
+  if defined?(ActionController::TestCase::Behavior)
+    ActionController::TestCase::Behavior.include Lobanov::SpecHelper::RailsControllerSpec
+  end
 
-if defined?(ActionDispatch::Integration::Session)
-  ActionDispatch::Integration::Session.prepend Lobanov::SpecHelper::RailsRequestSpec
+  if defined?(ActionDispatch::Integration::Session)
+    ActionDispatch::Integration::Session.prepend Lobanov::SpecHelper::RailsRequestSpec
+  end
+elsif defined?(Grape)
+  ::Rack::Test::Session.prepend Lobanov::SpecHelper::RackRequestSpec
 end
 
 if defined?(RSpec)
