@@ -1,6 +1,6 @@
 @grape_2.0
 Feature: generate complete specs for API
-  When you write lobanov specs for REST JSON API
+  When you write lobanov specs for GRAPE REST JSON API
 
   Scenario: basic usage
     When I cd to "../../test_apps/grape_2.0"
@@ -41,7 +41,7 @@ Feature: generate complete specs for API
           example: 1712782800
       """
 
-    Given a file named "spec/requests/fruits_controller_spec.rb" with:
+    Given a file named "spec/requests/todo_api_spec.rb" with:
       """ruby
       require 'spec_helper'
       require_relative '../../lobanov_initializer'
@@ -82,7 +82,7 @@ Feature: generate complete specs for API
           end
         end
 
-        describe 'P#create' do
+        describe '#create' do
           it 'returns expected resources', :lobanov do
             post('/api/v2/todos', {title: 'Test'})
 

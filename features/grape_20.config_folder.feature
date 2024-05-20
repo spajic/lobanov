@@ -49,7 +49,7 @@ Feature: Change the storage folder
       end
       """
 
-    When I successfully run `rspec spec/requests/todo_api_spec.rb` for up to 3 seconds
+    When I successfully run `rspec spec/requests/todo_api_spec.rb`
 
     Then the examples should all pass
 

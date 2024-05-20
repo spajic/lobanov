@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-appraise 'rails-61' do
+appraise 'rails_61' do
   source 'https://rubygems.org'
 
   gem 'rails', '6.1.4.2'
@@ -14,7 +14,7 @@ appraise 'grape' do
   gem 'rspec', '~> 3.12.0'
 end
 
-appraise 'grape-2.0' do
+appraise 'grape_2.0' do
   source 'https://rubygems.org'
 
   gem 'grape', '~> 2.0.0'

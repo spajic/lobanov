@@ -2,7 +2,7 @@
 Feature: prevent typeless examples
   When you write lobanov specs for REST JSON API
 
-  Scenario: basic usage fruits controller
+  Scenario: basic usage todos api
     When I cd to "../../test_apps/grape_2.0"
      
     Given a directory "frontend" does not exist

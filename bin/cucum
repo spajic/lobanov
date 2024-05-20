@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo "[INFO] Run $1 cucumber features"
+
+if [ "$1" = "all" ]
+then
+  for dir in test_apps/*/; do
+      if [ -d "$dir" ]; then
+        app_name=$(basename "$dir")
+        bundle exec appraisal $app_name cucumber --tags "@$app_name"
+        echo "[INFO] Run $dir cucumber features"
+      fi
+  done
+else
+  bundle exec appraisal $1 cucumber --tags "@$1"
+fi
+
+echo "[INFO] End $1 cucumber features"

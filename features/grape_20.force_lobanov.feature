@@ -92,7 +92,7 @@ Feature: force lobanov for schema changes
 
     Given I append "true" to the environment variable "FORCE_LOBANOV"
 
-    When I successfully run `rspec spec/requests/todo_api_spec.rb` for up to 3 seconds
+    When I successfully run `rspec spec/requests/todo_api_spec.rb`
 
     Then the examples should all pass
 

@@ -37,7 +37,7 @@ RSpec.describe API::V2::TodoApi, type: :request do
     end
   end
 
-  describe 'P#create' do
+  describe '#create' do
     it 'returns expected resources', :lobanov do
       post('/api/v2/todos', {title: 'Test'})
 
