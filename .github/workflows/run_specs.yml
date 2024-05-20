@@ -1,0 +1,46 @@
+name: CI
+
+on: [push]
+
+jobs:
+  rspec:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    env:
+      RAILS_ENV: test
+      GEMFILE_RUBY_VERSION: 3.0.4
+      TZ: "Europe/Warsaw"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
+          persist-credentials: false  # Do not persist Git credentials in the workflow
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Run RSpec tests
+        run: bundle exec rspec
+
+  cucumber:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [ rails_61, grape_2.0 ]
+      fail-fast: false
+    env:
+      RAILS_ENV: test
+      GEMFILE_RUBY_VERSION: 3.0.4
+      TZ: "Europe/Warsaw"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
+          persist-credentials: false  # Do not persist Git credentials in the workflow
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Install test app deps
+        run: bundle exec appraisal install
+      - name: Run ${{ matrix.app }} Cucumber features
+        run: bin/cucum ${{ matrix.app }}
