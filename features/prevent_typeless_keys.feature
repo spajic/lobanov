@@ -1,3 +1,4 @@
+@rails_61
 Feature: prevent typeless examples
   When you write lobanov specs for REST JSON API
 

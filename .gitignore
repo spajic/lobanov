@@ -10,8 +10,8 @@
 /test/version_tmp/
 /tmp/
 
-/test_apps/rails_61/log/
-/test_apps/rails_61/tmp/
+/test_apps/**/log/
+/test_apps/**/tmp/
 
 # Used by dotenv library to load environment variables.
 # .env
@@ -59,7 +59,8 @@ build-iPhoneSimulator/
 # .rubocop-https?--*
 
 .rspec_status
-test_apps/rails_61/frontend/
-test_apps/rails_61/fffuuu/
+test_apps/**/frontend/
+test_apps/**/fffuuu/
+test_apps/**/lobanov_initializer.rb
 
 todo.md

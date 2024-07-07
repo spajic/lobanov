@@ -353,7 +353,8 @@ And how files will change?
 
 To test this behavior we use `Cucumber` scenarios.
 
-To run these scenarios use `bundle exec appraisal rails-61 cucumber`
+To run these scenarios use `bundle exec appraisal rails-61 cucumber` or `bin/cucum your_test_app_name`
+To run scenarios for all test apps use `bin/cucum all`
 
 #### Appraisal
 Even more, we have to test lobanov with different versions of Rails.

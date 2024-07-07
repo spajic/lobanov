@@ -1,3 +1,4 @@
+@rails_61
 Feature: force lobanov for schema changes
   When you write lobanov specs for REST JSON API
 

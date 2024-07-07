@@ -1,3 +1,4 @@
+@rails_61
 Feature: Change the storage folder
   Scenario: A user has configured the storage folder via lobanov_initializer.rb
     When I cd to "../../test_apps/rails_61"

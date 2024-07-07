@@ -1,3 +1,4 @@
+@rails_61
 Feature: generate complete specs for API
   When you write lobanov specs for REST JSON API
 

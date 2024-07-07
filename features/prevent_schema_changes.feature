@@ -1,3 +1,4 @@
+@rails_61
 Feature: prevent unexpected schema changes
   When you write lobanov specs for REST JSON API
 
@@ -83,7 +84,7 @@ Feature: prevent unexpected schema changes
           get('/wapi/fruits/2?q=with_integer_name')
 
           expect(response).to have_http_status(:ok)
-	  expect(json_body).to eq({color: 'yellow', weight: 50, seasonal: false, name: 999})
+	      expect(json_body).to eq({color: 'yellow', weight: 50, seasonal: false, name: 999})
         end
       end
     end

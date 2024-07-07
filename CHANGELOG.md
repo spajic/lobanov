@@ -1,5 +1,9 @@
 ## Next Release
 
+## 0.10.0 (2024-05-20)
+### New
+* Added `grape` support
+
 ## 0.10.0 (2023-11-09)
 ### Breaking
 * Introduce Lobanov.namespaces config setting. You have to set it up in your initializer.

@@ -1,3 +1,4 @@
+@rails_61
 Feature: UPDATE_TAGS in existing schema
   Scenario: you have openapi-schema and you want to update tags in it
     # Note that schema is incorrect, but this is not validated
