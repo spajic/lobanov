@@ -1,6 +1,14 @@
 ## Next Release
 
-## 0.10.0 (2024-05-20)
+## 0.11.1 (2024-09-11)
+### Fix
+* Fix the support for nullable nested objects
+
+### New
+* move from `pry` to `debugger` for debugging the gem
+* make `bin/cucum` work as `bin/cucum all`
+
+## 0.11.0 (2024-05-20)
 ### New
 * Added `grape` support
 

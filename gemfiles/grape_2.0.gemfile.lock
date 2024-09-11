@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    lobanov (0.11.0)
+    lobanov (0.11.1)
       diffy
       json-schema-generator
 
@@ -33,9 +33,7 @@ GEM
     base64 (0.2.0)
     bigdecimal (3.1.7)
     builder (3.2.4)
-    byebug (11.1.3)
     childprocess (4.1.0)
-    coderay (1.1.3)
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
     contracts (0.16.1)
@@ -69,6 +67,9 @@ GEM
     cucumber-wire (6.2.1)
       cucumber-core (~> 10.1, >= 10.1.0)
       cucumber-cucumber-expressions (~> 14.0, >= 14.0.0)
+    debug (1.9.2)
+      irb (~> 1.10)
+      reline (>= 0.3.8)
     diff-lcs (1.5.1)
     diffy (3.4.2)
     drb (2.2.1)
@@ -97,11 +98,14 @@ GEM
       rack-accept
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
+    io-console (0.7.2)
+    irb (1.14.0)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
     json-schema-generator (0.0.9)
       jsonpath
     jsonpath (1.1.5)
       multi_json
-    method_source (1.0.0)
     mime-types (3.5.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2023.0808)
@@ -117,12 +121,8 @@ GEM
     parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
-    pry (0.14.2)
-      coderay (~> 1.1)
-      method_source (~> 1.0)
-    pry-byebug (3.10.1)
-      byebug (~> 11.0)
-      pry (>= 0.13, < 0.15)
+    psych (5.1.2)
+      stringio
     racc (1.7.3)
     rack (3.0.10)
     rack-accept (0.4.5)
@@ -131,7 +131,11 @@ GEM
       rack (>= 1.3)
     rainbow (3.1.1)
     rake (13.2.1)
+    rdoc (6.7.0)
+      psych (>= 4.0.0)
     regexp_parser (2.9.0)
+    reline (0.5.9)
+      io-console (~> 0.5)
     rexml (3.2.6)
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
@@ -165,6 +169,7 @@ GEM
     standard (1.11.0)
       rubocop (= 1.28.2)
       rubocop-performance (= 1.13.3)
+    stringio (3.1.1)
     sys-uname (1.2.2)
       ffi (~> 1.1)
     thor (1.3.1)
@@ -174,6 +179,7 @@ GEM
     zeitwerk (2.6.13)
 
 PLATFORMS
+  arm64-darwin-23
   x86_64-darwin-22
 
 DEPENDENCIES
@@ -181,10 +187,9 @@ DEPENDENCIES
   aruba
   bundler
   cucumber
+  debug
   grape (~> 2.0.0)
   lobanov!
-  pry
-  pry-byebug
   rack-test
   rake
   rspec (~> 3.12.0)

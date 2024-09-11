@@ -760,12 +760,7 @@ Feature: generate complete specs for API
       properties:
         message:
           type: string
-          example: |-
-            param is missing or the value is empty: name
-            Did you mean?  action
-                           format
-                           controller
-                           color
+          example: 'param is missing or the value is empty: name'
         title:
           type: string
           example: Bad request
@@ -882,10 +877,6 @@ Feature: generate complete specs for API
           type: string
           example: |-
             param is missing or the value is empty: name
-            Did you mean?  action
-                           format
-                           controller
-                           color
         title:
           type: string
           example: Bad request

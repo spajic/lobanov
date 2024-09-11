@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 Given('a breakpoint') do 
-  binding.pry
+  binding.b
 end
 
 Then(/^the example(s)? should( all)? pass$/) do |_, _|
