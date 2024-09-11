@@ -2,7 +2,7 @@
 
 require 'bundler/setup'
 require 'lobanov'
-require 'pry-byebug'
+require 'yaml'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

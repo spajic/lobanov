@@ -2,6 +2,10 @@
 
 echo "[INFO] Run $1 cucumber features"
 
+if [[ -z "$1" ]]; then
+  set -- "all"
+fi
+
 if [ "$1" = "all" ]
 then
   for dir in test_apps/*/; do
