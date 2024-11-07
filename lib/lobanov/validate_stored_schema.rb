@@ -37,6 +37,8 @@ module Lobanov
         if value['type'] != 'array' && value['example'].nil?
           missing_example_paths << path.join('->')
         end
+      rescue StandardError => e
+        raise e.class, "#{path.join('\\')}: #{e.message}", e.backtrace
       end
 
       raise_error(missing_type_paths, missing_example_paths)
