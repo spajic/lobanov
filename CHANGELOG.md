@@ -1,5 +1,10 @@
 ## Next Release
 
+## 0.11.2 (2024-11-21)
+
+### New
+* In case of failure path to offending key is provided in exception
+
 ## 0.11.1 (2024-09-11)
 ### Fix
 * Fix the support for nullable nested objects
